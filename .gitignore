@@ -1,0 +1,50 @@
+node_modules
+.env.administrator
+.env.customer
+.env.seller
+.vite
+bin/
+obj/
+dist*
+Migrations/
+appsettings.json
+appsettings.Testing.json
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+*localstack*
+
+HELP.md
+target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+*docker-compose*

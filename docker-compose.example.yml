@@ -1,0 +1,155 @@
+services:
+  seller-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=seller
+    ports:
+      - "80:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  customer-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=customer
+    ports:
+      - "81:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  administrator-client:
+    build:
+      context: ./clients
+      dockerfile: dockerfile
+      args:
+        - VITE_MODE=administrator
+    ports:
+      - "82:80"
+    environment:
+      - NODE_ENV=production
+      - VITE_SERVER_URL=
+    volumes:
+      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+
+  customer-server:
+    container_name: customer-server
+    build:
+      context: ./server
+      dockerfile: dockerfile.customer
+    ports:
+      - 8081:8081
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/TMDT
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=none
+      - SERVER_PORT=8081
+    networks:
+      - expose
+      - database
+      - localstack
+
+  seller-server:
+    container_name: seller-server
+    build:
+      context: ./server
+      dockerfile: dockerfile.seller
+    ports:
+      - 8080:8080
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__PostgresConnection=Host=database;Port=5432;Database=TMDT;Username=postgres;Password=admin
+      # JWT
+      - Jwt__Key=your_super_secret_key_123456
+      - Jwt__Issuer=yourapp
+      - Jwt__Audience=yourapp_users
+      # VNPAY
+      - VNPAY__VNP_TmnCode=
+      - VNPAY__VNP_HashSecret=
+      - VNPAY__VNP_Url=
+      - VNPAY__VNP_ReturnUrl=
+      # AWS
+      - AWS_Profile=default
+      - AWS_RegionEndpoint=ap-southeast-1
+      - AWS_AccessKey=test
+      - AWS_SecretKey=test
+      - AWS_BucketName=tmdt-bucket
+      - AWS_UseLocalStack=true
+      - AWS_ServiceURL=http://localstack:4566
+      # Mail
+      - MailSettings__SmtpServer=smtp.gmail.com"
+      - MailSettings__Port=587
+      - MailSettings__SenderName=
+      - MailSettings__SenderEmail=
+      - MailSettings__Username=
+      - MailSettings__Password=
+    networks:
+      - expose
+      - database
+      - localstack
+
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:latest
+    ports:
+      - 4566:4566 # main edge endpoint for all services
+      - 4571:4571
+    environment:
+      # Enable all AWS free-tier services (you can add/remove as needed)
+      - SERVICES=s3,lambda,sqs,sns,dynamodb,cloudwatch,cloudformation,iam,sts,events,secretsmanager,ssm
+      - DEBUG=1
+      - DATA_DIR=/var/lib/localstack/data # persist service state
+      - AWS_DEFAULT_REGION=ap-southeast-1
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - LOCALSTACK_HOST=localstack
+      - LAMBDA_EXECUTOR=docker
+      - HOST_TMP_FOLDER=/tmp/localstack
+      - DOCKER_HOST=unix:///var/run/docker.sock
+    volumes:
+      # persist all data locally
+      - localstack-data:/var/lib/localstack
+      # allow LocalStack to spawn Docker containers for Lambdas
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - localstack
+
+  database:
+    container_name: database
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: TMDT
+    ports:
+      - 8000:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: always
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - database
+
+volumes:
+  db-data:
+  localstack-data:
+
+networks:
+  expose:
+  database:
+  localstack:
