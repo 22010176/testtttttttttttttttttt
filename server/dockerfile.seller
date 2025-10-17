@@ -1,0 +1,21 @@
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+WORKDIR /src
+
+COPY ./DatabaseModels /src/DatabaseModels
+COPY ./Utilities /src/Utilities
+COPY ./SellerServer /src/SellerServer
+
+RUN dotnet restore SellerServer
+RUN dotnet build SellerServer -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish SellerServer -c Release -o /app/publish /p:UseAppHost=false
+
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+WORKDIR /app
+
+# Copy published output
+COPY --from=publish /app/publish .
+
+# Run the app
+ENTRYPOINT ["dotnet", "SellerServer.dll"]

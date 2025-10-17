@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "_s/*": [
+        "src/features/seller/*"
+      ],
+      "_c/*": [
+        "src/features/customer/*"
+      ],
+      "_a/*": [
+        "src/features/administrator/*"
+      ]
+    }
+  }
+}
