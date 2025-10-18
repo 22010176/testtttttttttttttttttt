@@ -3,6 +3,11 @@ export const ROUTE_KEYS = {
   REGISTER: "dang-ki",
   LOGIN: "dang-nhap",
   INFOMATION: "thong-tin",
+  PROFILE: "ho-so",
+  ADDRESS: "dia-chi",
+
+  SHOPPING_CART: "gio-hang",
+  CHECKOUT: "thanh-toan",
 
   MANAGEMENT: "quan-ly",
   DASHBOARD: "dashboard",
@@ -43,7 +48,9 @@ export const routePaths = {
     root: `/${ROUTE_KEYS.ACCOUNT}`,
     register: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.REGISTER}`,
     login: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.LOGIN}`,
-    infomation: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.INFOMATION}`
+    infomation: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.INFOMATION}`,
+    profile: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.PROFILE}`,
+    address: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.ADDRESS}`
   },
 
   root: `/${ROUTE_KEYS.MANAGEMENT}`,
@@ -53,7 +60,9 @@ export const routePaths = {
     // insert: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.PRODUCTS}/${ROUTE_KEYS.INSERT}`
   },
   orders: {
-    // root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}`,
+    root: `/${ROUTE_KEYS.ORDERS}`,
+    carts: `/${ROUTE_KEYS.SHOPPING_CART}`,
+    checkout: `/${ROUTE_KEYS.CHECKOUT}`,
     // return: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.ORDERS}/${ROUTE_KEYS.RETURN}`
   },
   marketing: {

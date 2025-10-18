@@ -1,10 +1,11 @@
-import { Button, Divider, Input, Menu, Space } from 'antd';
+import { Button, Input, Space } from 'antd';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Link } from 'react-router-dom';
+
+import { routePaths } from '../routes';
 
 import Container from './Container';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
-import { routePaths } from '../routes';
 
 export default function Header() {
   return (
@@ -27,7 +28,7 @@ export default function Header() {
 
         {/* </Badge> */}
         <div className="flex items-baseline gap-5 cursor-pointer">
-          <Link className='text-white'>
+          <Link className='text-white' to={routePaths.orders.carts}>
             <FontAwesomeIcon icon={faShoppingCart} className='text-xl' />
           </Link>
           <Link to={routePaths.account.infomation} className='text-white text-xl'>

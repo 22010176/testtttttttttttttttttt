@@ -1,11 +1,18 @@
 import { useEffect } from "react"
 import { Route, Routes } from "react-router-dom"
 
-import DashBoard from "./features/Dashboard"
-import MainLayout from "./layouts/MainLayout"
 import { ROUTE_KEYS, routePaths } from "./routes"
+
+import MainLayout from "./layouts/MainLayout"
+import ProfileLayout from "./layouts/ProfileLayout"
+
+import DashBoard from "./features/Dashboard"
 import ProductDetail from "./features/ProductDetails"
-import ProfileLayout from "./features/ProfileDashboard"
+import AddressManagement from "./features/Profiles/AddressManagement"
+import ProfilePage from "./features/Profiles/ProfileDashboard"
+import ShoppingCart from "./features/ShoppingCart/ShoppingCart"
+import ShopeeCarts from "./features/ShoppingCart/ShoppingCarts"
+import ShopeeCheckout from "./features/ShoppingCart/Checkout"
 
 function Customer() {
   useEffect(function () {
@@ -16,8 +23,24 @@ function Customer() {
     <Routes>
       <Route element={<MainLayout />} >
         <Route index element={<DashBoard />} />
+
         <Route path={routePaths.product.details} element={<ProductDetail />} />
-        <Route path={routePaths.account.infomation} element={<ProfileLayout />} />
+
+        <Route path={routePaths.account.root}>
+          <Route element={<ProfileLayout />}>
+            <Route path={ROUTE_KEYS.INFOMATION} element={<ProfilePage />} />
+            <Route path={ROUTE_KEYS.PROFILE} element={<ProfilePage />} />
+            <Route path={ROUTE_KEYS.ADDRESS} element={<AddressManagement />} />
+            <Route path={ROUTE_KEYS.NOT_FOUND} element={<ProfilePage />} />
+          </Route>
+        </Route>
+
+        <Route path={routePaths.orders.root} element={<ProfileLayout />}>
+          <Route index element={<ShoppingCart />} />
+        </Route>
+
+        <Route path={routePaths.orders.carts} element={<ShopeeCarts />} />
+        <Route path={routePaths.orders.checkout} element={<ShopeeCheckout />} />
       </Route>
     </Routes>
   )
