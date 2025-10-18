@@ -3,6 +3,8 @@ import { Button, Checkbox, InputNumber } from 'antd';
 import { useState } from 'react';
 
 import Container from '_c/components/Container';
+import { Link } from 'react-router-dom';
+import { routePaths } from '../../routes';
 
 function ProductRow({ className, children, ...props }) {
   return (
@@ -282,13 +284,11 @@ const ShopeeCarts = () => {
                   <span className="text-2xl text-red-500 font-medium">0₫</span>
                 </div>
               </div>
-              <Button
-                type="primary"
-                size="large"
-                className="bg-red-500 hover:bg-red-600 border-red-500 px-12"
-              >
-                Mua Hàng
-              </Button>
+              <Link to={routePaths.orders.checkout}>
+                <Button type="primary" >
+                  Mua Hàng
+                </Button>
+              </Link>
             </div>
           </div>
         </div>

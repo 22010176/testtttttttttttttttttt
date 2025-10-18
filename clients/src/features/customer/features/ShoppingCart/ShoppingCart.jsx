@@ -1,9 +1,9 @@
-import { DeleteOutlined, ShopOutlined } from '@ant-design/icons';
 import { faShop } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Checkbox, Form, Input, InputNumber, Menu, Tag } from 'antd';
+import { Menu } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTE_KEYS, routePaths } from '../../routes';
 
 
 const CartItem = ({ shop }) => {
@@ -35,7 +35,7 @@ const CartItem = ({ shop }) => {
             </Tag>
           )}
         </div> */}
-        <Link className='text-blue-500'>Xem chi tiết</Link>
+        <Link to={routePaths.account.tracking.replace(ROUTE_KEYS.BY_ID, 'd')} className='text-blue-500'>Xem chi tiết</Link>
       </div>
 
       {/* Cart Items */}

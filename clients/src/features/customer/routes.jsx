@@ -5,6 +5,7 @@ export const ROUTE_KEYS = {
   INFOMATION: "thong-tin",
   PROFILE: "ho-so",
   ADDRESS: "dia-chi",
+  TRACKING: 'theo-doi',
 
   SHOPPING_CART: "gio-hang",
   CHECKOUT: "thanh-toan",
@@ -50,7 +51,8 @@ export const routePaths = {
     login: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.LOGIN}`,
     infomation: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.INFOMATION}`,
     profile: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.PROFILE}`,
-    address: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.ADDRESS}`
+    address: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.ADDRESS}`,
+    tracking: `/${ROUTE_KEYS.ACCOUNT}/${ROUTE_KEYS.TRACKING}/${ROUTE_KEYS.BY_ID}`
   },
 
   root: `/${ROUTE_KEYS.MANAGEMENT}`,
