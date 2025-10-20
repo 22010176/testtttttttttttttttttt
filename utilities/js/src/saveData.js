@@ -7,7 +7,7 @@ const pool = new Pool({
   password: "admin",
   port: 5432
 });
-const data = require('../data/brands.json');
+const data = require('../../data/brands.json');
 
 async function InsertNganhHang(nganhHang = []) {
   const query = `

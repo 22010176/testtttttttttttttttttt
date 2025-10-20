@@ -1,5 +1,7 @@
 using System.Text;
 using DatabaseModels;
+using DatabaseModels.Models;
+using DatabaseModels.Temp_Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -49,11 +51,32 @@ builder.Services.AddSingleton<EmailService>(options =>
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-var config = app.Services.GetRequiredService<IConfiguration>();
-foreach (var configEntry in config.AsEnumerable())
+using (var scope = app.Services.CreateScope())
 {
-  logger.LogInformation("Config Key: {Key}, Value: {Value}", configEntry.Key, configEntry.Value);
+  var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+  var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+  var seedDataSection = config.GetSection("SeedDataPath");
+
+  foreach (var item in seedDataSection.GetChildren())
+  {
+    Console.WriteLine($"{item.Key} => {item.Value}");
+    string baseDir = AppContext.BaseDirectory;
+    Console.WriteLine(Path.GetFullPath(Path.Combine(baseDir, @"..\..\..", item.Value!)));
+  }
+  // Console.WriteLine(filePath);
+  // await JsonSeeder.SeedFromJSON<NganhHang>(
+  //   db,
+  //   Path.GetFullPath(Path.Combine(baseDir, filePath["Brands"]!)));
+}
+
+if (app.Environment.IsProduction())
+{
+  var logger = app.Services.GetRequiredService<ILogger<Program>>();
+  var config = app.Services.GetRequiredService<IConfiguration>();
+  foreach (var configEntry in config.AsEnumerable())
+  {
+    logger.LogInformation("Config Key: {Key}, Value: {Value}", configEntry.Key, configEntry.Value);
+  }
 }
 
 if (app.Environment.IsDevelopment())

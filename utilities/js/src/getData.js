@@ -11,9 +11,14 @@ Promise.all([
   .then(result => {
     brand = result.flat().map(i => i.path)
 
-    const level0 = uniqWith(brand.map(i => [null, i[0]]), isEqual)
-    const level1 = uniqWith(brand.map(i => [i[0], i[1]]), isEqual)
-    const level2 = uniqWith(brand.filter(i => !!i[2]).map(i => [i[1], i[2]]), isEqual)
+    const level0 = uniqWith(
+      brand.map(i => i.map((item, index, array) => ({
+        Id: item.category_id,
+        NganhHangChaId: array[index - 1]?.category_id || null,
+        TenNganhHang: item.category_name
+      }))).flat(Infinity),
+      i => i.category_id)
 
-    fs.writeFileSync(path.join(__dirname, "../data/brands.json"), JSON.stringify({ level0, level1, level2 }, null, 2))
+    fs.writeFileSync(path.join(__dirname, "../../data/brands.json"), JSON.stringify(level0, null, 2))
+    fs.writeFileSync(path.join(__dirname, "../../../server/SeedData/brands.json"), JSON.stringify(level0, null, 2))
   })
