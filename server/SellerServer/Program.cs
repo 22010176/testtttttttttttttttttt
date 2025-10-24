@@ -51,23 +51,21 @@ builder.Services.AddSingleton<EmailService>(options =>
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-  var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-  var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
-  var seedDataSection = config.GetSection("SeedDataPath");
+// using (var scope = app.Services.CreateScope())
+// {
+//   var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//   var config = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+//   var seedDataSection = config.GetSection("SeedDataPath");
 
-  foreach (var item in seedDataSection.GetChildren())
-  {
-    Console.WriteLine($"{item.Key} => {item.Value}");
-    string baseDir = AppContext.BaseDirectory;
-    Console.WriteLine(Path.GetFullPath(Path.Combine(baseDir, @"..\..\..", item.Value!)));
-  }
-  // Console.WriteLine(filePath);
-  // await JsonSeeder.SeedFromJSON<NganhHang>(
-  //   db,
-  //   Path.GetFullPath(Path.Combine(baseDir, filePath["Brands"]!)));
-}
+//   foreach (var item in seedDataSection.GetChildren())
+//   {
+//     Console.WriteLine($"{item.Key} => {item.Value}");
+//     string baseDir = AppContext.BaseDirectory;
+//     string srcSeed = Path.GetFullPath(Path.Combine(baseDir, @"..\..\..", item.Value!));
+//     // Console.WriteLine();
+//     await JsonSeeder.SeedFromJSON<NganhHang>(db, srcSeed);
+//   }
+// }
 
 if (app.Environment.IsProduction())
 {

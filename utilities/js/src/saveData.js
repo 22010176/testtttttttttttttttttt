@@ -10,15 +10,20 @@ const pool = new Pool({
 const data = require('../../data/brands.json');
 
 async function InsertNganhHang(nganhHang = []) {
+  console.log(await pool.query(`DELETE FROM "NganhHang";`))
   const query = `
-INSERT INTO "NganhHang" 
-  ("Id", "NganhHangChaId", "TenNganhHang")
-VALUES 
-    ${nganhHang.filter(i => i[1] != null).map(i => `(${i[1].category_id}, ${i[0]?.category_id || null}, '${i[1].category_name}')`).join(',\n')}`
+  INSERT INTO "NganhHang" 
+    ("Id", "NganhHangChaId", "TenNganhHang")
+  VALUES 
+      ${nganhHang
+      // .filter(i => i[1] !== null)
+      .map(i => `(${i.Id}, ${i.NganhHangChaId || null}, '${i.TenNganhHang}')`).join(',\n')}`
 
   const result = await pool.query(query)
   console.log(result)
+
 }
-InsertNganhHang(data.level0)
-  .then(a => InsertNganhHang(data.level1))
-  .then(a => InsertNganhHang(data.level2))
+InsertNganhHang(data)
+  .then(() => {
+    pool.end()
+  })

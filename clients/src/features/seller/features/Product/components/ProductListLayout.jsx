@@ -1,9 +1,14 @@
 import { DownOutlined, EditOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Select, Table } from 'antd';
+import { Button, Cascader, Form, Input, Select, Table } from 'antd';
 
 import EmptyList from '_s/components/EmptyList';
 
 function ProductListLayout({ dataSource = [] }) {
+  const [form] = Form.useForm();
+  const searchValue = Form.useWatch(i => i, form);
+  console.log(searchValue);
+
+
   const columns = [
     { title: 'Tên sản phẩm', dataIndex: 'name', key: 'name', width: '30%', sorter: true },
     { title: 'Doanh số', dataIndex: 'sales', key: 'sales', sorter: true },
@@ -14,12 +19,30 @@ function ProductListLayout({ dataSource = [] }) {
 
   return (
     <div className='bg-white p-5 flex flex-col gap-5'>
-      <Form layout='inline'>
+      <Form layout='inline' form={form}>
         <Form.Item className='w-100' name="name">
           <Input prefix={<SearchOutlined className="text-gray-400" />} />
         </Form.Item>
         <Form.Item className="w-64" name="category">
-          <Select placeholder="Category" suffixIcon={<EditOutlined />} />
+          {/* <Select placeholder="Category" suffixIcon={<EditOutlined />} /> */}
+          <Cascader options={[
+            {
+              value: 'electronics',
+              label: 'Điện tử',
+              children: [
+                { value: 'phones', label: 'Điện thoại' },
+                { value: 'laptops', label: 'Máy tính xách tay' },
+              ],
+            },
+            {
+              value: 'fashion',
+              label: 'Thời trang',
+              children: [
+                { value: 'clothes', label: 'Quần áo' },
+                { value: 'shoes', label: 'Giày dép' },
+              ],
+            },
+          ]} />
         </Form.Item>
         <Form.Item className="w-64" name="program">
           <Select defaultValue="Chương trình Shopee" suffixIcon={<DownOutlined />} />

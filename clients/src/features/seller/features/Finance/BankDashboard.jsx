@@ -25,20 +25,20 @@ export default function BankDashboard() {
               <span className="text-2xl font-bold text-white">S</span>
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-lg">SHB - NHTMCP SAI GON HANOI</h3>
+              <h3 className="font-semibold text-lg">Bank ABC</h3>
             </div>
           </div>
 
           {/* Account Number */}
           <div className="mb-2">
             <div className="text-lg font-mono tracking-wider">
-              **** 1608
+              **** 1111
             </div>
           </div>
 
           {/* Account Holder */}
           <div className="flex items-center justify-between">
-            <span className="text-gray-300 text-sm tracking-wide">DO DUC MINH</span>
+            <span className="text-gray-300 text-sm tracking-wide">DO THANH NAM</span>
             <span className="bg-teal-400 text-teal-900 text-xs font-semibold px-3 py-1 rounded">
               MẶC ĐỊNH
             </span>

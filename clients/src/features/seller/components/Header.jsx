@@ -9,7 +9,7 @@ function AccountPopOver() {
     <div className="flex gap-1 flex-col justify-center w-60">
       <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">
         <Avatar size={80} className="border-2 border-blue-200" />
-        <span className="text-gray-700 font-medium mt-2">ducminh16082004</span>
+        <span className="text-gray-700 font-medium mt-2">dothanhnam</span>
       </div>
 
       <div className="flex items-center hover:bg-gray-50 cursor-pointer p-2">
@@ -46,7 +46,7 @@ function Header() {
             <div className="size-10 rounded-full bg-blue-400 overflow-hidden">
               <img src="" alt="" className="w-full h-full object-cover" />
             </div>
-            <div className="text-sm">ducminh16082004</div>
+            <div className="text-sm">dothanhnam</div>
           </div>
         </Popover>
       </div>

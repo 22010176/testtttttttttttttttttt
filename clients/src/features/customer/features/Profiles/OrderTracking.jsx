@@ -5,7 +5,7 @@ export default function OrderTracking() {
   const [showAllTracking, setShowAllTracking] = useState(false);
 
   const orderData = {
-    orderCode: '25042667NSR0PV',
+    orderCode: '25042667dddNSR0PV',
     status: 'ĐƠN HÀNG ĐÃ HOÀN THÀNH',
     trackingSteps: [
       {
@@ -45,9 +45,9 @@ export default function OrderTracking() {
       }
     ],
     address: {
-      name: 'Đỗ Đức Minh',
-      phone: '(+84) 986 941 608',
-      address: '119 Đông Các, Phường Ô Chợ Dừa, Quận Đống Đa, Hà Nội'
+      name: 'Đỗ Thành Nam',
+      phone: '(+84) 1234567890',
+      address: '344444, aaaaaaaaaai'
     },
     shipping: {
       carrier: 'SPX Express',
@@ -71,16 +71,16 @@ export default function OrderTracking() {
       },
       {
         time: '23:34 25-04-2025',
-        description: 'Đơn hàng đã đến trạm giao hàng tại khu vực của bạn Phường Cát Linh, Quận Đống Đa, Hà Nội và sẽ được giao trong vòng 24 giờ tiếp theo'
+        description: 'Đơn hàng đã đến trạm giao hàng tại khu vực của bạn và sẽ được giao trong vòng 24 giờ tiếp theo'
       },
-      {
-        time: '20:55 25-04-2025',
-        description: 'Đơn hàng đã rời kho phân loại tới 20-HNI Đống Đa Hub'
-      },
-      {
-        time: '17:25 25-04-2025',
-        description: 'Đơn hàng đã đến kho phân loại Phường Phú Chắn, Thành Phố Từ Sơn, Bắc Ninh'
-      }
+      // {
+      //   time: '20:55 25-04-2025',
+      //   description: 'Đơn hàng đã rời kho phân loại tới 20-HNI Đống Đa Hub'
+      // },
+      // {
+      //   time: '17:25 25-04-2025',
+      //   description: 'Đơn hàng đã đến kho phân loại Phường Phú Chắn, Thành Phố Từ Sơn, Bắc Ninh'
+      // }
     ],
     products: [
       {

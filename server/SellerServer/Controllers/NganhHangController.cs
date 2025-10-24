@@ -12,35 +12,35 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
   readonly IConfiguration _config = configuration;
   readonly AppDbContext dbContext = dbContext;
 
-  [HttpGet("cap-do-1")]
-  public async Task<IActionResult> LayDanhSachNganhHangCap1()
-  {
-    try
-    {
-      var result = await dbContext.NganhHang
-        .Where(i => i.NganhHangCha == null)
-        .Select(i => new
-        {
-          i.Id,
-          i.TenNganhHang
-        }).ToListAsync();
-      return Ok(new ResponseFormat
-      {
-        Data = result,
-        Success = true,
-        Message = ""
-      });
-    }
-    catch (Exception err)
-    {
-      return BadRequest(new ResponseFormat
-      {
-        Data = err,
-        Success = false,
-        Message = ""
-      });
-    }
-  }
+  // [HttpGet("cap-do-1")]
+  // public async Task<IActionResult> LayDanhSachNganhHangCap1()
+  // {
+  //   try
+  //   {
+  //     var result = await dbContext.NganhHang
+  //       .Where(i => i.NganhHangCha == null)
+  //       .Select(i => new
+  //       {
+  //         i.Id,
+  //         i.TenNganhHang
+  //       }).ToListAsync();
+  //     return Ok(new ResponseFormat
+  //     {
+  //       Data = result,
+  //       Success = true,
+  //       Message = ""
+  //     });
+  //   }
+  //   catch (Exception err)
+  //   {
+  //     return BadRequest(new ResponseFormat
+  //     {
+  //       Data = err,
+  //       Success = false,
+  //       Message = ""
+  //     });
+  //   }
+  // }
 
   [HttpGet("lay-nganh-hang-con/{id}")]
   public async Task<IActionResult> LayNganhHangCon(int id, [FromQuery] int page, [FromQuery] int pageSize)
@@ -51,13 +51,14 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
       if (pageSize <= 0) pageSize = 10;
 
       var nganhHang = await dbContext.NganhHang.FirstOrDefaultAsync(i => i.Id == id);
-      if (nganhHang == null)
-      {
-        throw new Exception("Khong tim thay nganh hang!");
-      }
+      // if (nganhHang == null)
+      // {
+
+      // throw new Exception("Khong tim thay nganh hang!");
+      // }
 
       var result = await dbContext.NganhHang
-        .Where(i => i.NganhHangChaId == nganhHang.Id)
+        .Where(i => nganhHang == null ? i.NganhHangChaId == null : i.NganhHangChaId == nganhHang.Id)
         .Skip((page - 1) * pageSize)
         .Select(i => new
         {
@@ -69,11 +70,11 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
       {
         Data = new
         {
-          NganhHangCha = new
+          NganhHangCha = nganhHang != null ? new
           {
             nganhHang.Id,
             nganhHang.TenNganhHang
-          },
+          } : null,
           NganhHangCon = result
         }
       });

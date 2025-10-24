@@ -4,9 +4,9 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const AddressManagement = () => {
   const [addresses, setAddresses] = useState([
-    { id: 1, name: 'Đỗ Đức Minh', phone: '(+84) 986 941 608', street: '119 Đông Các', district: 'Phường Ô Chợ Dừa, Quận Đống Đa, Hà Nội', isDefault: true, isRetail: false },
-    { id: 2, name: 'Đỗ Đức Minh', phone: '(+84) 986 941 608', street: '119 Đông Các', district: 'Phường Ô Chợ Dừa, Quận Đống Đa, Hà Nội', isDefault: false, isRetail: true },
-    { id: 3, name: 'Đỗ Đức Minh', phone: '(+84) 983 383 621', street: '119 Đông Các', district: 'Phường Ô Chợ Dừa, Quận Đống Đa, Hà Nội', isDefault: false, isRetail: false }
+    { id: 1, name: 'Đỗ Thành Nam', phone: '(+84) 1234567890', street: '344444', district: 'aaaaaaaaaai', isDefault: true, isRetail: false },
+    { id: 2, name: 'Đỗ Thành Nam', phone: '(+84) 1234567890', street: '344444', district: 'aaaaaaaaaai', isDefault: false, isRetail: true },
+    { id: 3, name: 'Đỗ Thành Nam', phone: '(+84) 1234567890', street: '344444', district: 'aaaaaaaaaai', isDefault: false, isRetail: false }
   ]);
 
   return (

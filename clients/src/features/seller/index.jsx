@@ -4,6 +4,8 @@ import AnalyticsLayout from "./layouts/AnalyticsLayout"
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 
+import { ROUTE_KEYS, routePaths } from "./routes"
+
 import AnalyticsDashboard from "./features/Analytics/AnalyticsDashboard"
 import AnalyticsProduct from "./features/Analytics/AnalyticsProduct"
 import WorkingPerformance from "./features/Analytics/WorkingPerformance"
@@ -22,7 +24,7 @@ import OrderDashboard from "./features/Order/OrderDashboard"
 import ReturnOrder from "./features/Order/ReturnOrder"
 import AddProduct from "./features/Product/AddProduct"
 import ProductDashBoard from "./features/Product/ProductDashboard"
-import { ROUTE_KEYS, routePaths } from "./routes"
+
 
 function Seller() {
   return (

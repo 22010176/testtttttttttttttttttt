@@ -50,6 +50,7 @@ public static class JsonSeeder
       return;
     }
     string json = await File.ReadAllTextAsync(filePath);
+    Console.WriteLine(json);
     var data = JsonSerializer.Deserialize<List<T>>(json);
 
     if (data == null || data.Count == 0)
