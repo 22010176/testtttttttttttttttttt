@@ -4,9 +4,11 @@ const fs = require('fs')
 const path = require('path')
 
 Promise.all([
-  axios.get('https://banhang.shopee.vn/help/api/v3/global_category/list/?page=1&size=1000&SPC_CDS=2637e93c-8def-4fc6-80a5-d54aceb4dd6a&SPC_CDS_VER=2')
+  axios
+    .get('https://banhang.shopee.vn/help/api/v3/global_category/list/?page=1&size=1000&SPC_CDS=2637e93c-8def-4fc6-80a5-d54aceb4dd6a&SPC_CDS_VER=2')
     .then(data => data.data.data.global_cats),
-  axios.get('https://banhang.shopee.vn/help/api/v3/global_category/list/?page=2&size=1000&SPC_CDS=2637e93c-8def-4fc6-80a5-d54aceb4dd6a&SPC_CDS_VER=2')
+  axios
+    .get('https://banhang.shopee.vn/help/api/v3/global_category/list/?page=2&size=1000&SPC_CDS=2637e93c-8def-4fc6-80a5-d54aceb4dd6a&SPC_CDS_VER=2')
     .then(data => data.data.data.global_cats)])
   .then(result => {
     brand = result.flat().map(i => i.path)

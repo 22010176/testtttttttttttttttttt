@@ -41,9 +41,36 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
   //     });
   //   }
   // }
+  [HttpGet]
+  public async Task<IActionResult> LayTatCacNganhHang()
+  {
+    try
+    {
+      return Ok(new ResponseFormat
+      {
+        Data = await dbContext.NganhHang
+          .Where(i => i.NganhHangChaId == null)
+          .Select(i => new
+          {
 
-  [HttpGet("lay-nganh-hang-con/{id}")]
-  public async Task<IActionResult> LayNganhHangCon(int id, [FromQuery] int page, [FromQuery] int pageSize)
+          })
+          .ToListAsync()
+      });
+    }
+    catch (System.Exception)
+    {
+
+      return BadRequest(new ResponseFormat
+      {
+        Data = null,
+        Success = false,
+        Message = ""
+      });
+    }
+  }
+
+  [HttpGet("lay-nganh-hang-con")]
+  public async Task<IActionResult> LayNganhHangCon([FromQuery] int id, [FromQuery] int page, [FromQuery] int pageSize)
   {
     try
     {
