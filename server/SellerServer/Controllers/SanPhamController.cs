@@ -66,7 +66,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
 
   [HttpPost("tai-hinh-anh")]
   [Consumes("multipart/form-data")]
-  public async Task<IActionResult> CapNhatMediaSanPham([FromForm] List<CapNhatHinhAnhRequest> files)
+  public async Task<IActionResult> CapNhatMediaSanPham([FromBody] List<CapNhatHinhAnhRequest> files)
   {
     try
     {
@@ -102,13 +102,14 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
   }
 
   [HttpPost("cap-nhat-san-pham")]
-  public async Task<IActionResult> CapNhatSanPham([FromForm] CapNhatSanPhamRequest request)
+  public async Task<IActionResult> CapNhatSanPham([FromBody] CapNhatSanPhamRequest request)
   {
     try
     {
       SanPham? sanPham = await dbContext.SanPham.FirstOrDefaultAsync(i => i.Id == request.SanPhamId);
       if (sanPham == null)
       {
+        if (request.NganhHangId == null) throw new Exception("Nguoi ban khong hop le");
         sanPham = new()
         {
           NguoiBanId = request.NguoiBanId,
@@ -125,7 +126,8 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
         TenSanPham = request.TenSanPham,
         MoTaSanPham = request.MoTaSanPham,
         GiaBan = request.GiaBan,
-        NgayTao = DateTime.UtcNow
+        NgayTao = request.NgayTao,
+        // NgayTao = DateTime.UtcNow
       };
       await dbContext.PhienBanSanPham.AddAsync(phienBanSanPham);
       await dbContext.SaveChangesAsync();

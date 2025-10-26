@@ -12,6 +12,7 @@ public static class ServerTemplate
   {
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddLogging(logging => logging.AddConsole());
+    builder.Logging.ClearProviders();
     builder.Configuration
         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
         .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)

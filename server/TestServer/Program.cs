@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TestServer.Utilities;
 using Utilities;
 
 var builder = ServerTemplate.CreateTemplateServer(args);
@@ -42,11 +43,14 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-var config = app.Services.GetRequiredService<IConfiguration>();
-foreach (var configEntry in config.AsEnumerable())
+if (app.Environment.IsProduction())
 {
-  logger.LogInformation("Config Key: {Key}, Value: {Value}", configEntry.Key, configEntry.Value);
+  var logger = app.Services.GetRequiredService<ILogger<Program>>();
+  var config = app.Services.GetRequiredService<IConfiguration>();
+  foreach (var configEntry in config.AsEnumerable())
+  {
+    logger.LogInformation("Config Key: {Key}, Value: {Value}", configEntry.Key, configEntry.Value);
+  }
 }
 
 if (app.Environment.IsDevelopment())
@@ -59,4 +63,6 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
+
+// Console.WriteLine(RandomGenerator.RandomUtcDate(new(1990, 1, 1), new(2030, 1, 1)));
 app.Run();

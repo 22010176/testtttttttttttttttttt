@@ -17,7 +17,8 @@ Promise.all([
       brand.flatMap(i => i.map((item, index, array) => ({
         Id: item.category_id,
         NganhHangChaId: array[index - 1]?.category_id || null,
-        TenNganhHang: item.category_name
+        TenNganhHang: item.category_name,
+        LaNhanh: array.length == index + 1
       }))),
       (a, b) => a.Id === b.Id
     )

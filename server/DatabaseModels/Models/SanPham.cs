@@ -43,13 +43,14 @@ public class MediaSanPham
 {
   [Key]
   public int Id { get; set; }
-  public int SanPhamId { get; set; }
+  public int PhienBanSanPhamId { get; set; }
 
+  public int SoThuTu { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
   public string? Url { get; set; }
   public DateTime NgayTao { get; set; }
 
-  public SanPham? SanPham { get; set; }
+  public PhienBanSanPham? PhienBanSanPham { get; set; }
 }
 
 public enum LoaiHinhAnhSanPham
@@ -66,6 +67,7 @@ public class NganhHang
   public int? NganhHangChaId { get; set; }
 
   public string? TenNganhHang { get; set; }
+  public bool LaNhanh { get; set; } = false;
 
   public NganhHang? NganhHangCha { get; set; }
   public List<NganhHang>? NganhHangCon { get; set; }

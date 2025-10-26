@@ -50,10 +50,7 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
       {
         Data = await dbContext.NganhHang
           .Where(i => i.NganhHangChaId == null)
-          .Select(i => new
-          {
-
-          })
+          .Select(i => i)
           .ToListAsync()
       });
     }
