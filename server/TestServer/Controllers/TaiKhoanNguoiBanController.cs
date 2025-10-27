@@ -54,7 +54,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
   }
 
   [HttpPost("tao-tai-khoan-thu-nghiem")]
-  public async Task<IActionResult> TaoTaiKhoanThuNghiem(int number = 100000)
+  public async Task<IActionResult> TaoTaiKhoanThuNghiem(int number = 10)
   {
     try
     {

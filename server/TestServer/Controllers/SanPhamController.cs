@@ -20,9 +20,10 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   readonly Random random = new();
   readonly int IMAGE_SIZE = 100;
 
-  [HttpPost("san-pham")]
+  [HttpPost("them-san-pham")]
   public async Task<IActionResult> TaoSanPham(int sp = 10)
   {
+    // return BadRequest();
     try
     {
       // Generate product
@@ -31,42 +32,36 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         .Where(i => i.LaNhanh)
         .ToListAsync();
 
-      _ = Parallel.ForEachAsync(taiKhoanNguoiBan, async (n, b) =>
+      List<CapNhatSanPhamRequest> sanPham = [];
+      foreach (var nguoiBan in taiKhoanNguoiBan)
       {
-        List<SanPham> sanPham = [];
-        await Parallel.ForEachAsync(Enumerable.Range(0, sp), async (a, b) =>
+        for (int i = 0; i < sp; i++)
         {
-          var data = new
-          {
-            sanPhamId = -1,
-            nguoiBanId = n.Id,
-            nganhHangId = nganhHang.ElementAt(random.Next(nganhHang.Count)).Id,
-            tenSanPham = RandomGenerator.GenerateRandomString(5, 10),
-            moTaSanPham = RandomGenerator.GenerateRandomString(50, 100),
-            giaBan = random.NextDouble() * 999_999_999,
-            ngayTao = RandomGenerator.RandomUtcDate(new(1990, 1, 1), new(2030, 1, 1))
-          };
+          sanPham.Add(CapNhatSanPhamRequest.Generate(nganhHang, nguoiBan.Id));
+        }
+      }
+      _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
+        {
           var json = JsonSerializer.Serialize(data);
           var content = new StringContent(json, Encoding.UTF8, "application/json");
-
           var response = await _http.PostAsync("http://localhost:5216/api/san-pham/cap-nhat-san-pham", content, b);
           var body = await response.Content.ReadAsStringAsync(b);
-          Console.WriteLine($"TaoSanPham:  {body}");
+          Console.WriteLine($"TaoSanPham: {body}");
         });
-      });
+
 
       return Ok(new ResponseFormat
       {
         Success = true
       });
     }
-    catch (Exception)
+    catch (Exception err)
     {
-      return BadRequest();
+      return BadRequest(err);
     }
   }
 
-  [HttpPost("phien-ban-san-pham")]
+  [HttpPost("them-phien-ban-san-pham")]
   public async Task<IActionResult> TaoPhienBanSanPham(int phienBan = 10)
   {
     try
@@ -83,16 +78,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       {
         for (int i = 0; i < phienBan; ++i)
         {
-          capNhatSanPhamRequest.Add(new()
-          {
-            SanPhamId = item.Id,
-            NguoiBanId = item.NguoiBanId,
-            NganhHangId = nganhHang.ElementAt(random.Next(nganhHang.Count)).Id,
-            TenSanPham = RandomGenerator.GenerateRandomString(5, 10),
-            MoTaSanPham = RandomGenerator.GenerateRandomString(50, 200),
-            GiaBan = random.NextDouble() * 999_999_999,
-            NgayTao = RandomGenerator.RandomUtcDate(new(1990, 1, 1), new(2030, 1, 1))
-          });
+          capNhatSanPhamRequest.Add(CapNhatSanPhamRequest.Generate(nganhHang, (int)item.NguoiBanId!, item.Id));
         }
       }
 
@@ -103,7 +89,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
         var response = await _http.PostAsync("http://localhost:5216/api/san-pham/cap-nhat-san-pham", content, c);
         var body = await response.Content.ReadAsStringAsync(c);
-        Console.WriteLine($"TaoPhienBanSanPham: spID({data.SanPhamId}, {data})  {body}");
+        Console.WriteLine($"TaoPhienBanSanPham: spID({data.SanPhamId})  {body}");
       });
       return Ok(sanPham);
     }
@@ -113,8 +99,8 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
     }
   }
 
-  [HttpPost("tai-media")]
-  public async Task<IActionResult> TaiHinhAnh()
+  [HttpPost("them-media")]
+  public async Task<IActionResult> TaoMediaSanPham()
   {
     try
     {
@@ -124,31 +110,15 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         var list = new List<Task<CapNhatHinhAnhRequest>>
         {
           // HINH_ANH_BIA
-          Task.Run(async () => new CapNhatHinhAnhRequest
-          {
-            PhienBanSanPhamId = pbsp.Id,
-            LoaiHinhAnhSanPham = LoaiHinhAnhSanPham.HINH_ANH_BIA,
-            File = await RandomGenerator.GenerateRandomImageStream(IMAGE_SIZE, IMAGE_SIZE)
-          }),
-
+          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.HINH_ANH_BIA,IMAGE_SIZE)),
           // VIDEO_SAN_PHAM
-          Task.Run(async () => new CapNhatHinhAnhRequest
-          {
-            PhienBanSanPhamId = pbsp.Id,
-            LoaiHinhAnhSanPham = LoaiHinhAnhSanPham.VIDEO_SAN_PHAM,
-            File = await RandomGenerator.GenerateRandomImageStream(IMAGE_SIZE, IMAGE_SIZE)
-          })
+          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.VIDEO_SAN_PHAM,IMAGE_SIZE)),
         };
 
         // 10 x HINH_MINH_HOA
         for (int i = 0; i < 10; i++)
         {
-          list.Add(Task.Run(async () => new CapNhatHinhAnhRequest
-          {
-            PhienBanSanPhamId = pbsp.Id,
-            LoaiHinhAnhSanPham = LoaiHinhAnhSanPham.HINH_MINH_HOA,
-            File = await RandomGenerator.GenerateRandomImageStream(IMAGE_SIZE, IMAGE_SIZE)
-          }));
+          list.Add(Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.HINH_MINH_HOA, IMAGE_SIZE)));
         }
         return list;
       }).ToList();
@@ -177,22 +147,25 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
     }
     catch (Exception)
     {
-
       throw;
     }
   }
 
   [HttpPost]
-  public async Task<IActionResult> SinhSanPham()
+  public async Task<IActionResult> SinhSanPham(int sanPham, int phienBanSanPham)
   {
     try
     {
+      await TaoSanPham(sanPham);
+      await TaoPhienBanSanPham(phienBanSanPham);
+      await TaoMediaSanPham();
+
       return Ok();
     }
-    catch (System.Exception)
+    catch (Exception)
     {
 
-      throw;
+      return BadRequest();
     }
   }
 
