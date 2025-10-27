@@ -3,8 +3,9 @@ using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Formats.Png;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
-namespace TestServer.Utilities;
+namespace Utilities;
 
 public class RandomGenerator
 {
@@ -51,7 +52,7 @@ public class RandomGenerator
     return sb.ToString();
   }
 
-  public static async Task<MemoryStream> GenerateRandomImageStream(int width, int height)
+  public static async Task<IFormFile> GenerateRandomImageStream(int width, int height)
   {
     var memoryStream = new MemoryStream();
 
@@ -74,7 +75,11 @@ public class RandomGenerator
     }
 
     memoryStream.Position = 0;
-    return memoryStream;
+    return new FormFile(memoryStream, 0, memoryStream.Length, "Files", $"{Guid.NewGuid()}.png")
+    {
+      Headers = new HeaderDictionary(),
+      ContentType = "image/png"
+    };
   }
 
   public static DateTime RandomUtcDate(DateTime start, DateTime end)

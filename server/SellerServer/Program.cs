@@ -16,10 +16,7 @@ builder.Services.AddSingleton<S3Service>(options =>
   return new(awsConfig);
 });
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-{
-  options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresConnection"));
-});
+ServerTemplate.AddPostgres<AppDbContext>(builder, builder.Configuration.GetConnectionString("PostgresConnection")!);
 
 builder.Services.AddAuthentication(options =>
 {

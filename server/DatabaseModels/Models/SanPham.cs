@@ -19,7 +19,6 @@ public class SanPham
 
   public TaiKhoanNguoiBan? NguoiBan { get; set; }
   public List<PhienBanSanPham>? PhienBanSanPham { get; set; }
-  public List<MediaSanPham>? MediaSanPham { get; set; }
 }
 
 public class PhienBanSanPham
@@ -45,7 +44,7 @@ public class MediaSanPham
   public int Id { get; set; }
   public int PhienBanSanPhamId { get; set; }
 
-  public int SoThuTu { get; set; }
+  // public int SoThuTu { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
   public string? Url { get; set; }
   public DateTime NgayTao { get; set; }

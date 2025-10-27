@@ -8,7 +8,7 @@ namespace Utilities;
 
 public class S3Service
 {
-  private readonly IAmazonS3 _s3Client;
+  private AmazonS3Client S3Client { get; set; }
   private readonly string _bucketName;
   private readonly S3ServiceParam param;
 
@@ -21,13 +21,30 @@ public class S3Service
       s3Config.ServiceURL = s3ServiceParam.ServiceURL;
       s3Config.ForcePathStyle = true;
     }
-    _s3Client = new AmazonS3Client(s3ServiceParam.AccessKey, s3ServiceParam.SecretKey, s3Config);
+    S3Client = new AmazonS3Client(s3ServiceParam.AccessKey, s3ServiceParam.SecretKey, s3Config);
     _bucketName = s3ServiceParam.BucketName;
+
     param = s3ServiceParam;
+  }
+
+  public async Task CreateBucket(string bucketName)
+  {
+    await S3Client.PutBucketAsync(new PutBucketRequest
+    {
+      BucketName = bucketName
+    });
   }
 
   public async Task<string?> UploadFileAsync(IFormFile? file)
   {
+    try
+    {
+      await CreateBucket(_bucketName!);
+    }
+    catch (System.Exception)
+    {
+      throw;
+    }
     if (file == null) return null;
     var fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
 
@@ -41,7 +58,7 @@ public class S3Service
       CannedACL = S3CannedACL.PublicRead // Optional: make file public
     };
 
-    var fileTransferUtility = new TransferUtility(_s3Client);
+    var fileTransferUtility = new TransferUtility(S3Client);
     await fileTransferUtility.UploadAsync(uploadRequest);
 
     return param.UseLocalStack ?
@@ -58,7 +75,7 @@ public class S3Service
         BucketName = _bucketName,
         Key = key
       };
-      await _s3Client.DeleteObjectAsync(request);
+      await S3Client.DeleteObjectAsync(request);
       return true;
     }
     catch (AmazonS3Exception ex)

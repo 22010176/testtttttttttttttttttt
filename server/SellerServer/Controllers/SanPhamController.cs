@@ -1,4 +1,5 @@
 using DatabaseModels;
+using DatabaseModels.DTO;
 using DatabaseModels.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -66,26 +67,25 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
 
   [HttpPost("tai-hinh-anh")]
   [Consumes("multipart/form-data")]
-  public async Task<IActionResult> CapNhatMediaSanPham([FromBody] List<CapNhatHinhAnhRequest> files)
+  public async Task<IActionResult> CapNhatMediaSanPham([FromForm] CapNhatHinhAnhRequest file)
   {
     try
     {
-      List<MediaSanPham> media = [];
-      foreach (var item in files)
+      Console.WriteLine(file.LoaiHinhAnhSanPham);
+      MediaSanPham mediaSanPham = new()
       {
-        media.Add(new MediaSanPham()
-        {
-          NgayTao = DateTime.UtcNow,
-          Url = await s3.UploadFileAsync(item.File),
-          LoaiHinhAnhSanPham = item.LoaiHinhAnhSanPham
-        });
-      }
-      await dbContext.MediaSanPham.AddRangeAsync(media);
+        PhienBanSanPhamId = file.PhienBanSanPhamId,
+        NgayTao = DateTime.UtcNow,
+        Url = await s3.UploadFileAsync(file.File),
+        LoaiHinhAnhSanPham = file.LoaiHinhAnhSanPham
+      };
+      // if (mediaSanPham.Url == null)
+      await dbContext.MediaSanPham.AddAsync(mediaSanPham);
       await dbContext.SaveChangesAsync();
 
       return Ok(new ResponseFormat
       {
-        Data = media,
+        Data = mediaSanPham,
         Success = true,
         Message = ""
       });
@@ -160,7 +160,6 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       sanPham.TrangThaiSanPham = request.TrangThaiSanPham;
       await dbContext.SaveChangesAsync();
 
-
       return Ok(new ResponseFormat
       {
         Success = true
@@ -178,29 +177,29 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
   }
 }
 
-public class CapNhatTrangThaiRequest
-{
-  public int SanPhamId { get; set; }
-  public TrangThaiSanPham TrangThaiSanPham { get; set; }
-}
+// public class CapNhatTrangThaiRequest
+// {
+//   public int SanPhamId { get; set; }
+//   public TrangThaiSanPham TrangThaiSanPham { get; set; }
+// }
 
-public class CapNhatHinhAnhRequest
-{
-  public int? SanPhamId { get; set; }
-  public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
-  public IFormFile File { get; set; } = null!;
-}
+// public class CapNhatHinhAnhRequest
+// {
+//   public int PhienBanSanPhamId { get; set; }
+//   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
+//   public IFormFile File { get; set; } = null!;
+// }
 
-public class CapNhatSanPhamRequest
-{
-  public int? SanPhamId { get; set; }
-  public int? NguoiBanId { get; set; }
-  public int? NganhHangId { get; set; }
-  public string? TenSanPham { get; set; }
-  public string? MoTaSanPham { get; set; }
-  public double GiaBan { get; set; }
-  public DateTime NgayTao { get; set; }
-}
+// public class CapNhatSanPhamRequest
+// {
+//   public int? SanPhamId { get; set; }
+//   public int? NguoiBanId { get; set; }
+//   public int? NganhHangId { get; set; }
+//   public string? TenSanPham { get; set; }
+//   public string? MoTaSanPham { get; set; }
+//   public double GiaBan { get; set; }
+//   public DateTime NgayTao { get; set; }
+// }
 
 public class CapNhatTrangThaiSanPhamRequest
 {
