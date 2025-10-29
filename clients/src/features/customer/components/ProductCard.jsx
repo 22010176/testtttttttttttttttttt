@@ -1,5 +1,5 @@
-import { PlayCircleFilled } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+
 import { routePaths } from '../routes';
 
 export default function ProductCard() {
@@ -8,17 +8,13 @@ export default function ProductCard() {
       {/* Image Container */}
       <div className="relative">
         {/* Discount Badge */}
-        <div className="absolute top-0 right-0 bg-yellow-50 text-orange-500 px-2 py-1 text-xs font-semibold">
+        {/* <div className="absolute top-0 right-0 bg-yellow-50 text-orange-500 px-2 py-1 text-xs font-semibold">
           -36%
-        </div>
+        </div> */}
 
         {/* Product Image */}
         <div className="w-full h-48 bg-gray-50 flex items-center justify-center p-4">
-          <img
-            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 250'%3E%3Crect fill='%23f5f5f5' width='200' height='250'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23999'%3EOffice Chair%3C/text%3E%3C/svg%3E"
-            alt="Office Chair"
-            className="w-full h-full object-contain"
-          />
+          <img alt="Office Chair" className="w-full h-full object-contain" />
         </div>
 
         {/* Video Play Button */}

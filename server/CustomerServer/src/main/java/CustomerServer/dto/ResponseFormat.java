@@ -10,15 +10,31 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ResponseFormat<T> {
-  private T data;
-  private String message;
-  private boolean success;
+  public T data;
+  public String message;
+  public boolean success;
 
   public static <T> ResponseFormat<T> success(T data, String message) {
     return new ResponseFormat<>(data, message, true);
   }
 
-  public static <T> ResponseFormat<T> fail(String message) {
-    return new ResponseFormat<>(null, message, false);
+  public static <T> ResponseFormat<T> success(T data) {
+    return new ResponseFormat<>(data, "", true);
+  }
+
+  public static <T> ResponseFormat<T> success() {
+    return new ResponseFormat<>(null, "", true);
+  }
+
+  public static <T> ResponseFormat<T> fail(T data, String message) {
+    return new ResponseFormat<>(data, message, false);
+  }
+
+  public static <T> ResponseFormat<T> fail(T data) {
+    return new ResponseFormat<>(data, "", false);
+  }
+
+  public static <T> ResponseFormat<T> fail() {
+    return new ResponseFormat<>(null, "", false);
   }
 }

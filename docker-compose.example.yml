@@ -118,7 +118,7 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       # persist all data locally
-      - localstack-data:/var/lib/localstack
+      - localstack-data:/var/lib/localstack/data
       # allow LocalStack to spawn Docker containers for Lambdas
       - /var/run/docker.sock:/var/run/docker.sock
     networks:

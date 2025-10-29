@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.dto.ResponseFormat;
 import lombok.AllArgsConstructor;
-
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/sanpham")
@@ -19,20 +19,92 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class SanPhamController {
   private final JdbcTemplate jdbcTemplate;
 
+  @GetMapping("nganhhang")
+  public ResponseFormat<Object> XemDanhSachNganhHang(
+      @RequestParam(defaultValue = "-1") int nganhHangId) {
+    String sql;
+    List<Map<String, Object>> categories;
+    if (nganhHangId != -1) {
+      sql = """
+          SELECT *
+          FROM "NganhHang"
+          WHERE "NganhHangChaId" = ?
+          """;
+      categories = jdbcTemplate.queryForList(sql, nganhHangId);
+    } else {
+      sql = """
+          SELECT *
+          FROM "NganhHang"
+          WHERE "NganhHangChaId" IS NULL
+          """;
+      categories = jdbcTemplate.queryForList(sql);
+    }
+
+    return new ResponseFormat<>(categories, "", true);
+  }
+
   @GetMapping
-  public ResponseFormat<List<Map<String, Object>>> getMethodName(
+  public ResponseFormat<List<Map<String, Object>>> XemDanhSachSanPham(
       @RequestParam(required = false) Integer pageSize) {
     String sql = """
-        SELECT *
-        FROM "SanPham"
-        WHERE "Id" IN (
+        SELECT
+        	sp."Id",
+        	sp."TrangThaiSanPham",
+        	pbsp."Id" PhienBanSanPhamId,
+        	pbsp."TenSanPham",
+        	pbsp."MoTaSanPham",
+        	pbsp."GiaBan",
+        	pbsp."NgayTao"::DATE,
+        	(
+        		SELECT m."Url"
+        		FROM "MediaSanPham" m
+        		WHERE
+        			m."PhienBanSanPhamId" = pbsp."Id"
+        			AND m."LoaiHinhAnhSanPham" = 1
+        	) anhBia
+        FROM "SanPham" sp
+        JOIN LATERAL (
+        	SELECT *
+        	FROM "PhienBanSanPham" pbsp
+        	WHERE
+        		sp."Id" = pbsp."SanPhamId"
+        		AND pbsp."NgayTao" < CURRENT_DATE
+        	ORDER BY pbsp."NgayTao"
+        	LIMIT 1
+        ) pbsp ON TRUE
+        WHERE sp."Id" IN (
             SELECT "Id"
             FROM "SanPham"
             ORDER BY RANDOM()
             LIMIT ?
-        );
-                """;
+        )
+        ORDER BY sp."Id"
+        """;
     return new ResponseFormat<>(jdbcTemplate.queryForList(sql, pageSize), "", true);
-
   }
+
+  @GetMapping("/thong-tin-chi-tiet/{id}")
+  public ResponseFormat<Map<String, Object>> getProductDetail(@PathVariable Integer id) {
+    String sql = """
+        SELECT *
+        FROM "SanPham"
+        WHERE "Id" = ?
+        """;
+    Map<String, Object> product = jdbcTemplate.queryForMap(sql, id);
+    return new ResponseFormat<>(product, "", true);
+  }
+
+  @GetMapping("/tim-kiem")
+  public ResponseFormat<List<Map<String, Object>>> searchProducts(@RequestParam String param) {
+    String sql = """
+        SELECT *
+        FROM "PhienBanSanPham" AS pbs
+        JOIN "SanPham" AS sp ON pbs."SanPhamId" = sp."Id"
+        WHERE pbs."TenSanPham" LIKE ?
+        LIMIT 100
+        """;
+    List<Map<String, Object>> products = jdbcTemplate.queryForList(sql, "%" + param + "%");
+    return new ResponseFormat<>(products, "", true);
+  }
+
 }
