@@ -1,7 +1,7 @@
-import { HeartFilled, HeartOutlined, RightOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
+import { LikeOutlined, MoreOutlined, PlayCircleFilled, RightOutlined, ShopOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
+import { InputNumber } from 'antd';
 import { useState } from 'react';
 
-import { LikeOutlined, MessageOutlined, MoreOutlined, PlayCircleFilled, ShopOutlined } from '@ant-design/icons';
 import Container from '../components/Container';
 
 export default function ProductDetail() {
@@ -56,9 +56,6 @@ export default function ProductDetail() {
                 <div className="w-full aspect-square flex items-center justify-center">
                   <div className="text-gray-400 text-6xl">📦</div>
                 </div>
-                <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded shadow">
-                  <img src="https://via.placeholder.com/80x30?text=DUMIPHAR" alt="Brand" className="h-8" />
-                </div>
               </div>
 
               {/* Thumbnail Gallery */}
@@ -67,8 +64,8 @@ export default function ProductDetail() {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`flex-shrink-0 w-20 h-20 border-2 rounded ${selectedImage === index ? 'border-orange-500' : 'border-gray-200'
-                      } hover:border-orange-300 transition-colors`}
+                    className={`flex-shrink-0 w-20 h-20 border-2 rounded ${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
+                      } hover:border-blue-300 transition-colors`}
                   >
                     <div className="w-full h-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">
                       {index + 1}
@@ -173,7 +170,7 @@ export default function ProductDetail() {
               </div> */}
 
               {/* Flavor Selection */}
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <div className="flex items-start gap-3">
                   <span className="text-gray-600 w-32">Mẫu</span>
                   <div className="flex-1">
@@ -196,45 +193,25 @@ export default function ProductDetail() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Quantity */}
               <div className="mb-8">
                 <div className="flex items-center gap-3">
                   <span className="text-gray-600 w-32">Số Lượng</span>
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center border rounded">
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
-                      >
-                        -
-                      </button>
-                      <input
-                        type="text"
-                        value={quantity}
-                        onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                        className="w-16 h-8 text-center border-x"
-                      />
-                      <button
-                        onClick={() => setQuantity(quantity + 1)}
-                        className="w-8 h-8 flex items-center justify-center hover:bg-gray-50"
-                      >
-                        +
-                      </button>
-                    </div>
-                    <span className="text-gray-500 text-sm">CÒN HÀNG</span>
+                    <InputNumber controls={false} />
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
               <div className="flex gap-4">
-                <button className="flex-1 border-2 border-orange-500 text-orange-500 py-3 rounded hover:bg-orange-50 transition-colors flex items-center justify-center gap-2">
+                <button className="flex-1 border-2 border-blue-500 text-blue-500 py-3 rounded hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
                   <ShoppingCartOutlined />
                   <span>Thêm Vào Giỏ Hàng</span>
                 </button>
-                <button className="flex-1 bg-orange-500 text-white py-3 rounded hover:bg-orange-600 transition-colors">
+                <button className="flex-1 bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors">
                   Mua Ngay
                 </button>
               </div>
@@ -256,10 +233,10 @@ export default function ProductDetail() {
                 <p className="text-sm text-gray-500">Online 11 Phút Trước</p>
               </div>
               <div className="flex gap-2 ml-4">
-                <button className="flex items-center gap-2 px-4 py-2 border border-orange-500 text-orange-500 rounded hover:bg-orange-50 transition-colors">
+                {/* <button className="flex items-center gap-2 px-4 py-2 border border-blue-500 text-blue-500 rounded hover:bg-orange-50 transition-colors">
                   <MessageOutlined />
                   <span>Chat Ngay</span>
-                </button>
+                </button> */}
                 <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-50 transition-colors">
                   <ShopOutlined />
                   <span>Xem Shop</span>
@@ -267,7 +244,7 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            <div className="grid grid-cols-4 gap-8 text-center">
+            {/* <div className="grid grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-sm text-gray-500 mb-1">Đánh Giá</div>
                 <div className="text-orange-500 font-semibold">47,2k</div>
@@ -292,7 +269,7 @@ export default function ProductDetail() {
                 <div className="text-sm text-gray-500 mb-1">Người Theo Dõi</div>
                 <div className="text-orange-500 font-semibold">15,4k</div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </Container>

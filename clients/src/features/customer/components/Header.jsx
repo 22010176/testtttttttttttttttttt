@@ -1,4 +1,4 @@
-import { Button, Input, Space } from 'antd';
+import { Button, Image, Input, Space } from 'antd';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -12,12 +12,12 @@ export default function Header() {
     <div className="w-full bg-blue-500 py-5">
       <Container className="flex items-center justify-between gap-20">
         {/* Logo */}
-        <div className="flex items-center gap-3">
+        <Link to={routePaths.root} className="flex items-center gap-3">
           <div className="size-10 bg-white rounded-sm flex items-center justify-center">
             <p className="text-blue-500 text-2xl" />
           </div>
           <span className="text-white text-2xl font-light">AAAAA</span>
-        </div>
+        </Link>
 
         {/* Search Bar */}
         <Space.Compact className='w-full'>
@@ -27,12 +27,20 @@ export default function Header() {
 
 
         {/* </Badge> */}
-        <div className="flex items-baseline gap-5 cursor-pointer">
+        <div className="flex items-center gap-8 cursor-pointer">
           <Link className='text-white' to={routePaths.orders.carts}>
             <FontAwesomeIcon icon={faShoppingCart} className='text-xl' />
           </Link>
-          <Link to={routePaths.account.infomation} className='text-white text-xl'>
-            User
+          <Link to={routePaths.account.infomation} className='text-white text-xl flex items-center gap-2'>
+            <p>
+              User
+            </p>
+            <img
+              src="https://cf.shopee.vn/file/sg-11134201-22100-3m3nv4od6s6t2e"
+              alt="User Avatar"
+              className="size-8 rounded-full object-cover bg-white"
+            />
+
           </Link>
         </div>
       </Container>

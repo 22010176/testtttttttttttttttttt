@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Menu } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ROUTE_KEYS, routePaths } from '../../routes';
+
+import { ROUTE_KEYS, routePaths } from '_c/routes';
 
 
 const CartItem = ({ shop }) => {
@@ -35,7 +36,7 @@ const CartItem = ({ shop }) => {
             </Tag>
           )}
         </div> */}
-        <Link to={routePaths.account.tracking.replace(ROUTE_KEYS.BY_ID, 'd')} className='text-blue-500'>Xem chi tiết</Link>
+        <Link to={routePaths.orders.tracking.replace(ROUTE_KEYS.BY_ID, 'd')} className='text-blue-500'>Xem chi tiết</Link>
       </div>
 
       {/* Cart Items */}

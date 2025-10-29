@@ -25,12 +25,12 @@ export default function ProfileLayout() {
       children: [
         { key: routePaths.account.profile, label: 'Hồ Sơ' },
         { key: routePaths.account.address, label: 'Địa Chỉ' },
-        { key: 'doi-mat-khau', label: 'Đổi Mật Khẩu' },
+        { key: routePaths.account.change_password, label: 'Đổi Mật Khẩu' },
       ],
     },
     { key: routePaths.orders.root, icon: <ShoppingOutlined />, label: 'Đơn Mua', },
+
     { key: 'kho-voucher', icon: <GiftOutlined />, label: 'Kho Voucher', },
-    // { key: 'shopee-xu', icon: <ShopOutlined />, label: 'Shopee Xu', },
   ];
 
   function onClick(e) {
@@ -40,7 +40,7 @@ export default function ProfileLayout() {
   return (
     <ConfigProvider theme={theme}>
       <Container className="grid grid-cols-5 gap-5">
-        <Affix offsetTop={20}>
+        <Affix offsetTop={50}>
           <div className="bg-white">
             <div className="flex items-center gap-3 p-3">
               <Avatar size={50} src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />

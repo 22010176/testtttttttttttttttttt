@@ -3,6 +3,8 @@ import { Button } from 'antd';
 import Container from '../components/Container';
 import ProductCard from '../components/ProductCard';
 import SectionIsland from '../components/SectionIsland';
+import { Link } from 'react-router-dom';
+import { routePaths } from '../routes';
 
 export default function DashBoard() {
   const categories = [
@@ -37,7 +39,7 @@ export default function DashBoard() {
         <h2 className="text-lg font-normal uppercase">DANH MỤC</h2>
         <div className="grid grid-cols-10 gap-5">
           {categories[0].map((category, index) => (
-            <div key={index} className="border border-gray-200 rounded hover:shadow-lg hover:border-blue-500 transition-all cursor-pointer group">
+            <Link to={routePaths.search} key={index} className="border border-gray-200 rounded hover:shadow-lg hover:border-blue-500 transition-all cursor-pointer group">
               <div className="flex flex-col items-center justify-center h-full p-3">
                 <div className={`w-16 h-16 ${category.color} rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                   <span className="text-2xl">{category.icon}</span>
@@ -46,7 +48,7 @@ export default function DashBoard() {
                   {category.name}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </SectionIsland>

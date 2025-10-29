@@ -58,8 +58,8 @@ export default function ProductCard() {
         {/* Price and Sales */}
         <div className="flex items-end justify-between">
           <div className="flex items-baseline gap-0.5">
-            <span className="text-orange-500 text-base font-semibold">643.500</span>
-            <span className="text-orange-500 text-xs underline">đ</span>
+            <span className="text-blue-500 text-base font-semibold">643.500</span>
+            <span className="text-blue-500 text-xs underline">đ</span>
           </div>
           <span className="text-gray-500 text-[10px]">Đã bán 10k+</span>
         </div>
