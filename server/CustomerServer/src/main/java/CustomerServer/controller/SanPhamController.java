@@ -1,8 +1,10 @@
 package CustomerServer.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,19 +85,61 @@ public class SanPhamController {
     return new ResponseFormat<>(jdbcTemplate.queryForList(sql, pageSize), "", true);
   }
 
-  @GetMapping("/thong-tin-chi-tiet/{id}")
-  public ResponseFormat<Map<String, Object>> getProductDetail(@PathVariable Integer id) {
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseFormat<Object>> getProductDetail(@PathVariable Integer id) {
     String sql = """
-        SELECT *
-        FROM "SanPham"
-        WHERE "Id" = ?
+        SELECT
+          sp."Id",
+          pbsp."Id" PhienBanSanPhamId,
+          pbsp."TenSanPham",
+          pbsp."MoTaSanPham",
+          pbsp."GiaBan",
+          pbsp."NgayTao"::DATE,
+          tknb."HoTen"
+        FROM "SanPham" sp
+        JOIN LATERAL (
+          SELECT *
+          FROM "PhienBanSanPham" pbsp
+          WHERE
+            sp."Id" = pbsp."SanPhamId"
+            AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao"
+          LIMIT 1
+        ) pbsp ON TRUE
+        INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
+        WHERE sp."Id" = ?
+        """;
+    String mediaSql = """
+        SELECT
+          m_sp."Url",
+          m_sp."LoaiHinhAnhSanPham"
+        FROM "SanPham" sp
+        JOIN LATERAL (
+          SELECT *
+          FROM "PhienBanSanPham" pbsp
+          WHERE
+            sp."Id" = pbsp."SanPhamId"
+            AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao"
+          LIMIT 1
+        ) pbsp ON TRUE
+        INNER JOIN "MediaSanPham" m_sp ON m_sp."PhienBanSanPhamId" = pbsp."Id"
+        WHERE sp."Id" = ?
+        ORDER BY m_sp."LoaiHinhAnhSanPham" DESC, m_sp."NgayTao" DESC
+        LIMIT 8
         """;
     Map<String, Object> product = jdbcTemplate.queryForMap(sql, id);
-    return new ResponseFormat<>(product, "", true);
+    List<Map<String, Object>> media = jdbcTemplate.queryForList(mediaSql, id);
+
+    Map<String, Object> result = new HashMap<>();
+    result.put("media", media);
+    result.put("sanpham", product);
+    return ResponseEntity.ok(new ResponseFormat<>(result, "", true));
   }
 
   @GetMapping("/tim-kiem")
-  public ResponseFormat<List<Map<String, Object>>> searchProducts(@RequestParam String param) {
+  public ResponseFormat<List<Map<String, Object>>> searchProducts(
+      @RequestParam String param) {
     String sql = """
         SELECT *
         FROM "PhienBanSanPham" AS pbs

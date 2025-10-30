@@ -2,8 +2,10 @@ import { GiftOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons'
 import { Affix, Avatar, ConfigProvider, Layout, Menu, Typography } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import { ROUTE_KEYS } from '@/constant/route_keys';
+
 import Container from '../components/Container';
-import { ROUTE_KEYS, routePaths } from '../routes';
+import { routePaths } from '../routes';
 
 const { Sider, Content } = Layout;
 const { Title, Text } = Typography;
@@ -13,6 +15,7 @@ const theme = {
     Menu: { subMenuItemBg: "#FFFFFF" },
   },
 }
+
 export default function ProfileLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()

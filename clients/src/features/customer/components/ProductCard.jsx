@@ -2,9 +2,10 @@ import { Link } from 'react-router-dom';
 
 import { routePaths } from '../routes';
 
-export default function ProductCard() {
+export default function ProductCard({ Id, TenSanPham, anhbia, GiaBan, ...props }) {
+  console.log(props);
   return (
-    <Link to={routePaths.product.details.replace(":id", '3')} className="bg-white rounded-sm shadow-sm hover:shadow-lg transition-shadow cursor-pointer border border-gray-100">
+    <Link to={routePaths.product.details.replace(":id", Id)} className="bg-white rounded-sm shadow-sm hover:shadow-lg transition-shadow cursor-pointer border border-gray-100">
       {/* Image Container */}
       <div className="relative">
         {/* Discount Badge */}
@@ -14,7 +15,7 @@ export default function ProductCard() {
 
         {/* Product Image */}
         <div className="w-full h-48 bg-gray-50 flex items-center justify-center p-4">
-          <img alt="Office Chair" className="w-full h-full object-contain" />
+          <img src={anhbia} alt="Office Chair" className="w-full h-full object-contain" />
         </div>
 
         {/* Video Play Button */}
@@ -45,7 +46,7 @@ export default function ProductCard() {
 
         {/* Product Title */}
         <h3 className="text-xs text-gray-800 mb-2 line-clamp-2 h-8">
-          Ghế xoay văn phòng HTD V1 Công thái...
+          {TenSanPham}
         </h3>
 
         {/* Badges */}
@@ -56,9 +57,9 @@ export default function ProductCard() {
         </div> */}
 
         {/* Price and Sales */}
-        <div className="flex items-end justify-between">
+        <div className="">
           <div className="flex items-baseline gap-0.5">
-            <span className="text-blue-500 text-base font-semibold">643.500</span>
+            <span className="text-blue-500 text-base font-semibold">{(+GiaBan).toLocaleString()}</span>
             <span className="text-blue-500 text-xs underline">đ</span>
           </div>
           <span className="text-gray-500 text-[10px]">Đã bán 10k+</span>

@@ -1,15 +1,30 @@
 import { LikeOutlined, MoreOutlined, PlayCircleFilled, RightOutlined, ShopOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
 import { InputNumber } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
+import { XemChiTietSanPham } from '../api/sanPham';
 import Container from '../components/Container';
 
 export default function ProductDetail() {
-  const [quantity, setQuantity] = useState(1);
-  const [selectedFlavor, setSelectedFlavor] = useState('vị cam');
-  const [liked, setLiked] = useState(false);
+  const { id } = useParams();
+
+  const [product, setProduct] = useState(null);
+  const [media, setMedia] = useState([]);
+
   const [selectedImage, setSelectedImage] = useState(0);
   const [activeTab, setActiveTab] = useState('all');
+
+  useEffect(function () {
+    document.title = 'Product Details'
+    // Fetch product details and media
+    XemChiTietSanPham({ id }).then(data => {
+      console.log(data)
+      setProduct(data.data.sanpham);
+      setMedia(data.data.media || []);
+      setSelectedImage(0);
+    });
+  }, [id])
 
   const tabs = [
     { key: 'all', label: 'Tất Cả' },
@@ -43,8 +58,6 @@ export default function ProductDetail() {
 
   return (
     <div className="">
-
-
       {/* Main Content */}
       <Container>
         <div className="bg-white rounded-sm p-6">
@@ -54,22 +67,31 @@ export default function ProductDetail() {
               {/* Main Image */}
               <div className="bg-gray-50 rounded mb-4 flex items-center justify-center p-8 relative">
                 <div className="w-full aspect-square flex items-center justify-center">
-                  <div className="text-gray-400 text-6xl">📦</div>
+                  {media.length > 0 ? (
+                    <img
+                      src={media[selectedImage].Url}
+                      alt={`Product Image ${selectedImage + 1}`}
+                      className="w-full h-full object-cover rounded"
+                    />
+                  ) : (
+                    <div className="text-gray-400 text-6xl">📦</div>
+                  )}
                 </div>
               </div>
 
               {/* Thumbnail Gallery */}
               <div className="flex gap-2 overflow-x-auto pb-2">
-                {images.map((img, index) => (
+                {media.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
                     className={`flex-shrink-0 w-20 h-20 border-2 rounded ${selectedImage === index ? 'border-blue-500' : 'border-gray-200'
                       } hover:border-blue-300 transition-colors`}
                   >
-                    <div className="w-full h-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">
+                    {/* <div className="w-full h-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">
                       {index + 1}
-                    </div>
+                    </div> */}
+                    <img src={img.Url} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover rounded" />
                   </button>
                 ))}
               </div>
@@ -109,7 +131,7 @@ export default function ProductDetail() {
 
             {/* Right Column - Product Info */}
             <div>
-              <h1 className="text-xl font-normal mb-4">Tuýp 20 viên sủi Vitamin C PLUSZS</h1>
+              <h1 className="text-xl font-normal mb-4">{product.TenSanPham}</h1>
 
               {/* Rating & Sales */}
               <div className="flex items-center gap-6 mb-4">
@@ -133,9 +155,9 @@ export default function ProductDetail() {
               {/* Price */}
               <div className="bg-gray-50 p-4 rounded mb-4">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl text-orangbluee-500 font-light">14.799đ - 19.000đ</span>
-                  <span className="text-gray-400 line-through text-sm">16.000đ - 19.000đ</span>
-                  <span className="bg-blue-500 text-white text-xs px-1 rounded">-8%</span>
+                  <span className="text-3xl text-orangbluee-500 font-light">{(+product.GiaBan).toLocaleString()}đ</span>
+                  {/* <span className="text-gray-400 line-through text-sm">16.000đ - 19.000đ</span>
+                  <span className="bg-blue-500 text-white text-xs px-1 rounded">-8%</span> */}
                 </div>
               </div>
 
@@ -229,7 +251,7 @@ export default function ProductDetail() {
                 <span className="text-2xl">🌿</span>
               </div>
               <div>
-                <h2 className="font-semibold">Minh123dumiphar</h2>
+                <h2 className="font-semibold">{product.HoTen}</h2>
                 <p className="text-sm text-gray-500">Online 11 Phút Trước</p>
               </div>
               <div className="flex gap-2 ml-4">

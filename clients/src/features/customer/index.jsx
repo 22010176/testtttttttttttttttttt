@@ -12,10 +12,10 @@ import AddressManagement from "./features/Profiles/AddressManagement"
 import OrderTracking from "./features/Profiles/OrderTracking"
 import ProfilePage from "./features/Profiles/ProfileDashboard"
 import SearchPage from "./features/SearchPage"
+import ShopPage from "./features/ShopPage"
 import ShopeeCheckout from "./features/ShoppingCart/Checkout"
 import ShoppingCart from "./features/ShoppingCart/ShoppingCart"
 import ShopeeCarts from "./features/ShoppingCart/ShoppingCarts"
-import ShopPage from "./features/ShopPage"
 
 function Customer() {
   useEffect(function () {

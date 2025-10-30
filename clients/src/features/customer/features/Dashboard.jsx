@@ -1,12 +1,25 @@
 import { Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
+import { XemDanhSachSanPham } from '../api/sanPham';
 import Container from '../components/Container';
 import ProductCard from '../components/ProductCard';
 import SectionIsland from '../components/SectionIsland';
-import { Link } from 'react-router-dom';
 import { routePaths } from '../routes';
 
 export default function DashBoard() {
+  const [sanPham, setSanPham] = useState([])
+  useEffect(function () {
+    document.title = 'Dashboard'
+    XemDanhSachSanPham({}).then(data => {
+      console.log(data)
+      setSanPham(data.data)
+    })
+  }, [])
+
+  console.log(sanPham)
+
   const categories = [
     [
       { name: 'Thời Trang Nam', icon: '👔', color: 'bg-blue-100' },
@@ -58,7 +71,7 @@ export default function DashBoard() {
         <h2 className="text-lg font-normal uppercase">GỢI Ý</h2>
 
         <div className='grid grid-cols-6 gap-5'>
-          {new Array(50).fill().map((_, j) => <ProductCard key={j} />)}
+          {sanPham.map((product, j) => <ProductCard key={j} {...product} />)}
 
           <div className='col-span-6 flex justify-center'>
             <Button className='w-100' size='large' variant='solid' color='blue'>Xem thêm</Button>

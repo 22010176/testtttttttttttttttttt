@@ -4,8 +4,8 @@ import { Menu } from 'antd';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ROUTE_KEYS, routePaths } from '_c/routes';
-
+import { ROUTE_KEYS } from '@/constant/route_keys';
+import { routePaths } from '_c/routes';
 
 const CartItem = ({ shop }) => {
   const shopTotal = shop.items.reduce((sum, item) => {
