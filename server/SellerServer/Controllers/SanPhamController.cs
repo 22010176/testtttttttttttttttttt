@@ -1,6 +1,7 @@
 using DatabaseModels;
 using DatabaseModels.DTO;
 using DatabaseModels.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +10,17 @@ using Utilities;
 namespace SellerServer.Controllers;
 
 [ApiController]
+// [Authorize]
 [Route("api/san-pham")]
 public class SanPhamController(IConfiguration configuration, AppDbContext dbContext, S3Service s3Service) : ControllerBase
 {
+  // readonly int TaiKhoanTestId = 1;
   readonly IConfiguration config = configuration;
   readonly AppDbContext dbContext = dbContext;
   readonly S3Service s3 = s3Service;
 
   [HttpGet]
-  public async Task<IActionResult> LayDanhSachSanPham([FromQuery] int nguoiBanId)
+  public async Task<IActionResult> LayDanhSachSanPham()
   {
     try
     {
@@ -27,9 +30,9 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
           sp => sp.Id,
           pb => pb.SanPhamId,
           (sp, pb) => new { sp, pb })
-        .Where(i => i.sp.NguoiBanId == nguoiBanId)
+        .Where(i => i.sp.NguoiBanId == AuthUtilities.TaiKhoanTest)
         .OrderByDescending(i => i.pb.NgayTao)
-        .Take(1)
+        // .Take(1)
         .Select(o => new
         {
           o.sp.Id,
@@ -175,33 +178,4 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
     }
 
   }
-}
-
-// public class CapNhatTrangThaiRequest
-// {
-//   public int SanPhamId { get; set; }
-//   public TrangThaiSanPham TrangThaiSanPham { get; set; }
-// }
-
-// public class CapNhatHinhAnhRequest
-// {
-//   public int PhienBanSanPhamId { get; set; }
-//   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
-//   public IFormFile File { get; set; } = null!;
-// }
-
-// public class CapNhatSanPhamRequest
-// {
-//   public int? SanPhamId { get; set; }
-//   public int? NguoiBanId { get; set; }
-//   public int? NganhHangId { get; set; }
-//   public string? TenSanPham { get; set; }
-//   public string? MoTaSanPham { get; set; }
-//   public double GiaBan { get; set; }
-//   public DateTime NgayTao { get; set; }
-// }
-
-public class CapNhatTrangThaiSanPhamRequest
-{
-
 }

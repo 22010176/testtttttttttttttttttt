@@ -4,7 +4,8 @@ import AnalyticsLayout from "./layouts/AnalyticsLayout"
 import AuthLayout from "./layouts/AuthLayout"
 import MainLayout from "./layouts/MainLayout"
 
-import { ROUTE_KEYS, routePaths } from "./routes"
+import { ROUTE_KEYS } from "@/constant/route_keys"
+import { routePaths } from "./routes"
 
 import AnalyticsDashboard from "./features/Analytics/AnalyticsDashboard"
 import AnalyticsProduct from "./features/Analytics/AnalyticsProduct"
@@ -29,32 +30,26 @@ import ProductDashBoard from "./features/Product/ProductDashboard"
 function Seller() {
   return (
     <Routes>
-      <Route path={ROUTE_KEYS.ACCOUNT} element={<AuthLayout />} >
-        <Route path={ROUTE_KEYS.REGISTER} element={<Register />} />
-        <Route path={ROUTE_KEYS.LOGIN} element={<Login />} />
+      <Route element={<AuthLayout />} >
+        <Route path={routePaths.account.register} element={<Register />} />
+        <Route path={routePaths.account.login} element={<Login />} />
       </Route>
 
       <Route element={<MainLayout />}>
-        <Route path={ROUTE_KEYS.MANAGEMENT}>
-          <Route index element={<Dashboard />} />
+        <Route >
+          <Route path={routePaths.management.root} element={<Dashboard />} />
 
-          <Route path={ROUTE_KEYS.PRODUCTS}>
-            <Route index element={<ProductDashBoard />} />
-            <Route path={ROUTE_KEYS.INSERT} element={<AddProduct />} />
-          </Route>
+          <Route path={routePaths.management.product.root} element={<ProductDashBoard />} />
+          <Route path={routePaths.management.product.insert} element={<AddProduct />} />
 
-          <Route path={ROUTE_KEYS.ORDERS} >
-            <Route index element={<OrderDashboard />} />
-            <Route path={ROUTE_KEYS.RETURN} element={<ReturnOrder />} />
-          </Route>
+          <Route path={routePaths.management.orders.root} element={<OrderDashboard />} />
+          <Route path={routePaths.management.orders.return} element={<ReturnOrder />} />
 
-          <Route path={ROUTE_KEYS.MARKETING} >
-            <Route index element={<MarketingDashboard />} />
-            <Route path={ROUTE_KEYS.DISCOUNTS} element={<DiscountDashboard />} />
-            <Route path={ROUTE_KEYS.FLASH_SALE} element={<FlashSaleDashboard />} />
-            <Route path={ROUTE_KEYS.VOUCHER} element={<VoucherDashboard />} />
-            <Route path={ROUTE_KEYS.CAMPAIGNS} element={<PlatformCampaign />} />
-          </Route>
+          <Route path={routePaths.management.marketing.root} element={<MarketingDashboard />} />
+          <Route path={routePaths.management.marketing.discounts} element={<DiscountDashboard />} />
+          <Route path={routePaths.management.marketing.flashSale} element={<FlashSaleDashboard />} />
+          <Route path={routePaths.management.marketing.voucher} element={<VoucherDashboard />} />
+          <Route path={routePaths.management.marketing.campaigns} element={<PlatformCampaign />} />
 
           <Route path={ROUTE_KEYS.FINANCE} >
             <Route path={ROUTE_KEYS.PROFIT} element={<ProfitDashboard />} />
@@ -73,6 +68,7 @@ function Seller() {
           <Route path={ROUTE_KEYS.MANAGEMENT} element={<AnalyticsDashboard />} />
           <Route path={ROUTE_KEYS.NOT_FOUND} element={<AnalyticsDashboard />} />
         </Route>
+
         <Route path={routePaths.analytics.performance} element={<WorkingPerformance />} />
 
         {/* Default error page */}

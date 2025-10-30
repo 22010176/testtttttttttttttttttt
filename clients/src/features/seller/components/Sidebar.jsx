@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ConfigProvider, Menu } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { ROUTE_KEYS, routePaths } from '../routes';
+import { ROUTE_KEYS } from '@/constant/route_keys';
+import { routePaths } from '../routes';
 
 const theme = {
   components: {

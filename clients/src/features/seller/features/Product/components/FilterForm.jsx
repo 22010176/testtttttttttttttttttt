@@ -1,5 +1,5 @@
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
-import { Button, Cascader, Form, Input, Select } from "antd";
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Cascader, Form, Input } from "antd";
 import { useEffect, useState } from "react";
 
 import { getNganhHangList } from "@/features/seller/api/nganhHang";
@@ -29,7 +29,7 @@ function FilterForm({ form }) {
       <Form.Item className='w-100' name="name">
         <Input prefix={<SearchOutlined className="text-gray-400" />} />
       </Form.Item>
-      <Form.Item className="w-64" name="category">
+      <Form.Item className="w-64" name="category" hidden>
         {/* <Select placeholder="Category" suffixIcon={<EditOutlined />} /> */}
         <Cascader
           defaultValue={[0]}
@@ -41,14 +41,14 @@ function FilterForm({ form }) {
             ...renderBrandList(nganhHangList),
           ]} />
       </Form.Item>
-      <Form.Item className="w-64" name="program">
+      {/* <Form.Item className="w-64" name="program">
         <Select defaultValue="Chương trình Shopee" suffixIcon={<DownOutlined />} />
-      </Form.Item>
+      </Form.Item> */}
       {/* <Form.Item>
           <Button variant='solid' color='blue' >Áp dụng</Button>
         </Form.Item> */}
       <Form.Item>
-        <Button >Đặt lại</Button>
+        <Button>Đặt lại</Button>
       </Form.Item>
     </Form>
   )

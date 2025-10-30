@@ -17,7 +17,6 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   readonly IConfiguration _config = config;
   readonly AppDbContext dbContext = dbContext;
   readonly HttpClient _http = new();
-  readonly Random random = new();
   readonly int IMAGE_SIZE = 100;
 
   [HttpPost("them-san-pham")]
@@ -39,6 +38,44 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         {
           sanPham.Add(CapNhatSanPhamRequest.Generate(nganhHang, nguoiBan.Id));
         }
+      }
+      _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
+        {
+          var json = JsonSerializer.Serialize(data);
+          var content = new StringContent(json, Encoding.UTF8, "application/json");
+          var response = await _http.PostAsync("http://localhost:5216/api/san-pham/cap-nhat-san-pham", content, b);
+          var body = await response.Content.ReadAsStringAsync(b);
+          Console.WriteLine($"TaoSanPham: {body}");
+        });
+
+
+      return Ok(new ResponseFormat
+      {
+        Success = true
+      });
+    }
+    catch (Exception err)
+    {
+      return BadRequest(err);
+    }
+  }
+
+  [HttpPost("them-san-pham/{id}")]
+  public async Task<IActionResult> TaoSanPham(int id, int sp = 10)
+  {
+    // return BadRequest();
+    try
+    {
+      // Generate product
+      List<NganhHang> nganhHang = await dbContext.NganhHang
+        .Where(i => i.LaNhanh)
+        .ToListAsync();
+
+      List<CapNhatSanPhamRequest> sanPham = [];
+      for (int i = 0; i < sp; i++)
+      {
+        CapNhatSanPhamRequest request = CapNhatSanPhamRequest.Generate(nganhHang, id);
+        sanPham.Add(request);
       }
       _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
         {
@@ -167,6 +204,47 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
       return BadRequest();
     }
+  }
+
+  [HttpPut("cap-nhat-trang-thai")]
+  public async Task<IActionResult> CapNhatTrangThaiSanPham(TrangThaiSanPham trangThaiSanPham)
+  {
+    try
+    {
+
+      List<SanPham> sanPham = await dbContext.SanPham
+        .Where(i => i.TrangThaiSanPham != trangThaiSanPham)
+        .ToListAsync();
+
+      List<CapNhatTrangThaiRequest> capNhatTrangThaiRequest = [];
+      foreach (var item in sanPham)
+      {
+        capNhatTrangThaiRequest.Add(new()
+        {
+          SanPhamId = item.Id,
+          TrangThaiSanPham = trangThaiSanPham
+        });
+      }
+
+      _ = Parallel.ForEachAsync(capNhatTrangThaiRequest, async (data, c) =>
+      {
+        var json = JsonSerializer.Serialize(data);
+        var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+        var response = await _http.PutAsync("http://localhost:5216/api/san-pham/cap-nhat-trang-thai", content, c);
+        var body = await response.Content.ReadAsStringAsync(c);
+        Console.WriteLine($"CapNhatTrangThaiSanPham: spID({data.SanPhamId})  {body}");
+      });
+
+      return Ok();
+    }
+    catch (Exception)
+    {
+
+      throw;
+    }
+
+
   }
 
   [HttpDelete]

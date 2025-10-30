@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { register } from '../../api/account';
+import { register } from '../../api/taiKhoan';
 
 function Register() {
   const [api, contextHolder] = notification.useNotification();

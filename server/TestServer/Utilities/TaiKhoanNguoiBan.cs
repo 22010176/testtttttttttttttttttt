@@ -6,6 +6,7 @@ namespace TestServer.Utilities;
 public static class TaiKhoanNguoiBanUtil
 {
   static readonly Random random = new();
+
   public static TaiKhoanNguoiBan GenerateTaiKhoanNguoiBan()
   {
     return new()

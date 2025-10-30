@@ -6,12 +6,14 @@ namespace DatabaseModels.DTO;
 
 public class CapNhatTrangThaiRequest
 {
-  public static CapNhatTrangThaiRequest Generate(List<NganhHang> nganhHang, int nguoiBan, int sanPham = -1)
+  public static CapNhatTrangThaiRequest Generate(int sanPham, TrangThaiSanPham? trangThai = null)
   {
     Random random = new();
+    var values = Enum.GetValues<TrangThaiSanPham>();
     return new()
     {
-
+      SanPhamId = sanPham,
+      TrangThaiSanPham = (TrangThaiSanPham)values.GetValue(random.Next(values.Count()))!
     };
   }
   public int SanPhamId { get; set; }

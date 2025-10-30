@@ -9,6 +9,7 @@ namespace Utilities;
 
 public static class AuthUtilities
 {
+  public static readonly int TaiKhoanTest = 1;
   public static (string Hash, string Salt) GeneratePasswordHash(string password)
   {
     byte[] saltBytes = RandomNumberGenerator.GetBytes(16);
