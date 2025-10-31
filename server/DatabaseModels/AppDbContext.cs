@@ -1,12 +1,12 @@
 ﻿using DatabaseModels.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace DatabaseModels;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
   public DbSet<TaiKhoanNguoiBan> TaiKhoanNguoiBan { get; set; }
+  public DbSet<TaiKhoanKhachHang> TaiKhoanKhachHang { get; set; }
   public DbSet<SanPham> SanPham { get; set; }
   public DbSet<PhienBanSanPham> PhienBanSanPham { get; set; }
   public DbSet<MediaSanPham> MediaSanPham { get; set; }
@@ -17,6 +17,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     base.OnModelCreating(modelBuilder);
 
     var nguoiBan = modelBuilder.Entity<TaiKhoanNguoiBan>();
+    var khachHang = modelBuilder.Entity<TaiKhoanKhachHang>();
     var sanPham = modelBuilder.Entity<SanPham>();
     var phienBanSanPham = modelBuilder.Entity<PhienBanSanPham>();
     var mediaSanPham = modelBuilder.Entity<MediaSanPham>();

@@ -25,6 +25,7 @@ import OrderDashboard from "./features/Order/OrderDashboard"
 import ReturnOrder from "./features/Order/ReturnOrder"
 import AddProduct from "./features/Product/AddProduct"
 import ProductDashBoard from "./features/Product/ProductDashboard"
+import ShopDashboard from "./features/Shop/ShopDashboard"
 
 
 function Seller() {
@@ -57,6 +58,7 @@ function Seller() {
             <Route path={ROUTE_KEYS.BANK_ACCOUNT} element={<BankDashboard />} />
           </Route>
 
+          <Route path={routePaths.management.store.root} element={<ShopDashboard />} />
         </Route>
 
         <Route path={ROUTE_KEYS.ANALYTICS} element={<AnalyticsLayout />}>

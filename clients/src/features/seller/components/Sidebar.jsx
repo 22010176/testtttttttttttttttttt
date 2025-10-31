@@ -53,9 +53,9 @@ const items = [
     ]
   },
   {
-    key: 'f', icon: <FontAwesomeIcon icon={faSplotch} />, label: 'Quản Lý cửa hàng',
+    key: ROUTE_KEYS.STORE, icon: <FontAwesomeIcon icon={faSplotch} />, label: 'Quản Lý cửa hàng',
     children: [
-      { key: "f1", label: "Hồ Sơ Shop" },
+      { key: routePaths.management.store.root, label: "Hồ Sơ Shop" },
       { key: "f2", label: "Trang Trí Shop" },
       { key: "g3", label: "Quản Lý Khiếu Nại" },
     ]

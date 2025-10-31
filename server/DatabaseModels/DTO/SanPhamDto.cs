@@ -24,6 +24,7 @@ public class CapNhatHinhAnhRequest
 {
   async public static Task<CapNhatHinhAnhRequest> Generate(int phienBanSanPham, LoaiHinhAnhSanPham loai, int image_size)
   {
+    Console.WriteLine("CapNhatHinhAnhRequest");
     return new CapNhatHinhAnhRequest()
     {
       PhienBanSanPhamId = phienBanSanPham,

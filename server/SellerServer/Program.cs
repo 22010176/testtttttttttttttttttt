@@ -1,7 +1,5 @@
 using System.Text;
 using DatabaseModels;
-using DatabaseModels.Models;
-using DatabaseModels.Temp_Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;

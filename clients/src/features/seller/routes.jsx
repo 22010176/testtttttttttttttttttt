@@ -66,6 +66,9 @@ export const routePaths = {
       balance: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}/${ROUTE_KEYS.BALANCE}`,
       bankAccount: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.FINANCE}/${ROUTE_KEYS.BANK_ACCOUNT}`,
     },
+    store: {
+      root: `/${ROUTE_KEYS.MANAGEMENT}/${ROUTE_KEYS.STORE}`,
+    }
   },
   analytics: {
     root: `/${ROUTE_KEYS.ANALYTICS}`,
