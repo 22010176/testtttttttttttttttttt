@@ -73,12 +73,12 @@ public class TaiKhoanController {
         throw new Exception("Mật khẩu không đúng");
       }
 
-      String token = JwtUtilities.generateToken(entity.getEmail());
+      String token = JwtUtilities.generateToken((Integer) taiKhoan.get("Id"), entity.getEmail());
 
       return new ResponseFormat<>(Map.of("token", token), "Đăng nhập thành công", true);
     } catch (Exception e) {
       // TODO: handle exception
-      e.printStackTrace();
+      // e.printStackTrace();
       return new ResponseFormat<>(null, e.getMessage(), false);
     }
   }

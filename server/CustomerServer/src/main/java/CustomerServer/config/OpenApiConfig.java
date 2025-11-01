@@ -15,7 +15,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 @Configuration
 @SecurityScheme(name = OpenApiConfig.securityScheme, type = SecuritySchemeType.HTTP, scheme = "bearer", bearerFormat = "JWT")
 public class OpenApiConfig {
-
   public static final String securityScheme = "bearerAuth";
 
   @Bean
