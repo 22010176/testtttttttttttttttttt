@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: CustomerServer
+
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/TMDT}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: ${SERVER_PORT:8083}
+
+aws:
+  access-key: ${AWS_ACCESS_KEY_ID:test}
+  secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+  region: ${AWS_REGION:us-east-1}
+  s3-bucket: ${AWS_S3_BUCKET:tmdt-bucket}
+
+LOCALSTACK_ENDPOINT: http://localhost:4566

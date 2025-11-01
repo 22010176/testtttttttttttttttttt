@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.config.OpenApiConfig;
-import CustomerServer.dto.DangKiTaiKhoanRequest;
-import CustomerServer.dto.DangNhapTaiKhoanRequest;
 import CustomerServer.dto.ResponseFormat;
+import CustomerServer.dto.taikhoan.DangKiTaiKhoanRequest;
+import CustomerServer.dto.taikhoan.DangNhapTaiKhoanRequest;
 import CustomerServer.utilities.JwtUtilities;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;

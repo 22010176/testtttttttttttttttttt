@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.dto.ResponseFormat;
 import CustomerServer.dto.diachi.ThemDiaChiRequest;
-import CustomerServer.services.S3Service;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -25,7 +23,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class DiaChiController {
   private final JdbcTemplate jdbcTemplate;
-  private final S3Service s3Service;
 
   @GetMapping
   public ResponseEntity<?> XemDanhSachDiaChi() {
@@ -89,16 +86,5 @@ public class DiaChiController {
         """;
     jdbcTemplate.update(sql, id);
     return new String();
-  }
-
-  @PostMapping("/upload")
-  public String upload(@RequestParam String key, @RequestParam String content) {
-    s3Service.uploadFile(key, content);
-    return "File uploaded: " + key;
-  }
-
-  @GetMapping("/read")
-  public String read(@RequestParam String key) {
-    return s3Service.readFile(key);
   }
 }

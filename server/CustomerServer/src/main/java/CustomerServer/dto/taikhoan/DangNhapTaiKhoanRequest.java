@@ -1,4 +1,4 @@
-package CustomerServer.dto;
+package CustomerServer.dto.taikhoan;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
