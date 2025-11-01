@@ -14,10 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import CustomerServer.config.OpenApiConfig;
 import CustomerServer.dto.ResponseFormat;
 import CustomerServer.utilities.JwtUtilities;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -52,116 +50,99 @@ public class SanPhamController {
   }
 
   @GetMapping
-  @SecurityRequirement(name = OpenApiConfig.securityScheme)
+  // @SecurityRequirement(name = OpenApiConfig.securityScheme)
   public ResponseEntity<?> XemDanhSachSanPham(@RequestParam(required = false) Integer pageSize) {
-    try {
-      log.info(JwtUtilities.getEmail() + " " + JwtUtilities.getUserId().toString());
-      String sql = """
-          SELECT
-            sp."Id",
-            sp."TrangThaiSanPham",
-            pbsp."Id" PhienBanSanPhamId,
-            pbsp."TenSanPham",
-            pbsp."MoTaSanPham",
-            pbsp."GiaBan",
-            pbsp."NgayTao"::DATE,
-            (
-              SELECT m."Url"
-              FROM "MediaSanPham" m
-              WHERE
-                m."PhienBanSanPhamId" = pbsp."Id"
-                AND m."LoaiHinhAnhSanPham" = 1
-            ) anhBia
-          FROM "SanPham" sp
-          JOIN LATERAL (
-            SELECT *
-            FROM "PhienBanSanPham" pbsp
+    String sql = """
+        SELECT
+          sp."Id",
+          sp."TrangThaiSanPham",
+          pbsp."Id" PhienBanSanPhamId,
+          pbsp."TenSanPham",
+          pbsp."MoTaSanPham",
+          pbsp."GiaBan",
+          pbsp."NgayTao"::DATE,
+          (
+            SELECT m."Url"
+            FROM "MediaSanPham" m
             WHERE
-              sp."Id" = pbsp."SanPhamId"
-              AND pbsp."NgayTao" < CURRENT_DATE
-            ORDER BY pbsp."NgayTao"
-            LIMIT 1
-          ) pbsp ON TRUE
-          WHERE sp."Id" IN (
-              SELECT "Id"
-              FROM "SanPham"
-              ORDER BY RANDOM()
-              LIMIT ?
-          )
-          ORDER BY sp."Id"
-          """;
-      return ResponseEntity.ok(new ResponseFormat<>(jdbcTemplate.queryForList(sql, pageSize), "", true));
-
-    } catch (Exception e) {
-      return ResponseEntity
-          .badRequest()
-          .body(new ResponseFormat<>(null, e.getMessage(), false));
-    }
+              m."PhienBanSanPhamId" = pbsp."Id"
+              AND m."LoaiHinhAnhSanPham" = 1
+          ) anhBia
+        FROM "SanPham" sp
+        JOIN LATERAL (
+          SELECT *
+          FROM "PhienBanSanPham" pbsp
+          WHERE
+            sp."Id" = pbsp."SanPhamId"
+            AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao"
+          LIMIT 1
+        ) pbsp ON TRUE
+        WHERE sp."Id" IN (
+            SELECT "Id"
+            FROM "SanPham"
+            ORDER BY RANDOM()
+            LIMIT ?
+        )
+        ORDER BY sp."Id"
+        """;
+    return ResponseEntity.ok(new ResponseFormat<>(jdbcTemplate.queryForList(sql, pageSize), "", true));
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<?> getProductDetail(@PathVariable Integer id) {
-    try {
-      String sql = """
-          SELECT
-            sp."Id",
-            pbsp."Id" PhienBanSanPhamId,
-            pbsp."TenSanPham",
-            pbsp."MoTaSanPham",
-            pbsp."GiaBan",
-            pbsp."NgayTao"::DATE,
-            tknb."HoTen"
-          FROM "SanPham" sp
-          JOIN LATERAL (
-            SELECT *
-            FROM "PhienBanSanPham" pbsp
-            WHERE
-              sp."Id" = pbsp."SanPhamId"
-              AND pbsp."NgayTao" < CURRENT_DATE
-            ORDER BY pbsp."NgayTao"
-            LIMIT 1
-          ) pbsp ON TRUE
-          INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
-          WHERE sp."Id" = ?
-          """;
-      String mediaSql = """
-          SELECT
-            m_sp."Url",
-            m_sp."LoaiHinhAnhSanPham"
-          FROM "SanPham" sp
-          JOIN LATERAL (
-            SELECT *
-            FROM "PhienBanSanPham" pbsp
-            WHERE
-              sp."Id" = pbsp."SanPhamId"
-              AND pbsp."NgayTao" < CURRENT_DATE
-            ORDER BY pbsp."NgayTao"
-            LIMIT 1
-          ) pbsp ON TRUE
-          INNER JOIN "MediaSanPham" m_sp ON m_sp."PhienBanSanPhamId" = pbsp."Id"
-          WHERE sp."Id" = ?
-          ORDER BY m_sp."LoaiHinhAnhSanPham" DESC, m_sp."NgayTao" DESC
-          LIMIT 8
-          """;
-      Map<String, Object> product = jdbcTemplate.queryForMap(sql, id);
-      List<Map<String, Object>> media = jdbcTemplate.queryForList(mediaSql, id);
+    String sql = """
+        SELECT
+          sp."Id",
+          pbsp."Id" PhienBanSanPhamId,
+          pbsp."TenSanPham",
+          pbsp."MoTaSanPham",
+          pbsp."GiaBan",
+          pbsp."NgayTao"::DATE,
+          tknb."HoTen"
+        FROM "SanPham" sp
+        JOIN LATERAL (
+          SELECT *
+          FROM "PhienBanSanPham" pbsp
+          WHERE
+            sp."Id" = pbsp."SanPhamId"
+            AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao"
+          LIMIT 1
+        ) pbsp ON TRUE
+        INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
+        WHERE sp."Id" = ?
+        """;
+    String mediaSql = """
+        SELECT
+          m_sp."Url",
+          m_sp."LoaiHinhAnhSanPham"
+        FROM "SanPham" sp
+        JOIN LATERAL (
+          SELECT *
+          FROM "PhienBanSanPham" pbsp
+          WHERE
+            sp."Id" = pbsp."SanPhamId"
+            AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao"
+          LIMIT 1
+        ) pbsp ON TRUE
+        INNER JOIN "MediaSanPham" m_sp ON m_sp."PhienBanSanPhamId" = pbsp."Id"
+        WHERE sp."Id" = ?
+        ORDER BY m_sp."LoaiHinhAnhSanPham" DESC, m_sp."NgayTao" DESC
+        LIMIT 8
+        """;
+    Map<String, Object> product = jdbcTemplate.queryForMap(sql, id);
+    List<Map<String, Object>> media = jdbcTemplate.queryForList(mediaSql, id);
 
-      Map<String, Object> result = new HashMap<>();
-      result.put("media", media);
-      result.put("sanpham", product);
-      return ResponseEntity.ok(new ResponseFormat<>(result, "", true));
-    } catch (Exception e) {
-      // TODO: handle exception
-      return ResponseEntity
-          .badRequest()
-          .body(ResponseFormat.fail(null, e.getMessage()));
-    }
-
+    Map<String, Object> result = new HashMap<>();
+    result.put("media", media);
+    result.put("sanpham", product);
+    return ResponseEntity.ok(new ResponseFormat<>(result, "", true));
   }
 
   @GetMapping("/tim-kiem")
-  public ResponseFormat<List<Map<String, Object>>> searchProducts(
-      @RequestParam String param) {
+  public ResponseFormat<List<Map<String, Object>>> searchProducts(@RequestParam String param) {
     String sql = """
         SELECT *
         FROM "PhienBanSanPham" AS pbs

@@ -24,5 +24,5 @@ Promise.all([
     )
 
     fs.writeFileSync(path.join(__dirname, "../../data/brands.json"), JSON.stringify(level0, null, 2))
-    fs.writeFileSync(path.join(__dirname, "../../../server/SeedData/brands.json"), JSON.stringify(level0, null, 2))
+    // fs.writeFileSync(path.join(__dirname, "../../../server/SeedData/brands.json"), JSON.stringify(level0, null, 2))
   })
