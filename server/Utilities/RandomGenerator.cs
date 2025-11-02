@@ -13,7 +13,8 @@ public class RandomGenerator
   readonly static string chars =
   "abcdefghijklmnopqrstuvwxyz"
   + "abcdefghijklmnopqrstuvwxyz".ToUpper()
-  + "0123456789";
+  + "0123456789"
+  + " ";
 
   public static string GenerateRandomEmail()
   {

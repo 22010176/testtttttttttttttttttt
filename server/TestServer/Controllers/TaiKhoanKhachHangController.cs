@@ -1,5 +1,6 @@
 using DatabaseModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
 namespace TestServer.Controllers;
 
@@ -11,5 +12,15 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
   readonly AppDbContext dbContext = dbContext;
   readonly HttpClient _http = new();
 
+  [HttpPost]
+  public async Task<IActionResult> TaoTaiKhoanKhachHang()
+  {
+    return Ok();
+  }
 
+  [HttpDelete]
+  public async Task<IActionResult> XoaTaiKhoanKhachHang()
+  {
+    return Ok();
+  }
 }
