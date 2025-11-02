@@ -18,6 +18,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   readonly AppDbContext dbContext = dbContext;
   readonly HttpClient _http = new();
   readonly int IMAGE_SIZE = 100;
+  readonly string serverUrl = "http://localhost:5216";
 
   [HttpPost("them-san-pham")]
   public async Task<IActionResult> TaoSanPham(int sp = 10)
@@ -41,13 +42,9 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       }
       _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
         {
-          var json = JsonSerializer.Serialize(data);
-          var content = new StringContent(json, Encoding.UTF8, "application/json");
-          var response = await _http.PostAsync("http://localhost:5216/api/san-pham/cap-nhat-san-pham", content, b);
-          var body = await response.Content.ReadAsStringAsync(b);
+          var body = await GenerateRequest.CreateRequest(data, $"{serverUrl}/api/san-pham/cap-nhat-san-pham", RequestMethod.POST);
           Console.WriteLine($"TaoSanPham: {body}");
         });
-
 
       return Ok(new ResponseFormat
       {
@@ -85,7 +82,6 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
           var body = await response.Content.ReadAsStringAsync(b);
           Console.WriteLine($"TaoSanPham: {body}");
         });
-
 
       return Ok(new ResponseFormat
       {
@@ -240,11 +236,8 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
     }
     catch (Exception)
     {
-
       throw;
     }
-
-
   }
 
   [HttpDelete]

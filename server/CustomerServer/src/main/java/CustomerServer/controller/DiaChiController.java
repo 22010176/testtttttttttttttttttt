@@ -52,14 +52,13 @@ public class DiaChiController {
   public ResponseEntity<?> ThemDiaChi(@RequestBody ThemDiaChiRequest entity) {
     try {
       // int taiKhoanKhachHangId = JwtUtilities.getUserId();
-      int taiKhoanKhachHangId = 1;
       String sql = """
           INSERT INTO "DiaChiGiaoHang"
           ("TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
           VALUES (?, ?, ?, ?)
           """;
       jdbcTemplate.update(sql,
-          taiKhoanKhachHangId,
+          entity.getTaiKhoanId(),
           entity.getHoTen(),
           entity.getSoDienThoai(),
           entity.getDiaChiCuThe());

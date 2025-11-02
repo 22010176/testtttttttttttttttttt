@@ -96,9 +96,9 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
   {
     try
     {
-      var user = await dbContext.TaiKhoanNguoiBan.ToListAsync();
-      dbContext.TaiKhoanNguoiBan.RemoveRange(user);
+      dbContext.TaiKhoanNguoiBan.RemoveRange(await dbContext.TaiKhoanNguoiBan.ToListAsync());
       await dbContext.SaveChangesAsync();
+
       return Ok();
     }
     catch (Exception)

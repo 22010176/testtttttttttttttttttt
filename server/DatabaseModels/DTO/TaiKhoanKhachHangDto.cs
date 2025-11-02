@@ -19,3 +19,21 @@ public class DangKiTaiKhoanKhachHangRequest
   public string? MatKhau { get; set; }
   public string? HoTen { get; set; }
 }
+
+public class ThemDiaChiRequest
+{
+  public static ThemDiaChiRequest Generate(int taiKhoanId)
+  {
+    return new()
+    {
+      TaiKhoanId = taiKhoanId,
+      HoTen = RandomGenerator.GenerateRandomString(5, 10),
+      SoDienThoai = RandomGenerator.GenerateRandomPhoneNumber(),
+      DiaChiCuThe = RandomGenerator.GenerateRandomString(5, 40),
+    };
+  }
+  public int TaiKhoanId { get; set; } = 1;
+  public string? HoTen { get; set; }
+  public string? SoDienThoai { get; set; }
+  public string? DiaChiCuThe { get; set; }
+}
