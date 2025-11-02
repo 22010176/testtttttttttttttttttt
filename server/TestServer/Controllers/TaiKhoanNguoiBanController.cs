@@ -15,6 +15,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
   readonly IConfiguration _config = config;
   readonly AppDbContext dbContext = dbContext;
   readonly HttpClient _http = new();
+  readonly string serverUrl = "http://localhost:5216";
 
   [HttpPost("khoi-tao-tai-khoan-thu-nghiem")]
   public async Task<IActionResult> KhoiTaoTaiKhoanThuNghiem()
@@ -31,7 +32,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
       };
       var json = JsonSerializer.Serialize(data);
       var content = new StringContent(json, Encoding.UTF8, "application/json");
-      var response = await _http.PostAsync("http://localhost:5216/api/tai-khoan/register", content);
+      var response = await _http.PostAsync($"{serverUrl}/api/tai-khoan/register", content);
       var body = await response.Content.ReadAsStringAsync();
       return Ok(new ResponseFormat
       {
@@ -70,7 +71,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
        var json = JsonSerializer.Serialize(data);
        var content = new StringContent(json, Encoding.UTF8, "application/json");
 
-       var response = await _http.PostAsync("http://localhost:5216/api/tai-khoan/register", content, b);
+       var response = await _http.PostAsync($"{serverUrl}/api/tai-khoan/register", content, b);
        var body = await response.Content.ReadAsStringAsync(b);
        Console.WriteLine($"TaoTaiKhoanThuNghiem: {body}");
      });

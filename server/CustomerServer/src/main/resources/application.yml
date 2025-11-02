@@ -3,9 +3,9 @@ spring:
     name: CustomerServer
 
   datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/TMDT}
-    username: ${DB_USERNAME:postgres}
-    password: ${DB_PASSWORD:admin}
+    # url: ${DB_URL:jdbc:postgresql://localhost:5432/TMDT}
+    # username: ${DB_USERNAME:postgres}
+    # password: ${DB_PASSWORD:admin}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -18,8 +18,8 @@ server:
 aws:
   access-key: ${AWS_ACCESS_KEY_ID:test}
   secret-key: ${AWS_SECRET_ACCESS_KEY:test}
-  region: ap-southeast-1
-  bucket-name: my-test-bucket
+  region: us-east-1
+  secret-name: local/credentials
   endpoint: http://localhost:4566
 
 # LOCALSTACK_ENDPOINT: http://localhost:4566

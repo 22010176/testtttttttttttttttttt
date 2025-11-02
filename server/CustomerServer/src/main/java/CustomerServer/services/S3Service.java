@@ -4,7 +4,7 @@ import java.nio.charset.StandardCharsets;
 
 import org.springframework.stereotype.Service;
 
-import CustomerServer.config.AwsProperties;
+import CustomerServer.dto.aws.AwsSecret;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
@@ -14,9 +14,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @Service
 public class S3Service {
   private final S3Client s3Client;
-  private final AwsProperties aws;
+  private final AwsSecret aws;
 
-  public S3Service(S3Client s3Client, AwsProperties aws) {
+  public S3Service(S3Client s3Client, AwsSecret aws) {
     this.s3Client = s3Client;
     this.aws = aws;
 
