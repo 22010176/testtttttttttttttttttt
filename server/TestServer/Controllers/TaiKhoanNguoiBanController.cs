@@ -102,7 +102,6 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
     }
     catch (Exception)
     {
-
       throw;
     }
   }

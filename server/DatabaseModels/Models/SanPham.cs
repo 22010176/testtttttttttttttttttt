@@ -19,6 +19,7 @@ public class SanPham
 
   public TaiKhoanNguoiBan? NguoiBan { get; set; }
   public List<PhienBanSanPham>? PhienBanSanPham { get; set; }
+  public List<GioHangKhachHang>? GioHangKhachHang { get; set; }
 }
 
 public class PhienBanSanPham

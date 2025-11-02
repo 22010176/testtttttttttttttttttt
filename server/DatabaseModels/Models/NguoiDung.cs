@@ -15,8 +15,6 @@ public class TaiKhoanNguoiBan
   public DateTime SinhNhat { get; set; }
   public DateTime? NgayTao { get; set; } = DateTime.UtcNow;
 
-
-
   public List<SanPham>? SanPham { get; set; }
 }
 
@@ -34,6 +32,7 @@ public class TaiKhoanKhachHang
   public DateTime? NgayTao { get; set; } = DateTime.UtcNow;
 
   public List<DiaChiGiaoHang>? DiaChiGiaoHang { get; set; }
+  public List<GioHangKhachHang>? GioHangKhachHang { get; set; }
 }
 
 public class DiaChiGiaoHang

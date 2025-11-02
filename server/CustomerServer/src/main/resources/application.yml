@@ -18,7 +18,8 @@ server:
 aws:
   access-key: ${AWS_ACCESS_KEY_ID:test}
   secret-key: ${AWS_SECRET_ACCESS_KEY:test}
-  region: ${AWS_REGION:us-east-1}
-  s3-bucket: ${AWS_S3_BUCKET:tmdt-bucket}
+  region: ap-southeast-1
+  bucket-name: my-test-bucket
+  endpoint: http://localhost:4566
 
-LOCALSTACK_ENDPOINT: http://localhost:4566
+# LOCALSTACK_ENDPOINT: http://localhost:4566

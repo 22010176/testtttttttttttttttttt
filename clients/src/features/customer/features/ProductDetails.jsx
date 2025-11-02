@@ -131,7 +131,7 @@ export default function ProductDetail() {
 
             {/* Right Column - Product Info */}
             <div>
-              <h1 className="text-xl font-normal mb-4">{product.TenSanPham}</h1>
+              <h1 className="text-xl font-normal mb-4">{product?.TenSanPham}</h1>
 
               {/* Rating & Sales */}
               <div className="flex items-center gap-6 mb-4">
@@ -155,7 +155,7 @@ export default function ProductDetail() {
               {/* Price */}
               <div className="bg-gray-50 p-4 rounded mb-4">
                 <div className="flex items-baseline gap-3">
-                  <span className="text-3xl text-orangbluee-500 font-light">{(+product.GiaBan).toLocaleString()}đ</span>
+                  <span className="text-3xl text-orangbluee-500 font-light">{(+product?.GiaBan).toLocaleString()}đ</span>
                   {/* <span className="text-gray-400 line-through text-sm">16.000đ - 19.000đ</span>
                   <span className="bg-blue-500 text-white text-xs px-1 rounded">-8%</span> */}
                 </div>
@@ -222,7 +222,7 @@ export default function ProductDetail() {
                 <div className="flex items-center gap-3">
                   <span className="text-gray-600 w-32">Số Lượng</span>
                   <div className="flex items-center gap-4">
-                    <InputNumber controls={false} />
+                    <InputNumber defaultValue={1} controls={false} />
                   </div>
                 </div>
               </div>
@@ -251,7 +251,7 @@ export default function ProductDetail() {
                 <span className="text-2xl">🌿</span>
               </div>
               <div>
-                <h2 className="font-semibold">{product.HoTen}</h2>
+                <h2 className="font-semibold">{product?.HoTen}</h2>
                 <p className="text-sm text-gray-500">Online 11 Phút Trước</p>
               </div>
               <div className="flex gap-2 ml-4">
