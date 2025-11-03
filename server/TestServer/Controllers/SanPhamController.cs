@@ -58,7 +58,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   }
 
   [HttpPost("them-san-pham/{id}")]
-  public async Task<IActionResult> TaoSanPham(int id, int sp = 10)
+  public async Task<IActionResult> TaoSanPham(Guid id, int sp = 10)
   {
     // return BadRequest();
     try
@@ -71,7 +71,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       List<CapNhatSanPhamRequest> sanPham = [];
       for (int i = 0; i < sp; i++)
       {
-        CapNhatSanPhamRequest request = CapNhatSanPhamRequest.Generate(nganhHang, id);
+        CapNhatSanPhamRequest request = CapNhatSanPhamRequest.Generate(nganhHang, id.ToString());
         sanPham.Add(request);
       }
       _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
@@ -111,7 +111,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       {
         for (int i = 0; i < phienBan; ++i)
         {
-          capNhatSanPhamRequest.Add(CapNhatSanPhamRequest.Generate(nganhHang, (int)item.NguoiBanId!, item.Id));
+          capNhatSanPhamRequest.Add(CapNhatSanPhamRequest.Generate(nganhHang, item.NguoiBanId!, item.Id));
         }
       }
 
@@ -163,8 +163,8 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
           using var form = new MultipartFormDataContent
           {
-            { new StringContent(data.PhienBanSanPhamId.ToString()), nameof(CapNhatHinhAnhRequest.PhienBanSanPhamId) },
-            { new StringContent(data.LoaiHinhAnhSanPham.ToString()), nameof(CapNhatHinhAnhRequest.LoaiHinhAnhSanPham) },
+            { new StringContent(data.PhienBanSanPhamId!.ToString()), nameof(CapNhatHinhAnhRequest.PhienBanSanPhamId) },
+            { new StringContent(data.LoaiHinhAnhSanPham!.ToString()), nameof(CapNhatHinhAnhRequest.LoaiHinhAnhSanPham) },
             { stream, nameof(CapNhatHinhAnhRequest.File), data.File.FileName }
           };
           var response = await _http.PostAsync("http://localhost:5216/api/san-pham/tai-hinh-anh", form, c);
@@ -189,8 +189,11 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   {
     try
     {
+      Console.WriteLine("TaoSanPham");
       await TaoSanPham(sanPham);
+      Console.WriteLine("TaoPhienBanSanPham");
       await TaoPhienBanSanPham(phienBanSanPham);
+      Console.WriteLine("TaoMediaSanPham");
       await TaoMediaSanPham();
 
       return Ok();

@@ -58,11 +58,9 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
       {
         for (int i = 0; i < diaChi; ++i)
         {
-          themDiaChiRequest.Add(ThemDiaChiRequest.Generate(item.Id));
+          themDiaChiRequest.Add(ThemDiaChiRequest.Generate(Guid.NewGuid().ToString()));
         }
       }
-
-
 
       _ = Parallel.ForEachAsync(themDiaChiRequest, async (data, c) =>
       {
@@ -72,7 +70,6 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
 
       return Ok(new ResponseFormat
       {
-
       });
     }
     catch (Exception)

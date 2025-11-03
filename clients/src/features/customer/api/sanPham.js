@@ -3,7 +3,11 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_SERVER_URL + "/api/sanpham";
 
 export const XemDanhSachSanPham = async () => {
-  const response = await axios.get(API_URL);
+  const response = await axios.get(API_URL, {
+    params: {
+      pageSize: 50
+    }
+  });
   return response.data;
 };
 

@@ -1,6 +1,7 @@
 package CustomerServer.controller;
 
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.Authentication;
@@ -42,15 +43,20 @@ public class TaiKhoanController {
 
       String sql = """
           INSERT INTO "TaiKhoanKhachHang"
-          ("HoTen", "Email", "SoDienThoai", "MatKhauBam", "Salt", "SinhNhat", "NgayTao")
-          VALUES (?, ?, ?, ?, ?, CURRENT_DATE, CURRENT_DATE);
+          ("Id", "HoTen", "Email", "SoDienThoai", "MatKhauBam", "Salt", "SinhNhat", "NgayTao")
+          VALUES (?, ?, ?, ?, ?, ?, CURRENT_DATE, CURRENT_DATE);
           """;
 
       String salt = BCrypt.gensalt();
       String hashedPassword = BCrypt.hashpw(entity.getMatKhau(), salt);
 
-      jdbcTemplate.update(sql, entity.getHoTen(), entity.getEmail(), entity.getSoDienThoai(),
-          hashedPassword, salt);
+      jdbcTemplate.update(sql,
+          UUID.randomUUID().toString(),
+          entity.getHoTen(),
+          entity.getEmail(),
+          entity.getSoDienThoai(),
+          hashedPassword,
+          salt);
 
       return new ResponseFormat<>(null, "Đăng kí tài khoản thành công", true);
     } catch (Exception e) {

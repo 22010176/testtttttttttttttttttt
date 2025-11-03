@@ -5,7 +5,8 @@ namespace DatabaseModels.Models;
 public class TaiKhoanNguoiBan
 {
   [Key]
-  public int Id { get; set; }
+  public string Id { get; set; } = null!;
+
   public string? HoTen { get; set; }
   public string? Email { get; set; }
   public string? SoDienThoai { get; set; }
@@ -16,12 +17,14 @@ public class TaiKhoanNguoiBan
   public DateTime? NgayTao { get; set; } = DateTime.UtcNow;
 
   public List<SanPham>? SanPham { get; set; }
+  public List<GianHang>? GianHang { get; set; }
 }
 
 public class TaiKhoanKhachHang
 {
   [Key]
-  public int Id { get; set; }
+  public string Id { get; set; } = null!;
+
   public string? HoTen { get; set; }
   public string? Email { get; set; }
   public string? SoDienThoai { get; set; }
@@ -38,8 +41,8 @@ public class TaiKhoanKhachHang
 public class DiaChiGiaoHang
 {
   [Key]
-  public int Id { get; set; }
-  public int TaiKhoanKhachHangId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? TaiKhoanKhachHangId { get; set; }
   public string? HoTen { get; set; }
   public string? SoDienThoai { get; set; }
   public string? DiaChiCuThe { get; set; }

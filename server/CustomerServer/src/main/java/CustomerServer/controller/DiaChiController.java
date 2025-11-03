@@ -2,6 +2,7 @@ package CustomerServer.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -54,10 +55,11 @@ public class DiaChiController {
       // int taiKhoanKhachHangId = JwtUtilities.getUserId();
       String sql = """
           INSERT INTO "DiaChiGiaoHang"
-          ("TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
-          VALUES (?, ?, ?, ?)
+          ("Id", "TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
+          VALUES (?, ?, ?, ?, ?)
           """;
       jdbcTemplate.update(sql,
+          UUID.randomUUID().toString(),
           entity.getTaiKhoanId(),
           entity.getHoTen(),
           entity.getSoDienThoai(),

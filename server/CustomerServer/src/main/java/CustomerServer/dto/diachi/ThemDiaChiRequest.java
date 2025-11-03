@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ThemDiaChiRequest {
-  private int taiKhoanId = 1;
+  private String taiKhoanId;
   private String hoTen;
   private String soDienThoai;
   private String diaChiCuThe;

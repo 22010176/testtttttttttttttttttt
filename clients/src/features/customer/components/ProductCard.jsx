@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { routePaths } from '../routes';
 
 export default function ProductCard({ Id, TenSanPham, anhbia, GiaBan, ...props }) {
-  console.log(props);
+  // console.log(props);
   return (
     <Link to={routePaths.product.details.replace(":id", Id)} className="bg-white rounded-sm shadow-sm hover:shadow-lg transition-shadow cursor-pointer border border-gray-100">
       {/* Image Container */}

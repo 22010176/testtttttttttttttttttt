@@ -30,7 +30,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
           sp => sp.Id,
           pb => pb.SanPhamId,
           (sp, pb) => new { sp, pb })
-        .Where(i => i.sp.NguoiBanId == AuthUtilities.TaiKhoanTest)
+        // .Where(i => i.sp.NguoiBanId == AuthUtilities.TaiKhoanTest)
         .OrderByDescending(i => i.pb.NgayTao)
         // .Take(1)
         .Select(o => new
@@ -74,9 +74,10 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
   {
     try
     {
-      Console.WriteLine(file.LoaiHinhAnhSanPham);
+      // Console.WriteLine(file.LoaiHinhAnhSanPham);
       MediaSanPham mediaSanPham = new()
       {
+        Id = Guid.NewGuid().ToString(),
         PhienBanSanPhamId = file.PhienBanSanPhamId,
         NgayTao = DateTime.UtcNow,
         Url = await s3.UploadFileAsync(file.File),
@@ -115,6 +116,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
         if (request.NganhHangId == null) throw new Exception("Nguoi ban khong hop le");
         sanPham = new()
         {
+          Id = Guid.NewGuid().ToString(),
           NguoiBanId = request.NguoiBanId,
           TrangThaiSanPham = TrangThaiSanPham.BAN_NHAP,
         };
@@ -124,6 +126,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
 
       PhienBanSanPham phienBanSanPham = new()
       {
+        Id = Guid.NewGuid().ToString(),
         NganhHangId = request.NganhHangId,
         SanPhamId = sanPham.Id,
         TenSanPham = request.TenSanPham,

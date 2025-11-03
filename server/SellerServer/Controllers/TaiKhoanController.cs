@@ -33,16 +33,28 @@ public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, E
       await RegisterRequest.ValidateRegisterRequest(dbContext, request);
 
       var (hash, salt) = AuthUtilities.GeneratePasswordHash(request.MatKhau!);
+      string nguoiBanId = Guid.NewGuid().ToString();
       TaiKhoanNguoiBan nguoiDung = new()
       {
+        Id = nguoiBanId,
         HoTen = request.HoTen,
         SoDienThoai = request.SoDienThoai,
         Email = request.Email,
         MatKhauBam = hash,
         Salt = salt,
       };
-
       await dbContext.TaiKhoanNguoiBan.AddAsync(nguoiDung);
+      await dbContext.SaveChangesAsync();
+
+      GianHang gianHang = new()
+      {
+        Id = Guid.NewGuid().ToString(),
+        MoTaShop = "",
+        TenGianHang = nguoiDung.HoTen,
+        HinhAnhDaiDien = "",
+        NguoiBanId = nguoiBanId
+      };
+      await dbContext.GianHang.AddAsync(gianHang);
       await dbContext.SaveChangesAsync();
 
       return Ok(new ResponseFormat

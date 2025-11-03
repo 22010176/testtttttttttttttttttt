@@ -67,14 +67,14 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
   }
 
   [HttpGet("lay-nganh-hang-con")]
-  public async Task<IActionResult> LayNganhHangCon([FromQuery] int id, [FromQuery] int page, [FromQuery] int pageSize)
+  public async Task<IActionResult> LayNganhHangCon([FromQuery] Guid id, [FromQuery] int page, [FromQuery] int pageSize)
   {
     try
     {
       if (page <= 0) page = 1;
       if (pageSize <= 0) pageSize = 10;
 
-      var nganhHang = await dbContext.NganhHang.FirstOrDefaultAsync(i => i.Id == id);
+      var nganhHang = await dbContext.NganhHang.FirstOrDefaultAsync(i => i.Id == id.ToString());
       // if (nganhHang == null)
       // {
 

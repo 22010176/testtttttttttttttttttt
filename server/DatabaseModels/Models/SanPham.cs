@@ -12,8 +12,8 @@ public enum TrangThaiSanPham
 public class SanPham
 {
   [Key]
-  public int Id { get; set; }
-  public int? NguoiBanId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? NguoiBanId { get; set; }
 
   public TrangThaiSanPham TrangThaiSanPham { get; set; } = TrangThaiSanPham.BAN_NHAP;
 
@@ -25,9 +25,9 @@ public class SanPham
 public class PhienBanSanPham
 {
   [Key]
-  public int Id { get; set; }
-  public int? NganhHangId { get; set; }
-  public int? SanPhamId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? NganhHangId { get; set; }
+  public string? SanPhamId { get; set; }
 
   public string? TenSanPham { get; set; }
   public string? MoTaSanPham { get; set; }
@@ -42,8 +42,8 @@ public class PhienBanSanPham
 public class MediaSanPham
 {
   [Key]
-  public int Id { get; set; }
-  public int PhienBanSanPhamId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? PhienBanSanPhamId { get; set; }
 
   // public int SoThuTu { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
@@ -63,8 +63,8 @@ public enum LoaiHinhAnhSanPham
 public class NganhHang
 {
   [Key]
-  public int Id { get; set; }
-  public int? NganhHangChaId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? NganhHangChaId { get; set; }
 
   public string? TenNganhHang { get; set; }
   public bool LaNhanh { get; set; } = false;

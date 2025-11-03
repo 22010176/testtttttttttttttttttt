@@ -22,7 +22,7 @@ public class DangKiTaiKhoanKhachHangRequest
 
 public class ThemDiaChiRequest
 {
-  public static ThemDiaChiRequest Generate(int taiKhoanId)
+  public static ThemDiaChiRequest Generate(string taiKhoanId)
   {
     return new()
     {
@@ -32,7 +32,7 @@ public class ThemDiaChiRequest
       DiaChiCuThe = RandomGenerator.GenerateRandomString(5, 40),
     };
   }
-  public int TaiKhoanId { get; set; } = 1;
+  public string? TaiKhoanId { get; set; }
   public string? HoTen { get; set; }
   public string? SoDienThoai { get; set; }
   public string? DiaChiCuThe { get; set; }

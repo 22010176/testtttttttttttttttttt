@@ -5,10 +5,9 @@ namespace DatabaseModels.Models;
 public class GioHangKhachHang
 {
   [Key]
-  public int Id { get; set; }
-
-  public int SanPhamId { get; set; }
-  public int KhachHangId { get; set; }
+  public string Id { get; set; } = null!;
+  public string? SanPhamId { get; set; }
+  public string? KhachHangId { get; set; }
 
   public uint SoLuong { get; set; }
 

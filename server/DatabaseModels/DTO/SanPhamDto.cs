@@ -6,7 +6,7 @@ namespace DatabaseModels.DTO;
 
 public class CapNhatTrangThaiRequest
 {
-  public static CapNhatTrangThaiRequest Generate(int sanPham, TrangThaiSanPham? trangThai = null)
+  public static CapNhatTrangThaiRequest Generate(string? sanPham, TrangThaiSanPham? trangThai = null)
   {
     Random random = new();
     var values = Enum.GetValues<TrangThaiSanPham>();
@@ -16,13 +16,13 @@ public class CapNhatTrangThaiRequest
       TrangThaiSanPham = (TrangThaiSanPham)values.GetValue(random.Next(values.Count()))!
     };
   }
-  public int SanPhamId { get; set; }
+  public string? SanPhamId { get; set; }
   public TrangThaiSanPham TrangThaiSanPham { get; set; }
 }
 
 public class CapNhatHinhAnhRequest
 {
-  async public static Task<CapNhatHinhAnhRequest> Generate(int phienBanSanPham, LoaiHinhAnhSanPham loai, int image_size)
+  async public static Task<CapNhatHinhAnhRequest> Generate(string? phienBanSanPham, LoaiHinhAnhSanPham loai, int image_size)
   {
     Console.WriteLine("CapNhatHinhAnhRequest");
     return new CapNhatHinhAnhRequest()
@@ -32,14 +32,14 @@ public class CapNhatHinhAnhRequest
       File = await RandomGenerator.GenerateRandomImageStream(image_size, image_size)
     };
   }
-  public int PhienBanSanPhamId { get; set; }
+  public string? PhienBanSanPhamId { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
   public IFormFile File { get; set; } = null!;
 }
 
 public class CapNhatSanPhamRequest
 {
-  public static CapNhatSanPhamRequest Generate(List<NganhHang> nganhHang, int nguoiBan, int sanPham = -1)
+  public static CapNhatSanPhamRequest Generate(List<NganhHang> nganhHang, string nguoiBan, string sanPham = "")
   {
     Random random = new();
     return new()
@@ -53,9 +53,9 @@ public class CapNhatSanPhamRequest
       NgayTao = RandomGenerator.RandomUtcDate(new(1990, 1, 1), new(2030, 1, 1))
     };
   }
-  public int? SanPhamId { get; set; }
-  public int? NguoiBanId { get; set; }
-  public int? NganhHangId { get; set; }
+  public string? SanPhamId { get; set; }
+  public string? NguoiBanId { get; set; }
+  public string? NganhHangId { get; set; }
   public string? TenSanPham { get; set; }
   public string? MoTaSanPham { get; set; }
   public double GiaBan { get; set; }

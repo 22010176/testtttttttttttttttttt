@@ -13,10 +13,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<NganhHang> NganhHang { get; set; }
   public DbSet<DiaChiGiaoHang> DiaChiGiaoHang { get; set; }
   public DbSet<GioHangKhachHang> GioHangKhachHang { get; set; }
+  public DbSet<GianHang> GianHang { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+
+    var gianHang = modelBuilder.Entity<GianHang>();
     var gioHangKhachHang = modelBuilder.Entity<GioHangKhachHang>();
     var nguoiBan = modelBuilder.Entity<TaiKhoanNguoiBan>();
     var DiaChiGiaoHang = modelBuilder.Entity<DiaChiGiaoHang>();
@@ -65,5 +68,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       .HasOne(i => i.TaiKhoanKhachHang)
       .WithMany(i => i.GioHangKhachHang)
       .HasForeignKey(i => i.KhachHangId);
+
+    gianHang
+      .HasOne(i => i.TaiKhoanNguoiBan)
+      .WithMany(i => i.GianHang)
+      .HasForeignKey(i => i.NguoiBanId);
   }
 }
