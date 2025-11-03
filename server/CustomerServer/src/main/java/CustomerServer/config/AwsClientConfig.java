@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import CustomerServer.dto.aws.AwsSecret;
+import CustomerServer.dto.aws.DatabaseConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -31,8 +32,7 @@ public class AwsClientConfig {
   private final AwsProperties aws;
 
   StaticCredentialsProvider staticCredentialsProvider() {
-    return StaticCredentialsProvider
-        .create(AwsBasicCredentials.create(aws.getAccessKey(), aws.getSecretKey()));
+    return StaticCredentialsProvider.create(AwsBasicCredentials.create(aws.getAccessKey(), aws.getSecretKey()));
   }
 
   @Bean
@@ -50,13 +50,18 @@ public class AwsClientConfig {
 
   @Bean
   DataSource dataSource() {
-    AwsSecret secret = awsSecret();
+    DatabaseConfig dbConfig = awsSecret().getDatabase();
 
     DriverManagerDataSource ds = new DriverManagerDataSource();
     ds.setDriverClassName("org.postgresql.Driver");
-    ds.setUrl(String.format("jdbc:postgresql://%s:%d/%s", secret.getHost(), secret.getPort(), secret.getDbname()));
-    ds.setUsername(secret.getUsername());
-    ds.setPassword(secret.getPassword());
+    ds.setUrl(
+        String.format(
+            "jdbc:postgresql://%s:%d/%s",
+            dbConfig.getHost(),
+            dbConfig.getPort(),
+            dbConfig.getDatabaseName()));
+    ds.setUsername(dbConfig.getUsername());
+    ds.setPassword(dbConfig.getPassword());
     return ds;
   }
 
@@ -81,10 +86,7 @@ public class AwsClientConfig {
         .secretId(aws.getSecretName())
         .build());
     String secretString = response.secretString();
-    System.out.println(secretString);
     ObjectMapper objectMapper = new ObjectMapper();
-
-    // AwsSecret secret;
     try {
       return objectMapper.readValue(secretString, AwsSecret.class);
     } catch (JsonProcessingException e) {

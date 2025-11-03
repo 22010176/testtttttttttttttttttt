@@ -2,13 +2,17 @@ const fs = require('fs')
 const path = require('path')
 
 const data = {
-  username: 'postgres',
-  password: 'admin',
-  host: 'localhost',
-  port: 5432,
-  dbname: 'TMDT',
-
-  bucketName: 'tmdt-bucket'
+  database: {
+    username: 'postgres',
+    password: 'admin',
+    host: 'localhost',
+    port: 5432,
+    databaseName: 'TMDT',
+  },
+  s3: {
+    bucketName: 'tmdt-bucket',
+    region: 'us-east-1'
+  }
 }
 
 const secretString = `"${JSON.stringify(data).replaceAll("\"", "\\\"")}"`

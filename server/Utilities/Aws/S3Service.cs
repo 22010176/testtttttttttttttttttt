@@ -4,27 +4,30 @@ using Amazon.S3.Model;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 
-namespace Utilities;
+namespace Utilities.Aws;
 
 public class S3Service
 {
   private AmazonS3Client S3Client { get; set; }
   private readonly string _bucketName;
-  private readonly S3ServiceParam param;
+  private readonly AwsSettings param;
 
-  public S3Service(S3ServiceParam s3ServiceParam)
+  public S3Service(AwsSettings settings, S3Config config)
   {
-    var region = RegionEndpoint.GetBySystemName(s3ServiceParam.RegionEndpoint);
-    var s3Config = new AmazonS3Config { RegionEndpoint = region };
-    if (s3ServiceParam.UseLocalStack)
+    var s3Config = new AmazonS3Config
     {
-      s3Config.ServiceURL = s3ServiceParam.ServiceURL;
+      RegionEndpoint = RegionEndpoint.GetBySystemName(config.Region)
+    };
+
+    if (!string.IsNullOrEmpty(settings.ServiceURL))
+    {
+      s3Config.ServiceURL = settings.ServiceURL;
       s3Config.ForcePathStyle = true;
     }
-    S3Client = new AmazonS3Client(s3ServiceParam.AccessKey, s3ServiceParam.SecretKey, s3Config);
-    _bucketName = s3ServiceParam.BucketName;
+    S3Client = new AmazonS3Client(settings.AccessKey, settings.SecretKey, s3Config);
+    _bucketName = config.BucketName;
 
-    param = s3ServiceParam;
+    param = settings;
   }
 
   public async Task CreateBucket(string bucketName)
@@ -41,7 +44,7 @@ public class S3Service
     {
       await CreateBucket(_bucketName!);
     }
-    catch (System.Exception)
+    catch (Exception)
     {
       throw;
     }
@@ -61,7 +64,7 @@ public class S3Service
     var fileTransferUtility = new TransferUtility(S3Client);
     await fileTransferUtility.UploadAsync(uploadRequest);
 
-    return param.UseLocalStack ?
+    return !string.IsNullOrEmpty(param.ServiceURL) ?
       $"{param.ServiceURL}/{_bucketName}/{fileName}" :
       $"https://{_bucketName}.s3.amazonaws.com/{fileName}";
   }
@@ -87,12 +90,3 @@ public class S3Service
 
 }
 
-public struct S3ServiceParam
-{
-  public string RegionEndpoint { get; set; }
-  public string AccessKey { get; set; }
-  public string SecretKey { get; set; }
-  public string BucketName { get; set; }
-  public bool UseLocalStack { get; set; }
-  public string ServiceURL { get; set; }
-}

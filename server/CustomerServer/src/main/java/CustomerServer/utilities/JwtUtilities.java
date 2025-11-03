@@ -17,7 +17,7 @@ public class JwtUtilities {
   private static final Key key = Keys.hmacShaKeyFor(SECRET.getBytes(StandardCharsets.UTF_8));
   private static final long EXPIRATION = 1000 * 60 * 60 * 24 * 1000; // in milliseconds (1000 days)
 
-  public static String generateToken(Integer userId, String email) {
+  public static String generateToken(String userId, String email) {
     return Jwts.builder()
         .setSubject("user")
         .setClaims(Map.of(
@@ -46,8 +46,8 @@ public class JwtUtilities {
         .getBody();
   }
 
-  public static Integer getUserId(String token) {
-    return validateTokenAndGetClaims(token).get("id", Integer.class);
+  public static String getUserId(String token) {
+    return validateTokenAndGetClaims(token).get("id", String.class);
   }
 
   public static String getEmail(String token) {

@@ -80,7 +80,7 @@ services:
       - VNPAY__VNP_ReturnUrl=
       # AWS
       - AWS_Profile=default
-      - AWS_RegionEndpoint=ap-southeast-1
+      - AWS_RegionEndpoint=us-east-1
       - AWS_AccessKey=test
       - AWS_SecretKey=test
       - AWS_BucketName=tmdt-bucket
@@ -109,13 +109,14 @@ services:
       - SERVICES=s3,lambda,sqs,sns,dynamodb,cloudwatch,cloudformation,iam,sts,events,secretsmanager,ssm
       - DEBUG=1
       - DATA_DIR=/var/lib/localstack/data # persist service state
-      - AWS_DEFAULT_REGION=ap-southeast-1
+      - AWS_DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
       - LOCALSTACK_HOST=localstack
       - LAMBDA_EXECUTOR=docker
       - HOST_TMP_FOLDER=/tmp/localstack
       - DOCKER_HOST=unix:///var/run/docker.sock
+      - LOCALSTACK_AUTH_TOKEN=
     volumes:
       # persist all data locally
       - localstack-data:/var/lib/localstack/data

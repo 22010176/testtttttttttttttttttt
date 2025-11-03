@@ -1,3 +1,5 @@
+using Amazon.Extensions.NETCore.Setup;
+using Amazon.SecretsManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,28 @@ public static class ServerTemplate
       options.UseNpgsql(connectionString);
       options.LogTo(_ => { }, LogLevel.None);
     });
+    return builder;
+  }
+  public static WebApplicationBuilder AddPostgres<T>(WebApplicationBuilder builder, Func<DbContextOptionsBuilder, string> func)
+  where T : DbContext
+  {
+    builder.Services.AddDbContext<T>(options =>
+    {
+      options.UseNpgsql(func(options));
+      options.LogTo(_ => { }, LogLevel.None);
+    });
+    return builder;
+  }
+
+  public static WebApplicationBuilder AddAwsOptions(WebApplicationBuilder builder, AWSOptions options)
+  {
+    builder.Services.AddDefaultAWSOptions(options);
+    return builder;
+  }
+
+  public static WebApplicationBuilder AddSecretManager(WebApplicationBuilder builder, string secretName)
+  {
+    builder.Services.AddAWSService<IAmazonSecretsManager>();
     return builder;
   }
 
@@ -67,5 +91,7 @@ public static class ServerTemplate
     });
     return builder;
   }
+
+
 
 }

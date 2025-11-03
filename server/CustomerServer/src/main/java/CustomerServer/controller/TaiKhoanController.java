@@ -78,8 +78,7 @@ public class TaiKhoanController {
       if (!BCrypt.checkpw(entity.getMatKhau(), taiKhoan.get("MatKhauBam").toString())) {
         throw new Exception("Mật khẩu không đúng");
       }
-
-      String token = JwtUtilities.generateToken((Integer) taiKhoan.get("Id"), entity.getEmail());
+      String token = JwtUtilities.generateToken((String) taiKhoan.get("Id"), entity.getEmail());
 
       return new ResponseFormat<>(Map.of("token", token), "Đăng nhập thành công", true);
     } catch (Exception e) {
@@ -90,7 +89,6 @@ public class TaiKhoanController {
   }
 
   @GetMapping
-  @SecurityRequirement(name = OpenApiConfig.securityScheme)
   public ResponseFormat<Object> XemThongTinTaiKhoan(Authentication authentication) {
     try {
       String email = authentication.getName();

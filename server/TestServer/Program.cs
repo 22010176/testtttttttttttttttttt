@@ -1,21 +1,27 @@
 using System.Text;
+using Amazon;
+using Amazon.Runtime;
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using DatabaseModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using TestServer.Utilities;
+using Newtonsoft.Json;
 using Utilities;
+using Utilities.Aws;
 
 var builder = ServerTemplate.CreateTemplateServer(args);
-builder.Services.AddSingleton<S3Service>(options =>
-{
-  var config = options.GetRequiredService<IConfiguration>();
-  var awsConfig = config.GetSection("AWS").Get<S3ServiceParam>();
-  return new(awsConfig);
-});
 
-ServerTemplate.AddPostgres<AppDbContext>(builder, builder.Configuration.GetConnectionString("PostgresConnection")!);
+var awsSettings = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
+
+SecretsManagerService service = new(awsSettings!);
+var secret = (await service.GetSecretAsync())!;
+
+S3Config s3Config = secret.S3;
+DatabaseConfig dbConfig = secret.Database;
+builder.Services.AddSingleton<SecretsManagerService>(options => new(awsSettings));
+builder.Services.AddSingleton<S3Service>(options => new(awsSettings, secret!.S3));
+ServerTemplate.AddPostgres<AppDbContext>(builder, $"Host={dbConfig!.Host};Port={dbConfig.Port};Database={dbConfig.DatabaseName};Username={dbConfig.Username};Password={dbConfig.Password}");
 
 builder.Services.AddAuthentication(options =>
 {

@@ -5,6 +5,7 @@
 );
 
 START TRANSACTION;
+
 CREATE TABLE "NganhHang" (
     "Id" text NOT NULL,
     "NganhHangChaId" text,
@@ -119,8 +120,14 @@ CREATE INDEX "IX_PhienBanSanPham_SanPhamId" ON "PhienBanSanPham" ("SanPhamId");
 
 CREATE INDEX "IX_SanPham_NguoiBanId" ON "SanPham" ("NguoiBanId");
 
-INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20251103081133_Init', '9.0.9');
+INSERT INTO
+    "__EFMigrationsHistory" (
+        "MigrationId",
+        "ProductVersion"
+    )
+VALUES (
+        '20251103081133_Init',
+        '9.0.9'
+    );
 
 COMMIT;
-
