@@ -1,12 +1,9 @@
 using System.Text;
-using Amazon;
-using Amazon.Runtime;
-using Amazon.SecretsManager;
-using Amazon.SecretsManager.Model;
+
 using DatabaseModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+
 using Utilities;
 using Utilities.Aws;
 

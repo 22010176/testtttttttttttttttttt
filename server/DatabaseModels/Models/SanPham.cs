@@ -55,8 +55,8 @@ public class MediaSanPham
 
 public enum LoaiHinhAnhSanPham
 {
-  HINH_MINH_HOA,
   HINH_ANH_BIA,
+  HINH_MINH_HOA,
   VIDEO_SAN_PHAM
 }
 

@@ -1,19 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-const data = {
-  database: {
-    username: 'postgres',
-    password: 'admin',
-    host: 'localhost',
-    port: 5432,
-    databaseName: 'TMDT',
-  },
-  s3: {
-    bucketName: 'tmdt-bucket',
-    region: 'us-east-1'
-  }
-}
+const data = require('../data/aws_secret.json')
 
 const secretString = `"${JSON.stringify(data).replaceAll("\"", "\\\"")}"`
 const script = `

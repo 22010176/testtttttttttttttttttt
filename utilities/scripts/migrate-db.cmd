@@ -10,3 +10,4 @@ dotnet ef migrations script -o ./init.sql --project .\DatabaseModels\ --startup-
 cd ..\utilities\js\src
 node saveData.js
 node getData.js
+node exportSecretString.js

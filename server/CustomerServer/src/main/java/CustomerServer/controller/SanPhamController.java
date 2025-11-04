@@ -89,7 +89,7 @@ public class SanPhamController {
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<?> getProductDetail(@PathVariable Integer id) {
+  public ResponseEntity<?> getProductDetail(@PathVariable String id) {
     String sql = """
         SELECT
           sp."Id",

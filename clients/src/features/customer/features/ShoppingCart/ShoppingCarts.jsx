@@ -1,10 +1,10 @@
-import { PercentageOutlined } from '@ant-design/icons';
 import { Button, Checkbox, InputNumber } from 'antd';
-import { useState } from 'react';
-
-import Container from '_c/components/Container';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { routePaths } from '../../routes';
+
+import { XemDanhSachGioHang } from '_c/api/gioHang';
+import Container from '_c/components/Container';
+import { routePaths } from '_c/routes';
 
 function ProductRow({ className, children, ...props }) {
   return (
@@ -156,6 +156,18 @@ const ShopeeCarts = () => {
     }
   ]);
 
+  const [gioHang, setGioHang] = useState([])
+
+  useEffect(function () {
+    XemDanhSachGioHang({}).then(function (data) {
+      setGioHang(Object.values(data.data.reduce((acc, i) => {
+        if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
+        acc[i.GianHangId].sanPham.push(i)
+
+        return acc
+      }, {})))
+    })
+  }, [])
 
   const getTotalItems = () => {
     let count = 0;
@@ -168,53 +180,53 @@ const ShopeeCarts = () => {
   return (
     <Container>
       {/* Header */}
-      {cartItems.map(shop => (
-        <div key={shop.id} className="mb-5 bg-white shadow">
+      {gioHang.map((shop, j) => (
+        <div key={j} className="mb-5 bg-white shadow">
           {/* Shop Header */}
           <ProductRow className="border-b-1 gap-5 items-center text-left bg-blue-500">
             <Checkbox />
-            <span className="font-medium text-white col-span-5">{shop.shopName}</span>
+            <span className="font-medium text-white col-span-5">{shop.TenGianHang}</span>
             <span className="text-white">Đơn Giá</span>
             <span className="text-white">Số Lượng</span>
             <span className="text-white">Số Tiền</span>
             <span className="text-white">Thao Tác</span>
           </ProductRow>
 
-          {shop.items.map(item => (
+          {shop.sanPham.map((item, i) => (
             // <div className="px-5 py-4  hover:bg-gray-50">
-            <ProductRow className="items-center border-b-1">
+            <ProductRow key={i} className="items-center border-b-1">
               <Checkbox />
               {/* Product Image */}
-              <img src={item.image} alt={item.name} className="size-20 bg-black object-cover rounded" />
+              <img src={item.hinhanhsanpham} alt={item.TenSanPham} className="size-20 bg-black object-cover rounded" />
 
               {/* Product Info */}
-              <h3 className="text-sm mb-2 line-clamp-2 col-span-4">{item.name}</h3>
+              <h3 className="text-sm mb-2 line-clamp-2 col-span-4">{item.TenSanPham}</h3>
 
               {/* Price */}
               <div>
-                {item.originalPrice > item.price && (
+                {/* {item.originalPrice > item.price && (
                   <div className="text-xs text-gray-400 line-through">
-                    {item.originalPrice.toLocaleString()}₫
+                    {item.GiaBan.toLocaleString()}₫
                   </div>
-                )}
+                )} */}
                 <div className="text-sm">
-                  {item.price.toLocaleString()}₫
+                  {item.GiaBan.toLocaleString()}₫
                 </div>
               </div>
 
               {/* Quantity */}
-              <InputNumber controls={false} />
+              <InputNumber variant='underlined' controls={false} defaultValue={1} />
 
 
               {/* Total */}
               <div className="">
                 {item.originalPrice > item.price && (
                   <div className="text-xs text-gray-400 line-through mb-1">
-                    {(item.originalPrice * item.quantity).toLocaleString()}₫
+                    {(item.GiaBan * 1).toLocaleString()}₫
                   </div>
                 )}
                 <div className="text-red-500 font-medium">
-                  {(item.price * item.quantity).toLocaleString()}₫
+                  {(item.GiaBan * 1).toLocaleString()}₫
                 </div>
                 {/* {item.stock && (
                           <div className="text-xs text-gray-500 mt-1">

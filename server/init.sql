@@ -126,7 +126,7 @@ INSERT INTO
         "ProductVersion"
     )
 VALUES (
-        '20251103081133_Init',
+        '20251104015026_Init',
         '9.0.9'
     );
 

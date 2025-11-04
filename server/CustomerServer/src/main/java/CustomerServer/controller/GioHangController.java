@@ -1,5 +1,7 @@
 package CustomerServer.controller;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
@@ -9,10 +11,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.dto.ResponseFormat;
@@ -26,15 +26,68 @@ public class GioHangController {
   private final JdbcTemplate jdbcTemplate;
 
   @GetMapping
-  public String XemDanhSachGioHang(@RequestParam String param) {
-    return new String();
+  public ResponseEntity<?> XemDanhSachGioHang() {
+    String sql = """
+        SELECT
+        	ghkh."Id",
+        	ghkh."SanPhamId",
+        	ghkh."KhachHangId",
+        	gh."Id" "GianHangId",
+        	sp."TenSanPham",
+        	sp."GiaBan",
+        	gh."TenGianHang",
+        	media."Url" HinhAnhSanPham
+        FROM "GioHangKhachHang" ghkh
+        INNER JOIN "TaiKhoanKhachHang" tkkh ON tkkh."Id" = ghkh."KhachHangId"
+        JOIN LATERAL (
+        	SELECT
+        		sp2."Id",
+        		sp2."NguoiBanId",
+        		pbsp2."Id" "PhienBanSanPhamId",
+        		pbsp2."TenSanPham",
+        		pbsp2."GiaBan"
+        	FROM "SanPham" sp2
+        	INNER JOIN "PhienBanSanPham" pbsp2 ON sp2."Id" = pbsp2."SanPhamId"
+        	WHERE
+        		ghkh."SanPhamId" = sp2."Id"
+        		AND pbsp2."NgayTao" < CURRENT_DATE
+        	ORDER BY pbsp2."NgayTao" DESC
+        	LIMIT 1
+        ) sp ON TRUE
+        INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
+        INNER JOIN "GianHang" gh ON gh."NguoiBanId" = tknb."Id"
+        LEFT JOIN "MediaSanPham" media ON media."PhienBanSanPhamId" = sp."PhienBanSanPhamId"
+        WHERE
+        	media."LoaiHinhAnhSanPham" = 1
+        	OR media."Url" IS NULL
+        ORDER BY ghkh."Id"
+        """;
+    List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
+    return ResponseEntity.ok(ResponseFormat.success(orders, ""));
   }
 
-  @PostMapping("/them-gio-hang")
+  @PostMapping
   public ResponseEntity<?> ThemGioHang(
       Authentication authentication,
       @RequestBody ThemGioHangRequest entity) {
     // TODO: process POST request
+    String checkSql = """
+        SELECT
+        	ghkh."Id"
+        FROM "GioHangKhachHang" ghkh
+        WHERE
+        	ghkh."KhachHangId" = ?
+        	AND ghkh."SanPhamId" = ?
+        LIMIT 1;
+        """;
+    List<Map<String, Object>> data = jdbcTemplate.queryForList(checkSql,
+        entity.getKhachHangId(),
+        entity.getSanPhamId());
+
+    if (data.size() > 0) {
+      System.out.println("DDDDDDDD " + data.get(0));
+      return ResponseEntity.ok(ResponseFormat.success(null, ""));
+    }
 
     String sql = """
         INSERT INTO "GioHangKhachHang"
@@ -45,20 +98,11 @@ public class GioHangController {
         UUID.randomUUID().toString(),
         entity.getSanPhamId(),
         entity.getKhachHangId(),
-        entity.getSoLuong());
+        1);
     return ResponseEntity.ok(ResponseFormat.success(null, ""));
   }
 
-  @PutMapping("sua-gio-hang/{id}")
-  public ThemGioHangRequest SuaGioHang(
-      @PathVariable String id,
-      @RequestBody ThemGioHangRequest entity) {
-    // TODO: process PUT request
-
-    return entity;
-  }
-
-  @DeleteMapping("/xoa-gio-hang/{id}")
+  @DeleteMapping("{id}")
   public String XoaGioHang(@PathVariable String id) {
     return new String();
   }

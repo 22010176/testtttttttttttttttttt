@@ -139,6 +139,23 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       await dbContext.PhienBanSanPham.AddAsync(phienBanSanPham);
       await dbContext.SaveChangesAsync();
 
+      List<MediaSanPham> mediaSanPham = await dbContext.MediaSanPham
+        .Select(i => new MediaSanPham()
+        {
+          Id = Guid.NewGuid().ToString(),
+          PhienBanSanPhamId = i.PhienBanSanPhamId,
+          LoaiHinhAnhSanPham = i.LoaiHinhAnhSanPham,
+          Url = i.Url,
+          NgayTao = DateTime.UtcNow,
+        })
+        .Where(i => i.PhienBanSanPhamId == phienBanSanPham.Id)
+        .OrderByDescending(i => i.LoaiHinhAnhSanPham)
+        .ThenByDescending(i => i.NgayTao)
+        .Take(10)
+        .ToListAsync();
+
+      await dbContext.MediaSanPham.AddRangeAsync(mediaSanPham);
+      await dbContext.SaveChangesAsync();
       return Ok(new ResponseFormat
       {
         Message = "Cập nhật sản phẩm thành công",

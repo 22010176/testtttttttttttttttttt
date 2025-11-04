@@ -119,7 +119,7 @@ services:
       - LOCALSTACK_AUTH_TOKEN=
     volumes:
       # persist all data locally
-      - localstack-data:/var/lib/localstack/data
+      - ./localstack-data:/var/lib/localstack
       # allow LocalStack to spawn Docker containers for Lambdas
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
