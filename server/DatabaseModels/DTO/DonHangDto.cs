@@ -5,8 +5,8 @@ namespace DatabaseModels.DTO;
 public class TaoDonHangRequest
 {
   public string? KhachHangId { get; set; }
-  public LoaiHinhThanhToanDto LoaiHinhThanhToan { get; set; }
-  public List<SanPhamDonHangDto>? SanPhamDonHangDto { get; set; }
+  public string? LoaiHinhThanhToan { get; set; }
+  public List<SanPhamDonHangDto>? SanPham { get; set; }
 }
 
 public class SanPhamDonHangDto
@@ -15,8 +15,8 @@ public class SanPhamDonHangDto
   public int SoLuong { get; set; }
 }
 
-public enum LoaiHinhThanhToanDto
+public static class LoaiHinhThanhToanDto
 {
-  VN_PAY,
-  KHI_NHAN_HANG
+  public static string VN_PAY { get; } = "VN_PAY";
+  public static string KHI_NHAN_HANG { get; } = "KHI_NHAN_HANG";
 }

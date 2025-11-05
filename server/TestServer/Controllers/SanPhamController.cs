@@ -16,7 +16,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 {
   readonly IConfiguration _config = config;
   readonly AppDbContext dbContext = dbContext;
-  readonly HttpClient _http = new();
+  // readonly HttpClient _http = new();
   readonly int IMAGE_SIZE = 100;
   readonly string serverUrl = "http://localhost:5216";
 
@@ -76,6 +76,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       }
       _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
         {
+          HttpClient _http = new();
           var json = JsonSerializer.Serialize(data);
           var content = new StringContent(json, Encoding.UTF8, "application/json");
           var response = await _http.PostAsync("http://localhost:5216/api/san-pham/cap-nhat-san-pham", content, b);
@@ -117,6 +118,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
       _ = Parallel.ForEachAsync(capNhatSanPhamRequest, async (data, c) =>
       {
+        HttpClient _http = new();
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -158,6 +160,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
       _ = Parallel.ForEachAsync((await Task.WhenAll(tasks)).ToList(), async (data, c) =>
         {
+          var _http = new HttpClient();
           var stream = new StreamContent(data.File.OpenReadStream());
           stream.Headers.ContentType = new MediaTypeHeaderValue(data.File.ContentType);
 
@@ -229,7 +232,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       {
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");
-
+        HttpClient _http = new();
         var response = await _http.PutAsync("http://localhost:5216/api/san-pham/cap-nhat-trang-thai", content, c);
         var body = await response.Content.ReadAsStringAsync(c);
         Console.WriteLine($"CapNhatTrangThaiSanPham: spID({data.SanPhamId})  {body}");

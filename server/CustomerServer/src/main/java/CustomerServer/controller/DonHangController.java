@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,24 +44,23 @@ public class DonHangController {
         	pbsp."GiaBan",
         	gh."Id",
         	gh."TenGianHang",
-        	media."Url"
+        	(
+        		SELECT
+        			"Url"
+        		FROM "MediaSanPham" media
+        		WHERE
+        			media."PhienBanSanPhamId" = pbsp."Id"
+        			AND media."NgayTao" < CURRENT_DATE
+        			AND media."LoaiHinhAnhSanPham" = 0
+        		ORDER BY media."NgayTao" DESC
+        		LIMIT 1
+        	)"Url"
         FROM "DonHangKhachHang" dhkh
-        INNER JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
+        LEFT JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
         INNER JOIN "PhienBanSanPham" pbsp ON pbsp."Id" = spdh."PhienBanSanPhamId"
         INNER JOIN "SanPham" sp ON sp."Id" = pbsp."SanPhamId"
         INNER JOIN "TaiKhoanNguoiBan" nb ON nb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = nb."Id"
-        LEFT JOIN LATERAL (
-        	SELECT
-        		*
-        	FROM "MediaSanPham" media
-        	WHERE
-        		media."PhienBanSanPhamId" = pbsp."Id"
-        		AND media."NgayTao" < CURRENT_DATE
-        		AND media."LoaiHinhAnhSanPham" = 0
-        	ORDER BY media."NgayTao" DESC
-        	LIMIT 1
-        ) media ON TRUE
         ORDER BY dhkh."NgayTao" DESC, nb."Id"
         """;
 

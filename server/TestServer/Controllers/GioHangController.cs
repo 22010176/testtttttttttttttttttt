@@ -41,7 +41,7 @@ public class GioHangController(IConfiguration config, AppDbContext dbContext) : 
       });
       return Ok();
     }
-    catch (System.Exception)
+    catch (Exception)
     {
 
       throw;
