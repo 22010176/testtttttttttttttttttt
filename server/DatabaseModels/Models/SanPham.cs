@@ -37,6 +37,7 @@ public class PhienBanSanPham
   public NganhHang? NganhHang { get; set; }
   public SanPham? SanPham { get; set; }
   public List<MediaSanPham>? MediaSanPham { get; set; }
+  public List<SanPhamDonHang>? SanPhamDonHang { get; set; }
 }
 
 public class MediaSanPham

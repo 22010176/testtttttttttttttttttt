@@ -15,147 +15,6 @@ function ProductRow({ className, children, ...props }) {
 }
 
 const ShopeeCarts = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      shopName: 'Linh Kiện Điện Tử Viña',
-      shopBadge: 'Yêu thích',
-      shopIcon: '🛍️',
-      voucher: true,
-      freeShipping: 'Giảm 500.000₫ phí vận chuyển đơn tối thiểu 0₫; Giảm 501.000₫ phí vận chuyển đơn tối thiểu 500.000₫',
-      items: [
-        {
-          id: 101,
-          name: 'Gói 50 Con - Led Các Loại - Led Đúc, Siêu Sáng Ph1 Màu, Ph 3...',
-          variant: 'Led Sáu Sáng 6mm 50 CON Xanh Dương',
-          price: 18400,
-          originalPrice: 18400,
-          quantity: 1,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích'
-        },
-        {
-          id: 102,
-          name: 'Thanh Jump Cái Đơn 1 Hàng 1*40P 2.54mm, 1 Hàng 40 chân, Không...',
-          variant: '7 Jump Đực Thẳng',
-          price: 13700,
-          originalPrice: 13700,
-          quantity: 1,
-          image: '/api/placeholder/80/80'
-        },
-        {
-          id: 103,
-          name: 'Màn hình LCD 1602 2004 5V xanh lá/xanh dương I2C Đen Nền - Kem...',
-          variant: 'Xanh Lá 5V',
-          price: 38298,
-          originalPrice: 38298,
-          quantity: 1,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích'
-        },
-        {
-          id: 104,
-          name: 'Gói 20 Con Điốt Tử vạch 1/4W sài đá 5% 250V 1N - 10Đ (220R, 330...',
-          variant: '1K',
-          price: 8189,
-          originalPrice: 8189,
-          quantity: 1,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích'
-        },
-        {
-          id: 105,
-          name: 'Gói 20 Con Điốt Tử vạch 1/4W sài đá 5% 250V 1N - 10Đ (220R, 330...',
-          variant: '330R',
-          price: 8189,
-          originalPrice: 8189,
-          quantity: 1,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích',
-        }
-      ]
-    },
-    {
-      id: 2,
-      shopName: 'Linh Kiện Điện Tử Meta',
-      shopBadge: 'Yêu thích',
-      shopIcon: '🛍️',
-      voucher: true,
-      freeShipping: 'Giảm 500.000₫ phí vận chuyển đơn tối thiểu 0₫; Giảm 1.000.000₫ phí vận chuyển đơn tối thiểu 500.000₫',
-      items: [
-        {
-          id: 201,
-          name: '[Gói 50 Con] Led Siêu Sáng Phi 5 Màu Đỏ, Xanh Lá, Xanh Dương,...',
-          variant: 'TRẮNG',
-          price: 18400,
-          originalPrice: 18400,
-          quantity: 1,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích'
-        }
-      ]
-    },
-    {
-      id: 3,
-      shopName: 'Anhari Manga Shop',
-      shopBadge: 'Mall',
-      shopIcon: '🛍️',
-      dealTitle: 'Mua Kèm Deal Sốc với mức giá ưu đãi',
-      items: [
-        {
-          id: 301,
-          name: 'Sách Grimgar - Lẻ tập 1 - 16 - Ao Anh Và Trở Tận 1 2 3 4 5 6 7 8 9 6...',
-          variant: 'Tập 7',
-          price: 95500,
-          originalPrice: 95500,
-          quantity: 1,
-          stock: 5,
-          image: '/api/placeholder/80/80',
-          deal: true
-        }
-      ]
-    },
-    {
-      id: 4,
-      shopName: 'Light Novel Shop',
-      dealTitle: 'Mua Kèm Deal Sốc với mức giá ưu đãi',
-      freeShipping: 'Giảm 500.000₫ phí vận chuyển đơn tối thiểu 0₫; Giảm 1.000.000₫ phí vận chuyển đơn tối thiểu 500.000₫',
-      items: [
-        {
-          id: 401,
-          name: 'Sách Dược Sư 1 2 3 4 5 6 7 8 9 10 11 12 13 14 - Manga...',
-          variant: 'Light Novel 7',
-          price: 129500,
-          originalPrice: 388500,
-          quantity: 3,
-          stock: 3,
-          image: '/api/placeholder/80/80',
-          deal: true
-        }
-      ]
-    },
-    {
-      id: 5,
-      shopName: 'Linh Kiện Điện Tử LKI',
-      shopBadge: 'Yêu thích',
-      shopIcon: '🛍️',
-      voucher: true,
-      freeShipping: 'Giảm 500.000₫ phí vận chuyển đơn tối thiểu 0₫; Giảm 1.000.000₫ phí vận chuyển đơn tối thiểu 500.000₫',
-      items: [
-        {
-          id: 501,
-          name: 'KIT Arduino Uno R3 Atmega 328P Chip Cắm Có Kèm Dây Cáp',
-          variant: 'R3 Chip Dán',
-          price: 76998,
-          originalPrice: 307992,
-          quantity: 4,
-          image: '/api/placeholder/80/80',
-          tag: 'Yêu thích'
-        }
-      ]
-    }
-  ]);
-
   const [gioHang, setGioHang] = useState([])
 
   useEffect(function () {
@@ -169,16 +28,10 @@ const ShopeeCarts = () => {
     })
   }, [])
 
-  const getTotalItems = () => {
-    let count = 0;
-    cartItems.forEach(shop => {
-      count += shop.items.length;
-    });
-    return count;
-  };
+  const getTotalItems = () => gioHang.reduce((acc, i) => acc += i.sanPham.length, 0);
 
   return (
-    <Container>
+    <Container className="min-h-70">
       {/* Header */}
       {gioHang.map((shop, j) => (
         <div key={j} className="mb-5 bg-white shadow">

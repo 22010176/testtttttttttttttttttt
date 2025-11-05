@@ -13,9 +13,9 @@ import OrderTracking from "./features/Profiles/OrderTracking"
 import ProfilePage from "./features/Profiles/ProfileDashboard"
 import SearchPage from "./features/SearchPage"
 import ShopPage from "./features/ShopPage"
-import ShopeeCheckout from "./features/ShoppingCart/Checkout"
+import Checkout from "./features/ShoppingCart/Checkout"
 import ShoppingCart from "./features/ShoppingCart/ShoppingCart"
-import ShopeeCarts from "./features/ShoppingCart/ShoppingCarts"
+import Carts from "./features/ShoppingCart/ShoppingCarts"
 
 function Customer() {
   useEffect(function () {
@@ -30,8 +30,8 @@ function Customer() {
 
         <Route path={routePaths.product.details} element={<ProductDetail />} />
 
-        <Route path={routePaths.orders.carts} element={<ShopeeCarts />} />
-        <Route path={routePaths.orders.checkout} element={<ShopeeCheckout />} />
+        <Route path={routePaths.orders.carts} element={<Carts />} />
+        <Route path={routePaths.orders.checkout} element={<Checkout />} />
 
         <Route path={routePaths.shop} element={<ShopPage />} />
 

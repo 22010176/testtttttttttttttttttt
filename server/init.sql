@@ -5,7 +5,6 @@
 );
 
 START TRANSACTION;
-
 CREATE TABLE "NganhHang" (
     "Id" text NOT NULL,
     "NganhHangChaId" text,
@@ -51,6 +50,16 @@ CREATE TABLE "DiaChiGiaoHang" (
     CONSTRAINT "FK_DiaChiGiaoHang_TaiKhoanKhachHang_TaiKhoanKhachHangId" FOREIGN KEY ("TaiKhoanKhachHangId") REFERENCES "TaiKhoanKhachHang" ("Id")
 );
 
+CREATE TABLE "DonHangKhachHang" (
+    "Id" text NOT NULL,
+    "KhachHangId" text,
+    "PhiVanChuyen" integer NOT NULL,
+    "LoaiHinhThanhToan" integer NOT NULL,
+    "NgayTao" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_DonHangKhachHang" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_DonHangKhachHang_TaiKhoanKhachHang_KhachHangId" FOREIGN KEY ("KhachHangId") REFERENCES "TaiKhoanKhachHang" ("Id")
+);
+
 CREATE TABLE "GianHang" (
     "Id" text NOT NULL,
     "NguoiBanId" text,
@@ -67,6 +76,16 @@ CREATE TABLE "SanPham" (
     "TrangThaiSanPham" integer NOT NULL,
     CONSTRAINT "PK_SanPham" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_SanPham_TaiKhoanNguoiBan_NguoiBanId" FOREIGN KEY ("NguoiBanId") REFERENCES "TaiKhoanNguoiBan" ("Id")
+);
+
+CREATE TABLE "CapNhatTrangThaiDonHang" (
+    "Id" text NOT NULL,
+    "DonHangId" text,
+    "NoiDungCapNhat" text,
+    "TrangThaiDonHang" integer NOT NULL,
+    "ThoiGianTao" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_CapNhatTrangThaiDonHang" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_CapNhatTrangThaiDonHang_DonHangKhachHang_DonHangId" FOREIGN KEY ("DonHangId") REFERENCES "DonHangKhachHang" ("Id")
 );
 
 CREATE TABLE "GioHangKhachHang" (
@@ -102,7 +121,21 @@ CREATE TABLE "MediaSanPham" (
     CONSTRAINT "FK_MediaSanPham_PhienBanSanPham_PhienBanSanPhamId" FOREIGN KEY ("PhienBanSanPhamId") REFERENCES "PhienBanSanPham" ("Id")
 );
 
+CREATE TABLE "SanPhamDonHang" (
+    "Id" text NOT NULL,
+    "PhienBanSanPhamId" text,
+    "DonHangId" text,
+    "SoLuong" bigint NOT NULL,
+    CONSTRAINT "PK_SanPhamDonHang" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_SanPhamDonHang_DonHangKhachHang_DonHangId" FOREIGN KEY ("DonHangId") REFERENCES "DonHangKhachHang" ("Id"),
+    CONSTRAINT "FK_SanPhamDonHang_PhienBanSanPham_PhienBanSanPhamId" FOREIGN KEY ("PhienBanSanPhamId") REFERENCES "PhienBanSanPham" ("Id")
+);
+
+CREATE INDEX "IX_CapNhatTrangThaiDonHang_DonHangId" ON "CapNhatTrangThaiDonHang" ("DonHangId");
+
 CREATE INDEX "IX_DiaChiGiaoHang_TaiKhoanKhachHangId" ON "DiaChiGiaoHang" ("TaiKhoanKhachHangId");
+
+CREATE INDEX "IX_DonHangKhachHang_KhachHangId" ON "DonHangKhachHang" ("KhachHangId");
 
 CREATE INDEX "IX_GianHang_NguoiBanId" ON "GianHang" ("NguoiBanId");
 
@@ -120,14 +153,12 @@ CREATE INDEX "IX_PhienBanSanPham_SanPhamId" ON "PhienBanSanPham" ("SanPhamId");
 
 CREATE INDEX "IX_SanPham_NguoiBanId" ON "SanPham" ("NguoiBanId");
 
-INSERT INTO
-    "__EFMigrationsHistory" (
-        "MigrationId",
-        "ProductVersion"
-    )
-VALUES (
-        '20251104015026_Init',
-        '9.0.9'
-    );
+CREATE INDEX "IX_SanPhamDonHang_DonHangId" ON "SanPhamDonHang" ("DonHangId");
+
+CREATE INDEX "IX_SanPhamDonHang_PhienBanSanPhamId" ON "SanPhamDonHang" ("PhienBanSanPhamId");
+
+INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
+VALUES ('20251105025833_Init', '9.0.9');
 
 COMMIT;
+

@@ -108,7 +108,7 @@ services:
       # Enable all AWS free-tier services (you can add/remove as needed)
       - SERVICES=s3,lambda,sqs,sns,dynamodb,cloudwatch,cloudformation,iam,sts,events,secretsmanager,ssm
       - DEBUG=1
-      - DATA_DIR=/var/lib/localstack/data # persist service state
+      - DATA_DIR=/var/lib/localstack # persist service state
       - AWS_DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test

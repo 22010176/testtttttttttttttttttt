@@ -96,6 +96,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
   {
     try
     {
+      dbContext.GianHang.RemoveRange(await dbContext.GianHang.ToListAsync());
       dbContext.TaiKhoanNguoiBan.RemoveRange(await dbContext.TaiKhoanNguoiBan.ToListAsync());
       await dbContext.SaveChangesAsync();
 

@@ -36,6 +36,7 @@ public class TaiKhoanKhachHang
 
   public List<DiaChiGiaoHang>? DiaChiGiaoHang { get; set; }
   public List<GioHangKhachHang>? GioHangKhachHang { get; set; }
+  public List<DonHangKhachHang>? DonHangKhachHang { get; set; }
 }
 
 public class DiaChiGiaoHang

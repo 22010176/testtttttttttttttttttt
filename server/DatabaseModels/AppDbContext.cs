@@ -14,11 +14,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
   public DbSet<DiaChiGiaoHang> DiaChiGiaoHang { get; set; }
   public DbSet<GioHangKhachHang> GioHangKhachHang { get; set; }
   public DbSet<GianHang> GianHang { get; set; }
+  public DbSet<DonHangKhachHang> DonHangKhachHang { get; set; }
+  public DbSet<CapNhatTrangThaiDonHang> CapNhatTrangThaiDonHang { get; set; }
+  public DbSet<SanPhamDonHang> SanPhamDonHang { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
 
+    var donHangKhachHang = modelBuilder.Entity<DonHangKhachHang>();
+    var capNhatTrangThaiDonHang = modelBuilder.Entity<CapNhatTrangThaiDonHang>();
+    var sanPhamDonHang = modelBuilder.Entity<SanPhamDonHang>();
     var gianHang = modelBuilder.Entity<GianHang>();
     var gioHangKhachHang = modelBuilder.Entity<GioHangKhachHang>();
     var nguoiBan = modelBuilder.Entity<TaiKhoanNguoiBan>();
@@ -28,6 +34,26 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     var phienBanSanPham = modelBuilder.Entity<PhienBanSanPham>();
     var mediaSanPham = modelBuilder.Entity<MediaSanPham>();
     var nganhHang = modelBuilder.Entity<NganhHang>();
+
+    donHangKhachHang
+      .HasOne(i => i.KhachHang)
+      .WithMany(i => i.DonHangKhachHang)
+      .HasForeignKey(i => i.KhachHangId);
+
+    capNhatTrangThaiDonHang
+      .HasOne(i => i.DonHang)
+      .WithMany(i => i.TrangThaiDonHang)
+      .HasForeignKey(i => i.DonHangId);
+
+    sanPhamDonHang
+      .HasOne(i => i.PhienBanSanPham)
+      .WithMany(i => i.SanPhamDonHang)
+      .HasForeignKey(i => i.PhienBanSanPhamId);
+
+    sanPhamDonHang
+      .HasOne(i => i.DonHangKhachHang)
+      .WithMany(i => i.SanPhamDonHang)
+      .HasForeignKey(i => i.DonHangId);
 
     sanPham
       .HasOne(sanPham => sanPham.NguoiBan)

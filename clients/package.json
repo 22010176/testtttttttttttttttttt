@@ -6,7 +6,6 @@
   "scripts": {
     "dev-customer": "vite --mode customer --open",
     "dev-seller": "vite --mode seller --open",
-    "dev-administrator": "vite --mode administrator --open",
     "build": "vite build",
     "dev": "concurrently \"npm:dev-*\"",
     "lint": "eslint .",

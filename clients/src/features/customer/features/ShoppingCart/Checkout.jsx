@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import Container from '_c/components/Container';
 
-export default function ShopeeCheckout() {
+export default function Checkout() {
   const [orders, setOrders] = useState([
     {
       id: 1,

@@ -8,6 +8,8 @@ using Utilities;
 using Utilities.Aws;
 
 var builder = ServerTemplate.CreateTemplateServer(args);
+// builder.Logging.ClearProviders();
+// builder.Logging.SetMinimumLevel(LogLevel.None);
 
 var awsSettings = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
 

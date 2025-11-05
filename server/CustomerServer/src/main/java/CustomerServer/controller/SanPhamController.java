@@ -24,33 +24,10 @@ public class SanPhamController {
   private final JdbcTemplate jdbcTemplate;
   private static final Logger log = LoggerFactory.getLogger(SanPhamController.class);
 
-  @GetMapping("nganhhang")
-  public ResponseFormat<Object> XemDanhSachNganhHang(
-      @RequestParam(defaultValue = "-1") int nganhHangId) {
-    String sql;
-    List<Map<String, Object>> categories;
-    if (nganhHangId != -1) {
-      sql = """
-          SELECT *
-          FROM "NganhHang"
-          WHERE "NganhHangChaId" = ?
-          """;
-      categories = jdbcTemplate.queryForList(sql, nganhHangId);
-    } else {
-      sql = """
-          SELECT *
-          FROM "NganhHang"
-          WHERE "NganhHangChaId" IS NULL
-          """;
-      categories = jdbcTemplate.queryForList(sql);
-    }
-
-    return new ResponseFormat<>(categories, "", true);
-  }
-
   @GetMapping
   // @SecurityRequirement(name = OpenApiConfig.securityScheme)
-  public ResponseEntity<?> XemDanhSachSanPham(@RequestParam(required = false) Integer pageSize) {
+  public ResponseEntity<?> XemDanhSachSanPham(@RequestParam(required = true) Integer pageSize) {
+    System.out.println(pageSize);
     String sql = """
         SELECT
           sp."Id",
@@ -66,6 +43,8 @@ public class SanPhamController {
             WHERE
               m."PhienBanSanPhamId" = pbsp."Id"
               AND m."LoaiHinhAnhSanPham" = 1
+          ORDER BY m."NgayTao" DESC
+          LIMIT 1
           ) anhBia
         FROM "SanPham" sp
         JOIN LATERAL (
@@ -74,7 +53,7 @@ public class SanPhamController {
           WHERE
             sp."Id" = pbsp."SanPhamId"
             AND pbsp."NgayTao" < CURRENT_DATE
-          ORDER BY pbsp."NgayTao"
+          ORDER BY pbsp."NgayTao" DESC
           LIMIT 1
         ) pbsp ON TRUE
         WHERE sp."Id" IN (
