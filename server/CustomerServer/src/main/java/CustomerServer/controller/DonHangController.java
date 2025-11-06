@@ -34,7 +34,7 @@ public class DonHangController {
   }
 
   @GetMapping
-  public ResponseEntity<?> XemDanhSachDonHang(@RequestParam String param) {
+  public ResponseEntity<?> XemDanhSachDonHang() {
     String sql = """
         SELECT
           dhkh.*,
