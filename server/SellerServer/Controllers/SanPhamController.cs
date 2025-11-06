@@ -45,7 +45,9 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
           o.pb.GiaBan,
           NgayChinhSuaCuoi = o.pb.NgayTao,
           AnhBia = dbContext.MediaSanPham
-            .Where(i => i.LoaiHinhAnhSanPham == LoaiHinhAnhSanPham.HINH_ANH_BIA)
+            .Where(i =>
+              i.LoaiHinhAnhSanPham == LoaiHinhAnhSanPham.HINH_ANH_BIA
+              && i.SanPhamId == o.sp.Id)
             .OrderByDescending(i => i.NgayTao)
             .Select(i => i.Url)
             .FirstOrDefault(),
@@ -79,7 +81,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       MediaSanPham mediaSanPham = new()
       {
         Id = Guid.NewGuid().ToString(),
-        PhienBanSanPhamId = file.PhienBanSanPhamId,
+        SanPhamId = file.SanPhamId,
         NgayTao = DateTime.UtcNow,
         Url = await s3.UploadFileAsync(file.File),
         LoaiHinhAnhSanPham = file.LoaiHinhAnhSanPham
@@ -139,23 +141,23 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       await dbContext.PhienBanSanPham.AddAsync(phienBanSanPham);
       await dbContext.SaveChangesAsync();
 
-      List<MediaSanPham> mediaSanPham = await dbContext.MediaSanPham
-        .Select(i => new MediaSanPham()
-        {
-          Id = Guid.NewGuid().ToString(),
-          PhienBanSanPhamId = i.PhienBanSanPhamId,
-          LoaiHinhAnhSanPham = i.LoaiHinhAnhSanPham,
-          Url = i.Url,
-          NgayTao = DateTime.UtcNow,
-        })
-        .Where(i => i.PhienBanSanPhamId == phienBanSanPham.Id)
-        .OrderByDescending(i => i.LoaiHinhAnhSanPham)
-        .ThenByDescending(i => i.NgayTao)
-        .Take(10)
-        .ToListAsync();
+      // List<MediaSanPham> mediaSanPham = await dbContext.MediaSanPham
+      //   .Select(i => new MediaSanPham()
+      //   {
+      //     Id = Guid.NewGuid().ToString(),
+      //     PhienBanSanPhamId = i.PhienBanSanPhamId,
+      //     LoaiHinhAnhSanPham = i.LoaiHinhAnhSanPham,
+      //     Url = i.Url,
+      //     NgayTao = DateTime.UtcNow,
+      //   })
+      //   .Where(i => i.PhienBanSanPhamId == phienBanSanPham.Id)
+      //   .OrderByDescending(i => i.LoaiHinhAnhSanPham)
+      //   .ThenByDescending(i => i.NgayTao)
+      //   .Take(10)
+      //   .ToListAsync();
 
-      await dbContext.MediaSanPham.AddRangeAsync(mediaSanPham);
-      await dbContext.SaveChangesAsync();
+      // await dbContext.MediaSanPham.AddRangeAsync(mediaSanPham);
+      // await dbContext.SaveChangesAsync();
       return Ok(new ResponseFormat
       {
         Message = "Cập nhật sản phẩm thành công",

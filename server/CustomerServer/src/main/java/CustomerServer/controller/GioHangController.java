@@ -56,7 +56,7 @@ public class GioHangController {
         ) sp ON TRUE
         INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = tknb."Id"
-        LEFT JOIN "MediaSanPham" media ON media."PhienBanSanPhamId" = sp."PhienBanSanPhamId"
+        LEFT JOIN "MediaSanPham" media ON media."SanPhamId" = sp."Id"
         WHERE
         	media."LoaiHinhAnhSanPham" = 1
         	OR media."Url" IS NULL

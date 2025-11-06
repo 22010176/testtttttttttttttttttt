@@ -59,7 +59,7 @@ public class TakKhoanNguoiBanController(IConfiguration config, AppDbContext dbCo
   {
     try
     {
-      _ = Parallel.ForEachAsync(Enumerable.Range(0, number), async (n, b) =>
+      await Parallel.ForEachAsync(Enumerable.Range(0, number), async (n, b) =>
      {
        var data = new
        {

@@ -26,12 +26,13 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
       List<GianHang> gianHang = await dbContext.GianHang.ToListAsync();
       List<PhienBanSanPham?>? phienBanSanPham = [.. sanPham
         .OrderBy(sanPham => sanPham.NguoiBanId)
-        .Select(i => dbContext.PhienBanSanPham
-          .Where(j => j.SanPhamId == i.Id && j.NgayTao <= DateTime.UtcNow)
-          .OrderByDescending(i => i.NgayTao)
-          .Take(1)
-          .ToList()
-          .FirstOrDefault()
+        .Select(i =>
+          dbContext.PhienBanSanPham
+            .Where(j => j.SanPhamId == i.Id && j.NgayTao <= DateTime.UtcNow)
+            .OrderByDescending(i => i.NgayTao)
+            .Take(1)
+            .ToList()
+            .FirstOrDefault()
         )];
 
       List<TaoDonHangRequest> taoDonHangRequest = [];
@@ -39,18 +40,8 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
       {
         for (int i = 0; i < donHang; i++)
         {
-          int _index;
-          PhienBanSanPham? _item;
-          do
-          {
-            _index = random.Next(phienBanSanPham.Count);
-            _item = phienBanSanPham[_index];
-          } while (_item == null);
-          Console.WriteLine("dddd " + _item.Id);
-          var _sanPham = phienBanSanPham
-            .Where(i => i != null && i.SanPham.NguoiBanId == _item!.SanPham!.NguoiBanId)
-            .ToList();
 
+          List<PhienBanSanPham> _phienBanSanPham = [.. phienBanSanPham];
           TaoDonHangRequest request = new()
           {
             KhachHangId = kh.Id,
@@ -58,23 +49,23 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
             SanPham = []
           };
 
-          int len = random.Next(1, _sanPham.Count);
-          for (int j = 0; j < len; ++j)
+          int len = random.Next(1, donHang);
+          for (int j = 0; j < len; j++)
           {
-            _index = random.Next(_sanPham.Count);
-            var item = _sanPham[_index];
-            _sanPham.RemoveAt(_index);
+            int _index = random.Next(_phienBanSanPham.Count);
+            var item = _phienBanSanPham[_index];
+            _phienBanSanPham.RemoveAt(_index);
             request.SanPham.Add(new()
             {
               PhienBanSanPhamId = item.Id,
-              SoLuong = random.Next(100)
+              SoLuong = random.Next(1, 50)
             });
           }
           taoDonHangRequest.Add(request);
         }
       }
 
-      _ = Parallel.ForEachAsync(taoDonHangRequest, async (data, c) =>
+      await Parallel.ForEachAsync(taoDonHangRequest, async (data, c) =>
       {
         var body = await GenerateRequest.CreateRequest(data, serverUrl, RequestMethod.POST);
         Console.WriteLine($"TaoDonHang: {body}");

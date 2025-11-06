@@ -76,9 +76,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
       .HasForeignKey(i => i.NganhHangId);
 
     mediaSanPham
-      .HasOne(i => i.PhienBanSanPham)
+      .HasOne(i => i.SanPham)
       .WithMany(i => i.MediaSanPham)
-      .HasForeignKey(i => i.PhienBanSanPhamId);
+      .HasForeignKey(i => i.SanPhamId);
 
     DiaChiGiaoHang
       .HasOne(i => i.TaiKhoanKhachHang)

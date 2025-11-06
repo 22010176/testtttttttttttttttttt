@@ -67,7 +67,10 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
   }
 
   [HttpGet("lay-nganh-hang-con")]
-  public async Task<IActionResult> LayNganhHangCon([FromQuery] Guid id, [FromQuery] int page, [FromQuery] int pageSize)
+  public async Task<IActionResult> LayNganhHangCon(
+    [FromQuery] string id,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 100)
   {
     try
     {

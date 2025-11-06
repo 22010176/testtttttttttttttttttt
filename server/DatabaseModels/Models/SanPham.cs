@@ -20,6 +20,7 @@ public class SanPham
   public TaiKhoanNguoiBan? NguoiBan { get; set; }
   public List<PhienBanSanPham>? PhienBanSanPham { get; set; }
   public List<GioHangKhachHang>? GioHangKhachHang { get; set; }
+  public List<MediaSanPham>? MediaSanPham { get; set; }
 }
 
 public class PhienBanSanPham
@@ -36,7 +37,6 @@ public class PhienBanSanPham
 
   public NganhHang? NganhHang { get; set; }
   public SanPham? SanPham { get; set; }
-  public List<MediaSanPham>? MediaSanPham { get; set; }
   public List<SanPhamDonHang>? SanPhamDonHang { get; set; }
 }
 
@@ -44,14 +44,14 @@ public class MediaSanPham
 {
   [Key]
   public string Id { get; set; } = null!;
-  public string? PhienBanSanPhamId { get; set; }
+  public string? SanPhamId { get; set; }
 
   // public int SoThuTu { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
   public string? Url { get; set; }
   public DateTime NgayTao { get; set; }
 
-  public PhienBanSanPham? PhienBanSanPham { get; set; }
+  public SanPham? SanPham { get; set; }
 }
 
 public enum LoaiHinhAnhSanPham

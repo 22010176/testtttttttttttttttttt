@@ -22,17 +22,17 @@ public class CapNhatTrangThaiRequest
 
 public class CapNhatHinhAnhRequest
 {
-  async public static Task<CapNhatHinhAnhRequest> Generate(string? phienBanSanPham, LoaiHinhAnhSanPham loai, int image_size)
+  async public static Task<CapNhatHinhAnhRequest> Generate(string? sanPhamId, LoaiHinhAnhSanPham loai, int image_size)
   {
     Console.WriteLine("CapNhatHinhAnhRequest");
     return new CapNhatHinhAnhRequest()
     {
-      PhienBanSanPhamId = phienBanSanPham,
+      SanPhamId = sanPhamId,
       LoaiHinhAnhSanPham = loai,
       File = await RandomGenerator.GenerateRandomImageStream(image_size, image_size)
     };
   }
-  public string? PhienBanSanPhamId { get; set; }
+  public string? SanPhamId { get; set; }
   public LoaiHinhAnhSanPham LoaiHinhAnhSanPham { get; set; }
   public IFormFile File { get; set; } = null!;
 }

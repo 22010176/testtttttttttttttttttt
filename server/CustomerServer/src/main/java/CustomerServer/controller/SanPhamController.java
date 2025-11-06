@@ -26,7 +26,7 @@ public class SanPhamController {
 
   @GetMapping
   // @SecurityRequirement(name = OpenApiConfig.securityScheme)
-  public ResponseEntity<?> XemDanhSachSanPham(@RequestParam(required = true) Integer pageSize) {
+  public ResponseEntity<?> XemDanhSachSanPham(@RequestParam(defaultValue = "100") Integer pageSize) {
     System.out.println(pageSize);
     String sql = """
         SELECT
@@ -41,8 +41,8 @@ public class SanPhamController {
             SELECT m."Url"
             FROM "MediaSanPham" m
             WHERE
-              m."PhienBanSanPhamId" = pbsp."Id"
-              AND m."LoaiHinhAnhSanPham" = 1
+              m."SanPhamId" = sp."Id"
+              AND m."LoaiHinhAnhSanPham" = 0
           ORDER BY m."NgayTao" DESC
           LIMIT 1
           ) anhBia
@@ -96,18 +96,9 @@ public class SanPhamController {
           m_sp."Url",
           m_sp."LoaiHinhAnhSanPham"
         FROM "SanPham" sp
-        JOIN LATERAL (
-          SELECT *
-          FROM "PhienBanSanPham" pbsp
-          WHERE
-            sp."Id" = pbsp."SanPhamId"
-            AND pbsp."NgayTao" < CURRENT_DATE
-          ORDER BY pbsp."NgayTao"
-          LIMIT 1
-        ) pbsp ON TRUE
-        INNER JOIN "MediaSanPham" m_sp ON m_sp."PhienBanSanPhamId" = pbsp."Id"
+        INNER JOIN "MediaSanPham" m_sp ON m_sp."SanPhamId" = sp."Id"
         WHERE sp."Id" = ?
-        ORDER BY m_sp."LoaiHinhAnhSanPham" DESC, m_sp."NgayTao" DESC
+        ORDER BY m_sp."LoaiHinhAnhSanPham", m_sp."NgayTao" DESC
         LIMIT 8
         """;
     Map<String, Object> product = jdbcTemplate.queryForMap(sql, id);

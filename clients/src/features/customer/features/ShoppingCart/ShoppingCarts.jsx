@@ -8,7 +8,7 @@ import { routePaths } from '_c/routes';
 
 function ProductRow({ className, children, ...props }) {
   return (
-    <div {...props} className={[className, 'grid grid-cols-10 gap-5 py-2 px-5'].join(' ')}>
+    <div {...props} className={[className, 'grid grid-cols-12 gap-5 py-2 px-5'].join(' ')}>
       {children}
     </div>
   )
@@ -38,10 +38,10 @@ const ShopeeCarts = () => {
           {/* Shop Header */}
           <ProductRow className="border-b-1 gap-5 items-center text-left bg-blue-500">
             <Checkbox />
-            <span className="font-medium text-white col-span-5">{shop.TenGianHang}</span>
-            <span className="text-white">Đơn Giá</span>
+            <span className="font-medium text-white col-span-5  ">{shop.TenGianHang}</span>
+            <span className="text-white  col-span-2">Đơn Giá</span>
             <span className="text-white">Số Lượng</span>
-            <span className="text-white">Số Tiền</span>
+            <span className="text-white  col-span-2">Số Tiền</span>
             <span className="text-white">Thao Tác</span>
           </ProductRow>
 
@@ -56,7 +56,7 @@ const ShopeeCarts = () => {
               <h3 className="text-sm mb-2 line-clamp-2 col-span-4">{item.TenSanPham}</h3>
 
               {/* Price */}
-              <div>
+              <div className=' col-span-2'>
                 {/* {item.originalPrice > item.price && (
                   <div className="text-xs text-gray-400 line-through">
                     {item.GiaBan.toLocaleString()}₫
@@ -72,7 +72,7 @@ const ShopeeCarts = () => {
 
 
               {/* Total */}
-              <div className="">
+              <div className="col-span-2">
                 {item.originalPrice > item.price && (
                   <div className="text-xs text-gray-400 line-through mb-1">
                     {(item.GiaBan * 1).toLocaleString()}₫

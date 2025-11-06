@@ -30,7 +30,7 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
         dangKiTaiKhoanKhachHangRequest.Add(DangKiTaiKhoanKhachHangRequest.Generate());
       }
 
-      _ = Parallel.ForEachAsync(dangKiTaiKhoanKhachHangRequest, async (data, c) =>
+      await Parallel.ForEachAsync(dangKiTaiKhoanKhachHangRequest, async (data, c) =>
       {
         var body = await GenerateRequest.CreateRequest(data, $"{serverUrl}/api/taikhoan/dang-ki", RequestMethod.POST);
         Console.WriteLine($"TaoTaiKhoanKhachHang: {body}");
@@ -48,7 +48,7 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
   }
 
   [HttpPost("them-dia-chi")]
-  public async Task<IActionResult> TaoDiaChi(int diaChi)
+  public async Task<IActionResult> TaoDiaChi([FromQuery] int diaChi = 10)
   {
     try
     {
@@ -62,7 +62,7 @@ public class TaiKhoanKhachHangController(IConfiguration config, AppDbContext dbC
         }
       }
 
-      _ = Parallel.ForEachAsync(themDiaChiRequest, async (data, c) =>
+      await Parallel.ForEachAsync(themDiaChiRequest, async (data, c) =>
       {
         var body = await GenerateRequest.CreateRequest(data, $"{serverUrl}/api/diachi", RequestMethod.POST);
         Console.WriteLine($"TaoDiaChi: {body}");

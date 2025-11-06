@@ -37,24 +37,24 @@ public class DonHangController {
   public ResponseEntity<?> XemDanhSachDonHang(@RequestParam String param) {
     String sql = """
         SELECT
-        	dhkh.*,
-        	spdh."Id" PhienBanSanPhamId,
-        	spdh."SoLuong",
-        	pbsp."TenSanPham",
-        	pbsp."GiaBan",
-        	gh."Id",
-        	gh."TenGianHang",
-        	(
-        		SELECT
-        			"Url"
-        		FROM "MediaSanPham" media
-        		WHERE
-        			media."PhienBanSanPhamId" = pbsp."Id"
-        			AND media."NgayTao" < CURRENT_DATE
-        			AND media."LoaiHinhAnhSanPham" = 0
-        		ORDER BY media."NgayTao" DESC
-        		LIMIT 1
-        	)"Url"
+          dhkh.*,
+          spdh."Id" PhienBanSanPhamId,
+          spdh."SoLuong",
+          pbsp."TenSanPham",
+          pbsp."GiaBan",
+          gh."Id",
+          gh."TenGianHang",
+          (
+            SELECT
+              "Url"
+            FROM "MediaSanPham" media
+            WHERE
+              media."SanPhamId" = sp."Id"
+              -- AND media."NgayTao" < CURRENT_DATE
+              AND media."LoaiHinhAnhSanPham" = 0
+            ORDER BY media."NgayTao" DESC
+            LIMIT 1
+          )"Url"
         FROM "DonHangKhachHang" dhkh
         LEFT JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
         INNER JOIN "PhienBanSanPham" pbsp ON pbsp."Id" = spdh."PhienBanSanPhamId"
@@ -87,7 +87,7 @@ public class DonHangController {
         sqlTaoDonHAng,
         donHangId,
         entity.getKhachHangId(),
-        10_000,
+        15_000,
         entity.getLoaiHinhThanhToan().ordinal(),
         new Date());
 

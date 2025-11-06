@@ -40,7 +40,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
           sanPham.Add(CapNhatSanPhamRequest.Generate(nganhHang, nguoiBan.Id));
         }
       }
-      _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
+      await Parallel.ForEachAsync(sanPham, async (data, b) =>
         {
           var body = await GenerateRequest.CreateRequest(data, $"{serverUrl}/api/san-pham/cap-nhat-san-pham", RequestMethod.POST);
           Console.WriteLine($"TaoSanPham: {body}");
@@ -58,7 +58,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   }
 
   [HttpPost("them-san-pham/{id}")]
-  public async Task<IActionResult> TaoSanPham(Guid id, int sp = 10)
+  public async Task<IActionResult> TaoSanPham(string id, int sp = 10)
   {
     // return BadRequest();
     try
@@ -74,7 +74,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         CapNhatSanPhamRequest request = CapNhatSanPhamRequest.Generate(nganhHang, id.ToString());
         sanPham.Add(request);
       }
-      _ = Parallel.ForEachAsync(sanPham, async (data, b) =>
+      await Parallel.ForEachAsync(sanPham, async (data, b) =>
         {
           HttpClient _http = new();
           var json = JsonSerializer.Serialize(data);
@@ -116,7 +116,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         }
       }
 
-      _ = Parallel.ForEachAsync(capNhatSanPhamRequest, async (data, c) =>
+      await Parallel.ForEachAsync(capNhatSanPhamRequest, async (data, c) =>
       {
         HttpClient _http = new();
         var json = JsonSerializer.Serialize(data);
@@ -139,26 +139,26 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   {
     try
     {
-      var tasks = (await dbContext.PhienBanSanPham.ToListAsync())
-      .SelectMany(pbsp =>
+      var tasks = (await dbContext.SanPham.ToListAsync())
+      .SelectMany(sp =>
       {
         var list = new List<Task<CapNhatHinhAnhRequest>>
         {
           // HINH_ANH_BIA
-          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.HINH_ANH_BIA,IMAGE_SIZE)),
+          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(sp.Id, LoaiHinhAnhSanPham.HINH_ANH_BIA,IMAGE_SIZE)),
           // VIDEO_SAN_PHAM
-          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.VIDEO_SAN_PHAM,IMAGE_SIZE)),
+          Task.Run(async () => await CapNhatHinhAnhRequest.Generate(sp.Id, LoaiHinhAnhSanPham.VIDEO_SAN_PHAM,IMAGE_SIZE)),
         };
 
         // 10 x HINH_MINH_HOA
         for (int i = 0; i < 10; i++)
         {
-          list.Add(Task.Run(async () => await CapNhatHinhAnhRequest.Generate(pbsp.Id, LoaiHinhAnhSanPham.HINH_MINH_HOA, IMAGE_SIZE)));
+          list.Add(Task.Run(async () => await CapNhatHinhAnhRequest.Generate(sp.Id, LoaiHinhAnhSanPham.HINH_MINH_HOA, IMAGE_SIZE)));
         }
         return list;
       }).ToList();
 
-      _ = Parallel.ForEachAsync((await Task.WhenAll(tasks)).ToList(), async (data, c) =>
+      await Parallel.ForEachAsync((await Task.WhenAll(tasks)).ToList(), async (data, c) =>
         {
           var _http = new HttpClient();
           var stream = new StreamContent(data.File.OpenReadStream());
@@ -166,7 +166,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
 
           using var form = new MultipartFormDataContent
           {
-            { new StringContent(data.PhienBanSanPhamId!.ToString()), nameof(CapNhatHinhAnhRequest.PhienBanSanPhamId) },
+            { new StringContent(data.SanPhamId!.ToString()), nameof(CapNhatHinhAnhRequest.SanPhamId) },
             { new StringContent(data.LoaiHinhAnhSanPham!.ToString()), nameof(CapNhatHinhAnhRequest.LoaiHinhAnhSanPham) },
             { stream, nameof(CapNhatHinhAnhRequest.File), data.File.FileName }
           };
@@ -194,8 +194,10 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
     {
       Console.WriteLine("TaoSanPham");
       await TaoSanPham(sanPham);
+
       Console.WriteLine("TaoPhienBanSanPham");
       await TaoPhienBanSanPham(phienBanSanPham);
+
       Console.WriteLine("TaoMediaSanPham");
       await TaoMediaSanPham();
 
@@ -228,7 +230,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         });
       }
 
-      _ = Parallel.ForEachAsync(capNhatTrangThaiRequest, async (data, c) =>
+      await Parallel.ForEachAsync(capNhatTrangThaiRequest, async (data, c) =>
       {
         var json = JsonSerializer.Serialize(data);
         var content = new StringContent(json, Encoding.UTF8, "application/json");

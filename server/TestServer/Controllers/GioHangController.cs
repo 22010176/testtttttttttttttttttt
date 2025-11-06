@@ -34,7 +34,7 @@ public class GioHangController(IConfiguration config, AppDbContext dbContext) : 
           SoLuong = 1
         });
       }
-      _ = Parallel.ForEachAsync(taoGioHangRequest, async (data, c) =>
+      await Parallel.ForEachAsync(taoGioHangRequest, async (data, c) =>
       {
         var body = await GenerateRequest.CreateRequest(data, $"{serverUrl}/api/giohang", RequestMethod.POST);
         Console.WriteLine($"TaoGioHang: {body}");

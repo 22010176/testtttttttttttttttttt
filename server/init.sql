@@ -98,6 +98,16 @@ CREATE TABLE "GioHangKhachHang" (
     CONSTRAINT "FK_GioHangKhachHang_TaiKhoanKhachHang_KhachHangId" FOREIGN KEY ("KhachHangId") REFERENCES "TaiKhoanKhachHang" ("Id")
 );
 
+CREATE TABLE "MediaSanPham" (
+    "Id" text NOT NULL,
+    "SanPhamId" text,
+    "LoaiHinhAnhSanPham" integer NOT NULL,
+    "Url" text,
+    "NgayTao" timestamp with time zone NOT NULL,
+    CONSTRAINT "PK_MediaSanPham" PRIMARY KEY ("Id"),
+    CONSTRAINT "FK_MediaSanPham_SanPham_SanPhamId" FOREIGN KEY ("SanPhamId") REFERENCES "SanPham" ("Id")
+);
+
 CREATE TABLE "PhienBanSanPham" (
     "Id" text NOT NULL,
     "NganhHangId" text,
@@ -109,16 +119,6 @@ CREATE TABLE "PhienBanSanPham" (
     CONSTRAINT "PK_PhienBanSanPham" PRIMARY KEY ("Id"),
     CONSTRAINT "FK_PhienBanSanPham_NganhHang_NganhHangId" FOREIGN KEY ("NganhHangId") REFERENCES "NganhHang" ("Id"),
     CONSTRAINT "FK_PhienBanSanPham_SanPham_SanPhamId" FOREIGN KEY ("SanPhamId") REFERENCES "SanPham" ("Id")
-);
-
-CREATE TABLE "MediaSanPham" (
-    "Id" text NOT NULL,
-    "PhienBanSanPhamId" text,
-    "LoaiHinhAnhSanPham" integer NOT NULL,
-    "Url" text,
-    "NgayTao" timestamp with time zone NOT NULL,
-    CONSTRAINT "PK_MediaSanPham" PRIMARY KEY ("Id"),
-    CONSTRAINT "FK_MediaSanPham_PhienBanSanPham_PhienBanSanPhamId" FOREIGN KEY ("PhienBanSanPhamId") REFERENCES "PhienBanSanPham" ("Id")
 );
 
 CREATE TABLE "SanPhamDonHang" (
@@ -143,7 +143,7 @@ CREATE INDEX "IX_GioHangKhachHang_KhachHangId" ON "GioHangKhachHang" ("KhachHang
 
 CREATE INDEX "IX_GioHangKhachHang_SanPhamId" ON "GioHangKhachHang" ("SanPhamId");
 
-CREATE INDEX "IX_MediaSanPham_PhienBanSanPhamId" ON "MediaSanPham" ("PhienBanSanPhamId");
+CREATE INDEX "IX_MediaSanPham_SanPhamId" ON "MediaSanPham" ("SanPhamId");
 
 CREATE INDEX "IX_NganhHang_NganhHangChaId" ON "NganhHang" ("NganhHangChaId");
 
@@ -158,7 +158,7 @@ CREATE INDEX "IX_SanPhamDonHang_DonHangId" ON "SanPhamDonHang" ("DonHangId");
 CREATE INDEX "IX_SanPhamDonHang_PhienBanSanPhamId" ON "SanPhamDonHang" ("PhienBanSanPhamId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20251105025833_Init', '9.0.9');
+VALUES ('20251106024750_Init', '9.0.9');
 
 COMMIT;
 
