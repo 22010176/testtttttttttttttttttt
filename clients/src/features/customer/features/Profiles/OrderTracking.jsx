@@ -1,8 +1,28 @@
 import { ChevronLeft, FileText, Info, MessageSquare, Package, Star, Store, Truck } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import { XemThongTinChiTietDonHang } from '_c/api/donHang';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFlag } from '@fortawesome/free-solid-svg-icons';
+
+function LayTrangThaiDonHang(traingThai) {
+  const a = [
+    "LOI",
+    "KHACH_HANG_DAT_HANG",
+    "NGUOI_BAN_XAC_NHAN",
+    "DON_HANG_VAN_CHUYEN",
+    "DON_HANG_GIAO_THANH_CONG",
+    "HUY_DON_HANG"
+  ]
+  return a[(traingThai + 1) ?? 0]
+}
 
 export default function OrderTracking() {
+  const { id } = useParams()
+  console.log(id)
   const [showAllTracking, setShowAllTracking] = useState(false);
+  const [donHang, setDonHang] = useState(null);
 
   const orderData = {
     orderCode: '25042667dddNSR0PV',
@@ -136,6 +156,13 @@ export default function OrderTracking() {
   const shipping = 16500;
   const total = 54448;
 
+  useEffect(function () {
+    XemThongTinChiTietDonHang({ id }).then(function (data) {
+      console.log(data)
+      setDonHang(data.data)
+    })
+  }, [id])
+  console.log(donHang)
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto">
@@ -146,28 +173,29 @@ export default function OrderTracking() {
             <span className="text-sm">TRỞ LẠI</span>
           </button>
           <div className="flex items-center gap-4 text-sm">
-            <span>MÃ ĐƠN HÀNG. {orderData.orderCode}</span>
-            <span className="text-blue-500">{orderData.status}</span>
+            <span>MÃ ĐƠN HÀNG. {donHang?.Id}</span>
+            <span className="text-blue-500">{LayTrangThaiDonHang(donHang?.trangThai[0].TrangThaiDonHang)}</span>
           </div>
         </div>
 
         {/* Progress Tracker */}
         <div className="bg-white p-8 mb-4">
-          <div className="flex items-center justify-between relative">
+          <div className="flex items-center justify-between relative overflow-x-scroll">
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
 
-            {orderData.trackingSteps.map((step, index) => {
-              const Icon = step.icon;
+            {donHang?.trangThai.map((step, index) => {
+              const Icon = step?.icon;
               return (
+
                 <div key={index} className="flex flex-col items-center relative" style={{ zIndex: 1 }}>
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step.completed ? 'bg-green-500' : 'bg-gray-300'
-                    }`}>
-                    <Icon size={24} className="text-white" />
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 3 ? 'bg-green-500' : 'bg-gray-300'}`}>
+                    {/* <Icon size={24} className="text-white" /> */}
+                    <FontAwesomeIcon icon={faFlag} />
                   </div>
                   <div className="text-center mt-3 max-w-[120px]">
-                    <div className="text-xs font-medium">{step.title}</div>
-                    <div className="text-xs text-gray-400 mt-1">{step.time}</div>
+                    <div className="text-xs font-medium">{LayTrangThaiDonHang(step.TrangThaiDonHang)}</div>
+                    <div className="text-xs text-gray-400 mt-1">{new Date(step.ThoiGianTao).toLocaleString()}</div>
                   </div>
                 </div>
               );
@@ -178,7 +206,7 @@ export default function OrderTracking() {
         <div className="grid grid-cols-1 gap-4 mb-4">
           {/* Left Column - Tracking Info */}
           <div className="bg-white rounded-lg shadow-sm p-4">
-            <div className="text-sm text-gray-500 mb-4">return_ineligible_pass_due_date</div>
+            {/* <div className="text-sm text-gray-500 mb-4">return_ineligible_pass_due_date</div> */}
 
             <div className="flex gap-4 mb-6">
               <button className="flex-1 bg-blue-500 text-white py-2.5 rounded hover:bg-blue-600">
@@ -207,7 +235,7 @@ export default function OrderTracking() {
             </div>
 
             {/* Timeline */}
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               {orderData.timeline.slice(0, showAllTracking ? undefined : 3).map((item, index) => (
                 <div key={index} className="flex gap-3">
                   <div className="flex flex-col items-center">
@@ -235,16 +263,16 @@ export default function OrderTracking() {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
 
-            {!showAllTracking && orderData.timeline.length > 3 && (
+            {/* {!showAllTracking && orderData.timeline.length > 3 && (
               <button
                 onClick={() => setShowAllTracking(true)}
                 className="text-blue-500 text-sm mt-4 hover:text-blue-600"
               >
                 Xem thêm
               </button>
-            )}
+            )} */}
 
             {/* Seller Info */}
             <div className="flex items-center gap-3 mt-6 pt-6 border-t">
@@ -265,15 +293,15 @@ export default function OrderTracking() {
 
             {/* Products */}
             <div className="mt-6 space-y-4">
-              {orderData.products.map((product) => (
-                <div key={product.id} className="flex gap-3 pb-4 border-b last:border-b-0">
-                  <img src={product.image} alt={product.name} className="w-20 h-20 object-cover rounded" />
+              {donHang?.sanPham.map((product) => (
+                <div key={product.SanPhamId} className="flex gap-3 pb-4 border-b last:border-b-0">
+                  <img src={product.Url} alt={product.TenSanPham} className="w-20 h-20 object-cover rounded" />
                   <div className="flex-1">
-                    <div className="text-sm mb-1">{product.name}</div>
-                    <div className="text-xs text-gray-500">{product.variant}</div>
-                    <div className="text-sm mt-2">x{product.quantity}</div>
+                    <div className="text-sm mb-1">{product.TenSanPham}</div>
+                    {/* <div className="text-xs text-gray-500">{product.variant}</div> */}
+                    <div className="text-sm mt-2">x{product.SoLuong}</div>
                   </div>
-                  <div className="text-sm">{product.price.toLocaleString('vi-VN')}₫</div>
+                  <div className="text-sm">{product.GiaBan.toLocaleString('vi-VN')}₫</div>
                 </div>
               ))}
             </div>
@@ -297,12 +325,12 @@ export default function OrderTracking() {
             </div>
 
             {/* Payment Notice */}
-            <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded p-3 flex items-start gap-2">
+            {/* <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded p-3 flex items-start gap-2">
               <span className="text-yellow-600">⚠</span>
               <span className="text-xs text-gray-700">
                 Vui lòng thanh toán <strong>{total.toLocaleString('vi-VN')}₫</strong> khi nhận hàng
               </span>
-            </div>
+            </div> */}
 
             {/* Payment Method */}
             <div className="mt-6 pt-6 border-t">

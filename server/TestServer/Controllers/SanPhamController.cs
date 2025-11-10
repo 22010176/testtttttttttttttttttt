@@ -29,7 +29,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
       // Generate product
       List<TaiKhoanNguoiBan> taiKhoanNguoiBan = await dbContext.TaiKhoanNguoiBan.ToListAsync();
       List<NganhHang> nganhHang = await dbContext.NganhHang
-        .Where(i => i.LaNhanh)
+        .Where(i => i.NganhHangChaId == null)
         .ToListAsync();
 
       List<CapNhatSanPhamRequest> sanPham = [];

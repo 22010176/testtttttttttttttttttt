@@ -116,7 +116,7 @@ services:
       - LAMBDA_EXECUTOR=docker
       - HOST_TMP_FOLDER=/tmp/localstack
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - LOCALSTACK_AUTH_TOKEN=
+      - PERSISTENCE=1
     volumes:
       # persist all data locally
       - ./localstack-data:/var/lib/localstack
@@ -127,13 +127,13 @@ services:
 
   database:
     container_name: database
-    image: postgres:latest
+    image: postgres:17.6
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: TMDT
     ports:
-      - 8000:5432
+      - 5432:5432
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql

@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.dto.ResponseFormat;
 import CustomerServer.dto.donhang.LoaiHinhThanhToan;
 import CustomerServer.dto.donhang.SanPhamDonHang;
 import CustomerServer.dto.donhang.TaoDonHangRequest;
+import CustomerServer.dto.donhang.TrangThaiDonHang;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -69,8 +69,52 @@ public class DonHangController {
   }
 
   @GetMapping("{id}")
-  public String XemThongTinDonHang(@PathVariable String id) {
-    return new String();
+  public ResponseEntity<?> XemThongTinDonHang(@PathVariable String id) {
+    String sqlLayThongTinDonHang = """
+        SELECT *
+        FROM "DonHangKhachHang"
+        WHERE "Id" = ?
+        ORDER BY "NgayTao" DESC
+        LIMIT 1""";
+    Map<String, Object> donHang = jdbcTemplate.queryForMap(sqlLayThongTinDonHang, id);
+
+    String sqlXemThongTinTrangThaiDonHang = """
+        SELECT
+        	cntt.*
+        FROM "DonHangKhachHang" dhkh
+        INNER JOIN "CapNhatTrangThaiDonHang" cntt ON cntt."DonHangId" = dhkh."Id"
+        WHERE dhkh."Id" = ?
+        ORDER BY cntt."ThoiGianTao" DESC
+        """;
+    List<Map<String, Object>> trangThai = jdbcTemplate.queryForList(sqlXemThongTinTrangThaiDonHang, id);
+
+    String sqlXemDanhSachSanPham = """
+        SELECT
+        	pbsp."SanPhamId",
+        	pbsp."Id" PhienBanId,
+        	pbsp."TenSanPham",
+        	pbsp."GiaBan",
+        	spdh."SoLuong",
+        	media."Url"
+        FROM "DonHangKhachHang" dhkh
+        INNER JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
+        INNER JOIN "PhienBanSanPham" pbsp ON pbsp."Id" = spdh."PhienBanSanPhamId"
+        JOIN LATERAL (
+        	SELECT "Url"
+        	FROM "MediaSanPham"
+        	WHERE
+        		"SanPhamId" = pbsp."SanPhamId"
+        		AND "LoaiHinhAnhSanPham" = 0
+        	ORDER BY "NgayTao"
+        	LIMIT 1
+        ) media ON TRUE
+        WHERE dhkh."Id" = ?
+        """;
+    List<Map<String, Object>> sanPham = jdbcTemplate.queryForList(sqlXemDanhSachSanPham, id);
+    donHang.put("trangThai", trangThai);
+    donHang.put("sanPham", sanPham);
+
+    return ResponseEntity.ok(ResponseFormat.success(donHang));
   }
 
   @PostMapping
@@ -125,9 +169,18 @@ public class DonHangController {
   }
 
   @DeleteMapping("{id}")
-  public String HuyDonHang(@PathVariable String id, @RequestBody String entity) {
+  public ResponseEntity<?> HuyDonHang(@PathVariable String id) {
     // TODO: process PUT request
-
-    return entity;
+    String sqlHuyDonHang = """
+        INSERT INTO "CapNhatTrangThaiDonHang"
+        	("Id", "DonHangId", "NoiDungCapNhat", "TrangThaiDonHang", "ThoiGianTao")
+        VALUES (?, ?, ?, ?, CURRENT_DATE)
+        """;
+    jdbcTemplate.update(sqlHuyDonHang,
+        UUID.randomUUID().toString(),
+        id,
+        "Huy Don Hang",
+        TrangThaiDonHang.HUY_DON_HANG.ordinal());
+    return ResponseEntity.ok(ResponseFormat.success());
   }
 }
