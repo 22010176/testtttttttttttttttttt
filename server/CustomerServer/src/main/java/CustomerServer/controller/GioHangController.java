@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,9 +33,10 @@ public class GioHangController {
         	ghkh."KhachHangId",
         	gh."Id" "GianHangId",
         	sp."TenSanPham",
+          sp."PhienBanSanPhamId",
         	sp."GiaBan",
         	gh."TenGianHang",
-        	media."Url" HinhAnhSanPham
+        	sp."Url" "HinhAnhSanPham"
         FROM "GioHangKhachHang" ghkh
         INNER JOIN "TaiKhoanKhachHang" tkkh ON tkkh."Id" = ghkh."KhachHangId"
         JOIN LATERAL (
@@ -45,21 +45,23 @@ public class GioHangController {
         		sp2."NguoiBanId",
         		pbsp2."Id" "PhienBanSanPhamId",
         		pbsp2."TenSanPham",
-        		pbsp2."GiaBan"
+        		pbsp2."GiaBan",
+        		media."Url"
         	FROM "SanPham" sp2
+        	LEFT JOIN "MediaSanPham" media ON media."SanPhamId" = sp2."Id"
         	INNER JOIN "PhienBanSanPham" pbsp2 ON sp2."Id" = pbsp2."SanPhamId"
         	WHERE
         		ghkh."SanPhamId" = sp2."Id"
         		AND pbsp2."NgayTao" < CURRENT_DATE
+        		AND (
+        			media."LoaiHinhAnhSanPham" = 1
+        			OR media."Url" IS NULL
+        		)
         	ORDER BY pbsp2."NgayTao" DESC
         	LIMIT 1
         ) sp ON TRUE
         INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = tknb."Id"
-        LEFT JOIN "MediaSanPham" media ON media."SanPhamId" = sp."Id"
-        WHERE
-        	media."LoaiHinhAnhSanPham" = 1
-        	OR media."Url" IS NULL
         ORDER BY ghkh."Id"
         """;
     List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
@@ -71,7 +73,7 @@ public class GioHangController {
       // Authentication authentication,
       @RequestBody ThemGioHangRequest entity) {
     // TODO: process POST request
-    entity.setKhachHangId("e6794ee2-2ed6-4f40-9280-1edfb5122db9");
+    // entity.setKhachHangId("e6794ee2-2ed6-4f40-9280-1edfb5122db9");
 
     String checkSql = """
         SELECT

@@ -2,9 +2,9 @@ package CustomerServer.dto.donhang;
 
 import java.util.List;
 
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class TaoDonHangRequest {
   private String khachHangId;
   private LoaiHinhThanhToan loaiHinhThanhToan;

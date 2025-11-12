@@ -1,10 +1,11 @@
 import { Button, Checkbox, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { XemDanhSachGioHang, XoaGioHang } from '_c/api/gioHang';
 import Container from '_c/components/Container';
-import { routePaths } from '_c/routes';
+import { TaoDonHang } from '../../api/donHang';
+import { routePaths } from '../../routes';
 
 function ProductRow({ className, children, ...props }) {
   return (
@@ -15,19 +16,30 @@ function ProductRow({ className, children, ...props }) {
 }
 
 const ShopeeCarts = () => {
+  const navigate = useNavigate()
   const [gioHang, setGioHang] = useState([])
+  const [donHang, setDonHang] = useState({})
 
   async function updateGioHang() {
-    XemDanhSachGioHang({}).then(function (data) {
-      setGioHang(Object.values(data.data.reduce((acc, i) => {
-        if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
-        acc[i.GianHangId].sanPham.push(i)
+    XemDanhSachGioHang({})
+      .then(function (data) {
+        const items = data.data
 
-        return acc
-      }, {})))
-    })
+        setDonHang(items.reduce((acc, i) => {
+          if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, donHang: {} }
+          acc[i.GianHangId].donHang[i.PhienBanSanPhamId] = 0
+          return acc
+        }, {}))
+        setGioHang(Object.values(items.reduce((acc, i) => {
+          if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
+
+          acc[i.GianHangId].sanPham.push(i)
+
+          return acc
+        }, {})))
+      })
   }
-
+  console.log(donHang)
   useEffect(function () {
     updateGioHang()
   }, [])
@@ -41,8 +53,11 @@ const ShopeeCarts = () => {
         <div key={j} className="mb-5 bg-white shadow">
           {/* Shop Header */}
           <ProductRow className="border-b-1 gap-5 items-center text-left bg-blue-500">
-            <Checkbox />
-            <span className="font-medium text-white col-span-5  ">{shop.TenGianHang}</span>
+            {/* <Checkbox value={shop.GianHangId} onChange={item => {
+              console.log(item.target.value)
+            }} /> */}
+            {/* <div></div> */}
+            <span className="font-medium text-white col-span-6  ">{shop.TenGianHang}</span>
             <span className="text-white  col-span-2">Đơn Giá</span>
             <span className="text-white">Số Lượng</span>
             <span className="text-white  col-span-2">Số Tiền</span>
@@ -52,7 +67,24 @@ const ShopeeCarts = () => {
           {shop.sanPham.map((item, i) => (
             // <div className="px-5 py-4  hover:bg-gray-50">
             <ProductRow key={i} className="items-center border-b-1">
-              <Checkbox />
+              <Checkbox value={item.GianHangId}
+                checked={donHang[item.GianHangId].donHang[item.PhienBanSanPhamId] > 0}
+                onChange={function (e) {
+                  const id = e.target.value
+                  let result = donHang[id].donHang[item.PhienBanSanPhamId] > 0
+                  console.log(donHang[id], result)
+                  setDonHang(i => ({
+                    ...i,
+                    [id]: {
+                      ...i[id],
+                      donHang: {
+                        ...i[id].donHang,
+                        [item.PhienBanSanPhamId]: result ? 0 : 1
+                      }
+                    }
+                  }))
+
+                }} />
               {/* Product Image */}
               <img src={item.hinhanhsanpham} alt={item.TenSanPham} className="size-20 bg-black object-cover rounded" />
 
@@ -72,7 +104,21 @@ const ShopeeCarts = () => {
               </div>
 
               {/* Quantity */}
-              <InputNumber variant='underlined' controls={false} defaultValue={1} />
+              <InputNumber variant='underlined' controls={false} defaultValue={1}
+                value={donHang[item.GianHangId].donHang[item.PhienBanSanPhamId] || 1}
+                onChange={function (e) {
+                  const id = item.GianHangId
+                  setDonHang(i => ({
+                    ...i,
+                    [id]: {
+                      ...i[id],
+                      donHang: {
+                        ...i[id].donHang,
+                        [item.PhienBanSanPhamId]: e > 0 ? e : 1
+                      }
+                    }
+                  }))
+                }} />
 
 
               {/* Total */}
@@ -104,13 +150,14 @@ const ShopeeCarts = () => {
                   Xóa
                 </Button>
                 {/* <div className="text-xs text-blue-500 cursor-pointer mt-1">
-                          Tìm sản phẩm tương tự
-                        </div> */}
+                      Tìm sản phẩm tương tự
+                  </div> */}
               </div>
             </ProductRow>
 
             // </div>
-          ))}
+          )
+          )}
           {/* </div> */}
 
           {/* Shop Footer */}
@@ -159,11 +206,31 @@ const ShopeeCarts = () => {
                   <span className="text-2xl text-red-500 font-medium">0₫</span>
                 </div>
               </div>
-              <Link to={routePaths.orders.checkout}>
-                <Button type="primary" >
-                  Mua Hàng
-                </Button>
-              </Link>
+              {/* <Link to={routePaths.orders.checkout}> */}
+              <Button type="primary"
+                onClick={function () {
+                  const result = Object.values(donHang)
+                    .filter(i => Object.values(i.donHang).reduce((acc, i) => acc + i, 0) > 0)
+                    .map(i => ({
+                      khachHangId: 'e6794ee2-2ed6-4f40-9280-1edfb5122db9',
+                      loaiHinhThanhToan: 'DANG_CHO',
+                      sanPham: Object.entries(i.donHang).map(entry => ({
+                        phienBanSanPhamId: entry[0],
+                        soLuong: entry[1]
+                      }))
+                    }))
+
+                  Promise.all(result.map(i => {
+                    console.log(JSON.stringify(i, null, 2))
+                    return TaoDonHang(i)
+                  }))
+                    .then(a => console.log(a))
+                  console.log(donHang)
+                  navigate(routePaths.orders.checkout)
+                }}>
+                Mua Hàng
+              </Button>
+              {/* </Link> */}
             </div>
           </div>
         </div>

@@ -33,6 +33,11 @@ public class DonHangController {
     return ResponseEntity.ok(ResponseFormat.success(LoaiHinhThanhToan.values()));
   }
 
+  @GetMapping("thanh-toan")
+  public ResponseEntity<?> XemDanhSachDonHangThanhToan() {
+    return ResponseEntity.ok(ResponseFormat.success());
+  }
+
   @GetMapping
   public ResponseEntity<?> XemDanhSachDonHang() {
     String sql = """
@@ -121,6 +126,7 @@ public class DonHangController {
   public ResponseEntity<?> TaoDonHang(@RequestBody TaoDonHangRequest entity) {
     // TODO: process POST request
     // tao don hang
+    // entity.setKhachHangId("khachHangId");
     String sqlTaoDonHAng = """
         INSERT INTO "DonHangKhachHang"
         ("Id", "KhachHangId", "PhiVanChuyen", "LoaiHinhThanhToan", "NgayTao")
