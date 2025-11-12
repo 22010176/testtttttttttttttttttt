@@ -1,10 +1,10 @@
 import { ChevronLeft, FileText, Info, MessageSquare, Package, Star, Store, Truck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { faFlag } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { XemThongTinChiTietDonHang } from '_c/api/donHang';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFlag } from '@fortawesome/free-solid-svg-icons';
 
 function LayTrangThaiDonHang(traingThai) {
   const a = [

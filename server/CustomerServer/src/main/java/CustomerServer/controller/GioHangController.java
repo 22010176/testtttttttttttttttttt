@@ -68,9 +68,11 @@ public class GioHangController {
 
   @PostMapping
   public ResponseEntity<?> ThemGioHang(
-      Authentication authentication,
+      // Authentication authentication,
       @RequestBody ThemGioHangRequest entity) {
     // TODO: process POST request
+    entity.setKhachHangId("e6794ee2-2ed6-4f40-9280-1edfb5122db9");
+
     String checkSql = """
         SELECT
         	ghkh."Id"
@@ -84,9 +86,9 @@ public class GioHangController {
         entity.getKhachHangId(),
         entity.getSanPhamId());
 
-    if (data.size() > 0) {
+    if (!data.isEmpty()) {
       System.out.println("DDDDDDDD " + data.get(0));
-      return ResponseEntity.ok(ResponseFormat.success(null, ""));
+      return ResponseEntity.ok(ResponseFormat.success(null, "test"));
     }
 
     String sql = """
@@ -103,7 +105,13 @@ public class GioHangController {
   }
 
   @DeleteMapping("{id}")
-  public String XoaGioHang(@PathVariable String id) {
-    return new String();
+  public ResponseEntity<?> XoaGioHang(
+      @PathVariable String id) {
+    String sql = """
+        DELETE FROM "GioHangKhachHang"
+        WHERE "Id" = ?;
+        """;
+    jdbcTemplate.update(sql, id);
+    return ResponseEntity.ok(ResponseFormat.success());
   }
 }

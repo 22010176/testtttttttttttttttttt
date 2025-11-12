@@ -32,14 +32,14 @@ function AddProduct() {
           </Form.Item>
 
           {/* Product Video */}
-          <Form.Item label="Video sản phẩm">
+          {/* <Form.Item label="Video sản phẩm">
             <Upload listType="picture-card" showUploadList={false}>
               <div className="text-center">
                 <PlusOutlined className="text-2xl text-blue-500 mb-2" />
                 <div className="text-blue-500 text-sm">Thêm video</div>
               </div>
             </Upload>
-          </Form.Item>
+          </Form.Item> */}
 
           {/* Product Name */}
           <Form.Item label="Tên sản phẩm">

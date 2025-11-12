@@ -1,10 +1,11 @@
 import { LikeOutlined, MoreOutlined, PlayCircleFilled, RightOutlined, ShopOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
-import { InputNumber } from 'antd';
+import { Button, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { XemChiTietSanPham } from '../api/sanPham';
 import Container from '../components/Container';
+import { ThemGioHang } from '../api/gioHang';
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -229,13 +230,19 @@ export default function ProductDetail() {
 
               {/* Action Buttons */}
               <div className="flex gap-4">
-                <button className="flex-1 border-2 border-blue-500 text-blue-500 py-3 rounded hover:bg-blue-50 transition-colors flex items-center justify-center gap-2">
-                  <ShoppingCartOutlined />
-                  <span>Thêm Vào Giỏ Hàng</span>
-                </button>
-                <button className="flex-1 bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors">
+                <Button variant='outlined' color='blue' size='large' icon={<ShoppingCartOutlined />}
+                  onClick={async function () {
+                    const result = await ThemGioHang({
+                      sanPhamId: id,
+                      soLuong: 1
+                    })
+                    console.log(result)
+                  }}>
+                  Thêm Vào Giỏ Hàng
+                </Button>
+                {/* <button className="flex-1 bg-blue-500 text-white py-3 rounded hover:bg-blue-600 transition-colors">
                   Mua Ngay
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

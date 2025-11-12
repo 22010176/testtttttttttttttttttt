@@ -16,7 +16,7 @@ async function InsertNganhHang(nganhHang = []) {
     ("Id", "NganhHangChaId", "TenNganhHang", "LaNhanh")
   VALUES 
       ${nganhHang
-      // .filter(i => i[1] !== null)
+      .filter(i => i.NganhHangChaId == null)
       .map(i => `(${i.Id}, ${i.NganhHangChaId || null}, '${i.TenNganhHang}', ${i.LaNhanh})`).join(',\n')}`
 
   const result = await pool.query(query)

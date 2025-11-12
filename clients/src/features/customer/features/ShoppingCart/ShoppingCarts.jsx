@@ -2,7 +2,7 @@ import { Button, Checkbox, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { XemDanhSachGioHang } from '_c/api/gioHang';
+import { XemDanhSachGioHang, XoaGioHang } from '_c/api/gioHang';
 import Container from '_c/components/Container';
 import { routePaths } from '_c/routes';
 
@@ -17,7 +17,7 @@ function ProductRow({ className, children, ...props }) {
 const ShopeeCarts = () => {
   const [gioHang, setGioHang] = useState([])
 
-  useEffect(function () {
+  async function updateGioHang() {
     XemDanhSachGioHang({}).then(function (data) {
       setGioHang(Object.values(data.data.reduce((acc, i) => {
         if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
@@ -26,6 +26,10 @@ const ShopeeCarts = () => {
         return acc
       }, {})))
     })
+  }
+
+  useEffect(function () {
+    updateGioHang()
   }, [])
 
   const getTotalItems = () => gioHang.reduce((acc, i) => acc += i.sanPham.length, 0);
@@ -90,7 +94,13 @@ const ShopeeCarts = () => {
 
               {/* Actions */}
               <div className="">
-                <Button type="link" danger className="text-xs">
+                <Button type="link" danger className="text-xs"
+                  onClick={async function () {
+                    console.log(item)
+                    const result = await XoaGioHang({ id: item.Id })
+                    console.log(result)
+                    await updateGioHang()
+                  }}>
                   Xóa
                 </Button>
                 {/* <div className="text-xs text-blue-500 cursor-pointer mt-1">

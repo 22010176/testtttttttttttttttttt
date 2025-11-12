@@ -104,7 +104,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
         .OrderByDescending(i => i.Id)
         .ToListAsync();
       List<NganhHang> nganhHang = await dbContext.NganhHang
-        .Where(i => i.LaNhanh)
+        // .Where(i => i.LaNhanh)
         .ToListAsync();
 
       List<CapNhatSanPhamRequest> capNhatSanPhamRequest = [];
@@ -205,7 +205,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
     }
     catch (Exception)
     {
-
+      throw;
       return BadRequest();
     }
   }
