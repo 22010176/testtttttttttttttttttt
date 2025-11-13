@@ -2,15 +2,16 @@ import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
+import { routePaths } from '../../routes';
 
-import { register } from '../../api/taiKhoan';
+// import { register } from '../../api/taiKhoan';
 
 function Register() {
   const [api, contextHolder] = notification.useNotification();
 
   async function onFinish(values) {
     try {
-      const result = await register({ email: values.email, matKhau: values.matKhau, soDienThoai: values.soDienThoai, hoTen: values.hoTen })
+      // const result = await register({ email: values.email, matKhau: values.matKhau, soDienThoai: values.soDienThoai, hoTen: values.hoTen })
       console.log(result)
       api.success({ description: "Đăng kí thành công!" })
     } catch (error) {
@@ -22,7 +23,7 @@ function Register() {
   return (
     <>
       {contextHolder}
-      <div className="bg-gray-50 p-10 rounded-lg shadow-md w-200">
+      <div className=" bg-blue-50 p-10 rounded-lg shadow-md w-200 mx-auto">
         <div className="text-2xl font-bold text-center mb-10">Đăng ký tài khoản</div>
         <Form layout="vertical" className="w-full" onFinish={onFinish}>
           <Form.Item label="Họ tên" name="hoTen">
@@ -70,7 +71,7 @@ function Register() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to="/login">
+        <Link className='text-sm text-blue-500' to={routePaths.login}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng nhập tài khoản
         </Link>

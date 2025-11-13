@@ -80,6 +80,7 @@ public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, E
     try
     {
       await LoginRequest.ValidateLoginRequest(dbContext, request);
+      TaiKhoanNguoiBan? nguoiDung = await dbContext.TaiKhoanNguoiBan.FirstOrDefaultAsync(i => i.Email == request.Email);
 
       var jwtSettings = _config.GetSection("Jwt");
       var claims = new[]
@@ -92,13 +93,14 @@ public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, E
       {
         Success = true,
         Message = "",
-        Data = AuthUtilities.GenerateAuthToken(
-          issuer: jwtSettings["Issuer"]!,
-          audience: jwtSettings["Audience"]!,
-          claims: claims,
-          expires: DateTime.UtcNow.AddDays(1),
-          jwt_key: jwtSettings["Key"]!
-        )
+        Data = nguoiDung!.Id
+        // Data = AuthUtilities.GenerateAuthToken(
+        //   issuer: jwtSettings["Issuer"]!,
+        //   audience: jwtSettings["Audience"]!,
+        //   claims: claims,
+        //   expires: DateTime.UtcNow.AddDays(1),
+        //   jwt_key: jwtSettings["Key"]!
+        // )
       });
     }
     catch (Exception err)

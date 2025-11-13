@@ -25,7 +25,7 @@ public class GioHangController {
   private final JdbcTemplate jdbcTemplate;
 
   @GetMapping
-  public ResponseEntity<?> XemDanhSachGioHang() {
+  public ResponseEntity<?> XemDanhSachGioHang(String khachHangId) {
     String sql = """
         SELECT
         	ghkh."Id",
@@ -62,9 +62,10 @@ public class GioHangController {
         ) sp ON TRUE
         INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = tknb."Id"
+        WHERE tkkh."Id" = ?
         ORDER BY ghkh."Id"
         """;
-    List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql);
+    List<Map<String, Object>> orders = jdbcTemplate.queryForList(sql, khachHangId);
     return ResponseEntity.ok(ResponseFormat.success(orders, ""));
   }
 

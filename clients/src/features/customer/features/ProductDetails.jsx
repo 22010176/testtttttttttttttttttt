@@ -1,5 +1,5 @@
 import { LikeOutlined, MoreOutlined, PlayCircleFilled, RightOutlined, ShopOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
-import { Button, InputNumber } from 'antd';
+import { Button, InputNumber, notification } from 'antd';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import Container from '../components/Container';
 import { ThemGioHang } from '../api/gioHang';
 
 export default function ProductDetail() {
+  const [api, contextHolder] = notification.useNotification();
   const { id } = useParams();
 
   const [product, setProduct] = useState(null);
@@ -37,28 +38,10 @@ export default function ProductDetail() {
     { key: 'withComments', label: 'Có Bình Luận (405)' },
     { key: 'withMedia', label: 'Có Hình Ảnh / Video (217)' }
   ];
-  const images = [
-    'Product Image 1',
-    'Product Image 2',
-    'Product Image 3',
-    'Product Image 4',
-    'Product Image 5'
-  ];
-
-  const flavors = [
-    { id: 1, name: 'vị cam', active: true },
-    { id: 2, name: 'chanh leo', active: true },
-    { id: 3, name: 'vị dứa', active: true },
-    { id: 4, name: 'vị dâu', active: true },
-    { id: 5, name: 'muti việt quất', active: true },
-    { id: 6, name: 'muti chanh dây', active: true },
-    { id: 7, name: 'muti hoa quả', active: false },
-    { id: 8, name: 'Vistar C Hồng sâm', active: false },
-    { id: 9, name: 'ossizan C Trợ thọ', active: false }
-  ];
 
   return (
     <div className="">
+      {contextHolder}
       {/* Main Content */}
       <Container>
         <div className="bg-white rounded-sm p-6">
@@ -236,6 +219,8 @@ export default function ProductDetail() {
                       sanPhamId: id,
                       soLuong: 1
                     })
+                    if (result.success)
+                      api.success({ description: "Thêm giỏ hàng thành công!" })
                     console.log(result)
                   }}>
                   Thêm Vào Giỏ Hàng

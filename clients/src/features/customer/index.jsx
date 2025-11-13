@@ -6,6 +6,8 @@ import { routePaths } from "./routes"
 import MainLayout from "./layouts/MainLayout"
 import ProfileLayout from "./layouts/ProfileLayout"
 
+import Login from "./features/Auth/Login"
+import Register from "./features/Auth/Register"
 import DashBoard from "./features/Dashboard"
 import ProductDetail from "./features/ProductDetails"
 import AddressManagement from "./features/Profiles/AddressManagement"
@@ -27,6 +29,8 @@ function Customer() {
       <Route element={<MainLayout />} >
         <Route index element={<DashBoard />} />
         <Route path={routePaths.search} element={<SearchPage />} />
+        <Route path={routePaths.register} element={<Register />} />
+        <Route path={routePaths.login} element={<Login />} />
 
         <Route path={routePaths.product.details} element={<ProductDetail />} />
 

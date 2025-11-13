@@ -50,7 +50,7 @@ public class CapNhatSanPhamRequest
       TenSanPham = RandomGenerator.GenerateRandomString(5, 10),
       MoTaSanPham = RandomGenerator.GenerateRandomString(50, 200),
       GiaBan = random.NextDouble() * 999_999_999,
-      NgayTao = RandomGenerator.RandomUtcDate(new(1990, 1, 1), new(2030, 1, 1))
+      NgayTao = RandomGenerator.RandomUtcDate(new(1990, 1, 1), DateTime.UtcNow)
     };
   }
   public string? SanPhamId { get; set; }

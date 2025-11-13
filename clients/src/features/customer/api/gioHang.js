@@ -1,10 +1,15 @@
 import axios from 'axios'
+import { keys } from '@/constant/localStorageKey'
+import { useNavigate } from 'react-router-dom';
+import { routePaths } from '../routes';
 
 const API_URL = import.meta.env.VITE_SERVER_URL + "/api/giohang";
 
-export async function XemDanhSachGioHang({ ...params }) {
+export async function XemDanhSachGioHang({ khachHangId }) {
   const response = await axios.get(API_URL, {
-    params
+    params: {
+      khachHangId
+    }
   })
   return response.data
 }
@@ -12,9 +17,10 @@ export async function XemDanhSachGioHang({ ...params }) {
 
 export async function ThemGioHang({
   sanPhamId = "string",
-  khachHangId = "e6794ee2-2ed6-4f40-9280-1edfb5122db9",
   soLuong = 0
 }) {
+  const khachHangId = localStorage.getItem(keys.userToken)
+  if (khachHangId == null) return document.location.replace(routePaths.login)
   const response = await axios.post(API_URL, { sanPhamId, khachHangId, soLuong })
   return response.data
 }

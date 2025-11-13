@@ -4,8 +4,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { XemDanhSachGioHang, XoaGioHang } from '_c/api/gioHang';
 import Container from '_c/components/Container';
-import { TaoDonHang } from '../../api/donHang';
-import { routePaths } from '../../routes';
+import { TaoDonHang } from '_c/api/donHang';
+import { routePaths } from '_c/routes';
+import { keys } from '@/constant/localStorageKey';
 
 function ProductRow({ className, children, ...props }) {
   return (
@@ -21,23 +22,24 @@ const ShopeeCarts = () => {
   const [donHang, setDonHang] = useState({})
 
   async function updateGioHang() {
-    XemDanhSachGioHang({})
-      .then(function (data) {
-        const items = data.data
+    XemDanhSachGioHang({
+      khachHangId: localStorage.getItem(keys.userToken)
+    }).then(function (data) {
+      const items = data.data
 
-        setDonHang(items.reduce((acc, i) => {
-          if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, donHang: {} }
-          acc[i.GianHangId].donHang[i.PhienBanSanPhamId] = 0
-          return acc
-        }, {}))
-        setGioHang(Object.values(items.reduce((acc, i) => {
-          if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
+      setDonHang(items.reduce((acc, i) => {
+        if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, donHang: {} }
+        acc[i.GianHangId].donHang[i.PhienBanSanPhamId] = 0
+        return acc
+      }, {}))
+      setGioHang(Object.values(items.reduce((acc, i) => {
+        if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, sanPham: [] }
 
-          acc[i.GianHangId].sanPham.push(i)
+        acc[i.GianHangId].sanPham.push(i)
 
-          return acc
-        }, {})))
-      })
+        return acc
+      }, {})))
+    })
   }
   console.log(donHang)
   useEffect(function () {

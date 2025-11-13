@@ -1,13 +1,3 @@
-// export const ROUTE_KEYS = {
-//   ACCOUNT: "tai-khoan",
-//   REGISTER: "dang-ki",
-//   LOGIN: "dang-nhap",
-//   INFOMATION: "thong-tin",
-//   PROFILE: "ho-so",
-//   ADDRESS: "dia-chi",
-//   TRACKING: 'theo-doi',
-//   CHANGE_PASSWORD: 'doi-mat-khau',
-
 import { ROUTE_KEYS } from "@/constant/route_keys";
 
 //   SHOPPING_CART: "gio-hang",
@@ -64,6 +54,8 @@ export const routePaths = {
   root: `/`,
   search: `/${ROUTE_KEYS.SEARCH}`,
   shop: `/${ROUTE_KEYS.STORE}`,
+  register: `/${ROUTE_KEYS.REGISTER}`,
+  login: `/${ROUTE_KEYS.LOGIN}`,
 
   product: {
     details: `/${ROUTE_KEYS.PRODUCTS}/${ROUTE_KEYS.BY_ID}`,

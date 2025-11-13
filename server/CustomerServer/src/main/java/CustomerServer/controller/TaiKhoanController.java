@@ -78,7 +78,9 @@ public class TaiKhoanController {
       }
       String token = JwtUtilities.generateToken((String) taiKhoan.get("Id"), entity.getEmail());
 
-      return new ResponseFormat<>(Map.of("token", token), "Đăng nhập thành công", true);
+      // return new ResponseFormat<>(Map.of("token", token), "Đăng nhập thành công",
+      // true);
+      return new ResponseFormat<>(Map.of("Id", taiKhoan.get("Id")), "Đăng nhập thành công", true);
     } catch (Exception e) {
       // TODO: handle exception
       // e.printStackTrace();
