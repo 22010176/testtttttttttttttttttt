@@ -59,8 +59,8 @@ public class JwtUtilities {
     return (String) ((Map<?, ?>) auth.getDetails()).get("email");
   }
 
-  public static Integer getUserId() {
+  public static String getUserId() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    return (Integer) ((Map<?, ?>) auth.getDetails()).get("id");
+    return (String) ((Map<?, ?>) auth.getDetails()).get("id");
   }
 }

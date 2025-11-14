@@ -6,6 +6,8 @@ using Utilities;
 
 namespace SellerServer.Controllers;
 
+[ApiController]
+[Route("api/don-hang")]
 public class DonHangController(IConfiguration configuration, AppDbContext dbContext) : ControllerBase
 {
   readonly IConfiguration _config = configuration;
@@ -45,7 +47,7 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
         Success = true
       });
     }
-    catch (System.Exception)
+    catch (Exception)
     {
 
       return BadRequest(new ResponseFormat()

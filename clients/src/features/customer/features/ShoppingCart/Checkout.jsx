@@ -103,11 +103,11 @@ export default function Checkout() {
         <div className="flex items-start justify-between">
           <div>
             <div className="font-medium">
-              Đỗ Đức Minh (+84) 986 941 608
+              dddd 0123456789
               <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-0.5 rounded">Mặc Định</span>
             </div>
             <div className="text-gray-600 text-sm mt-1">
-              119 Đông Các, Phường Ô Chợ Dừa, Quận Đống Đa, Hà Nội
+              dddd
             </div>
           </div>
           <button className="text-blue-500 text-sm hover:text-blue-600">Thay Đổi</button>

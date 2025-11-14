@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CustomerServer.dto.ResponseFormat;
 import CustomerServer.dto.giohang.ThemGioHangRequest;
+import CustomerServer.utilities.ControllerUtils;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -26,6 +27,8 @@ public class GioHangController {
 
   @GetMapping
   public ResponseEntity<?> XemDanhSachGioHang(String khachHangId) {
+    ControllerUtils.CheckAccount(jdbcTemplate, khachHangId);
+
     String sql = """
         SELECT
         	ghkh."Id",
@@ -52,7 +55,7 @@ public class GioHangController {
         	INNER JOIN "PhienBanSanPham" pbsp2 ON sp2."Id" = pbsp2."SanPhamId"
         	WHERE
         		ghkh."SanPhamId" = sp2."Id"
-        		AND pbsp2."NgayTao" < CURRENT_DATE
+        		-- AND pbsp2."NgayTao" < CURRENT_DATE
         		AND (
         			media."LoaiHinhAnhSanPham" = 1
         			OR media."Url" IS NULL

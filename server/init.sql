@@ -158,7 +158,7 @@ CREATE INDEX "IX_SanPhamDonHang_DonHangId" ON "SanPhamDonHang" ("DonHangId");
 CREATE INDEX "IX_SanPhamDonHang_PhienBanSanPhamId" ON "SanPhamDonHang" ("PhienBanSanPhamId");
 
 INSERT INTO "__EFMigrationsHistory" ("MigrationId", "ProductVersion")
-VALUES ('20251113135554_Init', '9.0.9');
+VALUES ('20251114140915_Init', '9.0.9');
 
 COMMIT;
 

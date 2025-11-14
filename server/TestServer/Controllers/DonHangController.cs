@@ -21,6 +21,7 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
     try
     {
       Random random = new();
+      List<TaiKhoanNguoiBan> taiKhoanNguoiBan = await dbContext.TaiKhoanNguoiBan.ToListAsync();
       List<TaiKhoanKhachHang> taiKhoanKhachHang = await dbContext.TaiKhoanKhachHang.ToListAsync();
       List<SanPham> sanPham = await dbContext.SanPham.ToListAsync();
       List<GianHang> gianHang = await dbContext.GianHang.ToListAsync();
@@ -40,8 +41,16 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
       {
         for (int i = 0; i < donHang; i++)
         {
+          TaiKhoanNguoiBan nguoiBan = taiKhoanNguoiBan.ElementAt(random.Next(taiKhoanNguoiBan.Count));
+          List<PhienBanSanPham> _phienBanSanPham = [.. phienBanSanPham
+            .Join(
+              dbContext.SanPham,
+              pbsp => pbsp!.SanPhamId,
+              sp => sp.Id,
+              (pbsp,sp)=>new {pbsp, sp})
+              .Where(i=>i.sp.NguoiBanId == nguoiBan.Id)
+            .Select(i=>i.pbsp!)];
 
-          List<PhienBanSanPham> _phienBanSanPham = [.. phienBanSanPham];
           TaoDonHangRequest request = new()
           {
             KhachHangId = kh.Id,
@@ -49,7 +58,7 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
             SanPham = []
           };
 
-          int len = random.Next(1, donHang);
+          int len = Math.Max(_phienBanSanPham.Count, random.Next(1, donHang));
           for (int j = 0; j < len; j++)
           {
             int _index = random.Next(_phienBanSanPham.Count);
@@ -76,6 +85,14 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
     {
       throw;
     }
+  }
+
+  [HttpPost("trang-thai-don-hang")]
+  public async Task<IActionResult> TaoTrangThaiDonHang(int trangThai = 5)
+  {
+    List<DonHangKhachHang> donHangKhachHang = await dbContext.DonHangKhachHang.ToListAsync();
+
+    return Ok(donHangKhachHang);
   }
 
   [HttpDelete]

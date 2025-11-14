@@ -52,7 +52,7 @@ public class SanPhamController {
           FROM "PhienBanSanPham" pbsp
           WHERE
             sp."Id" = pbsp."SanPhamId"
-            AND pbsp."NgayTao" < CURRENT_DATE
+            -- AND pbsp."NgayTao" < CURRENT_DATE
           ORDER BY pbsp."NgayTao" DESC
           LIMIT 1
         ) pbsp ON TRUE
@@ -84,8 +84,8 @@ public class SanPhamController {
           FROM "PhienBanSanPham" pbsp
           WHERE
             sp."Id" = pbsp."SanPhamId"
-            AND pbsp."NgayTao" < CURRENT_DATE
-          ORDER BY pbsp."NgayTao"
+            -- AND pbsp."NgayTao" < CURRENT_DATE
+          ORDER BY pbsp."NgayTao" DESC
           LIMIT 1
         ) pbsp ON TRUE
         INNER JOIN "TaiKhoanNguoiBan" tknb ON tknb."Id" = sp."NguoiBanId"

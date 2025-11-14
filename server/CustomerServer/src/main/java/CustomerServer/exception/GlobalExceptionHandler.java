@@ -32,6 +32,6 @@ public class GlobalExceptionHandler {
     ex.printStackTrace(); // or use logger
     return ResponseEntity
         .status(HttpStatus.INTERNAL_SERVER_ERROR)
-        .body(ResponseFormat.fail(null, "Internal server error"));
+        .body(ResponseFormat.fail(null, ex.getMessage()));
   }
 }

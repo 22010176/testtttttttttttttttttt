@@ -1,12 +1,14 @@
 import { Button, Checkbox, InputNumber } from 'antd';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
+import { keys } from '@/constant/localStorageKey';
+import { ROUTE_KEYS } from '@/constant/route_keys';
+
+import { TaoDonHang } from '_c/api/donHang';
 import { XemDanhSachGioHang, XoaGioHang } from '_c/api/gioHang';
 import Container from '_c/components/Container';
-import { TaoDonHang } from '_c/api/donHang';
 import { routePaths } from '_c/routes';
-import { keys } from '@/constant/localStorageKey';
 
 function ProductRow({ className, children, ...props }) {
   return (
@@ -16,8 +18,9 @@ function ProductRow({ className, children, ...props }) {
   )
 }
 
-const ShopeeCarts = () => {
+const ShoppingCarts = () => {
   const navigate = useNavigate()
+  const [data, setData] = useState([])
   const [gioHang, setGioHang] = useState([])
   const [donHang, setDonHang] = useState({})
 
@@ -26,7 +29,7 @@ const ShopeeCarts = () => {
       khachHangId: localStorage.getItem(keys.userToken)
     }).then(function (data) {
       const items = data.data
-
+      setData(items)
       setDonHang(items.reduce((acc, i) => {
         if (acc[i.GianHangId] == null) acc[i.GianHangId] = { ...i, donHang: {} }
         acc[i.GianHangId].donHang[i.PhienBanSanPhamId] = 0
@@ -41,12 +44,13 @@ const ShopeeCarts = () => {
       }, {})))
     })
   }
-  console.log(donHang)
+  console.log({
+    data, donHang
+  },
+  )
   useEffect(function () {
     updateGioHang()
   }, [])
-
-  const getTotalItems = () => gioHang.reduce((acc, i) => acc += i.sanPham.length, 0);
 
   return (
     <Container className="min-h-70">
@@ -74,7 +78,7 @@ const ShopeeCarts = () => {
                 onChange={function (e) {
                   const id = e.target.value
                   let result = donHang[id].donHang[item.PhienBanSanPhamId] > 0
-                  console.log(donHang[id], result)
+                  // console.log(donHang[id], result)
                   setDonHang(i => ({
                     ...i,
                     [id]: {
@@ -91,7 +95,9 @@ const ShopeeCarts = () => {
               <img src={item.hinhanhsanpham} alt={item.TenSanPham} className="size-20 bg-black object-cover rounded" />
 
               {/* Product Info */}
-              <h3 className="text-sm mb-2 line-clamp-2 col-span-4">{item.TenSanPham}</h3>
+              <Link className="col-span-4" to={routePaths.product.details.replace(ROUTE_KEYS.BY_ID, item.SanPhamId)}>
+                <h3 className="text-sm mb-2 line-clamp-2 ">{item.TenSanPham}</h3>
+              </Link>
 
               {/* Price */}
               <div className=' col-span-2'>
@@ -144,9 +150,9 @@ const ShopeeCarts = () => {
               <div className="">
                 <Button type="link" danger className="text-xs"
                   onClick={async function () {
-                    console.log(item)
+                    // console.log(item)
                     const result = await XoaGioHang({ id: item.Id })
-                    console.log(result)
+                    // console.log(result)
                     await updateGioHang()
                   }}>
                   Xóa
@@ -190,22 +196,30 @@ const ShopeeCarts = () => {
       {/* Footer Checkout */}
       < div className="bg-white border-t shadow-lg" >
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-6">
+          <div className="flex items-center justify-end">
+            {/* <div className="flex items-center space-x-6">
               <Checkbox>
                 Chọn Tất Cả ({getTotalItems()})
               </Checkbox>
               <Button type="link" danger>Xóa</Button>
-            </div>
+            </div> */}
 
             <div className="flex items-center space-x-6">
               <div className="text-right">
-                <div className="text-xs text-gray-500 mb-1">
+                {/* <div className="text-xs text-gray-500 mb-1">
                   Bạn chưa chọn sản phẩm <span className="ml-2">💡</span>
-                </div>
+                </div> */}
                 <div className="flex items-baseline">
-                  <span className="text-sm mr-2">Tổng cộng (0 Sản phẩm):</span>
-                  <span className="text-2xl text-red-500 font-medium">0₫</span>
+                  {/* <span className="text-sm mr-2">Tổng cộng (0 Sản phẩm):</span> */}
+                  <span className="text-2xl text-red-500 font-medium">
+                    {Object.values(donHang)
+                      .map(i => Object.entries(i.donHang))
+                      .flat()
+                      .filter(i => i[1] > 0)
+                      .map(i => data.find(j => j.PhienBanSanPhamId === i[0]).GiaBan * i[1])
+                      .reduce((acc, i) => acc + i, 0)
+                      .toLocaleString()}₫
+                  </span>
                 </div>
               </div>
               {/* <Link to={routePaths.orders.checkout}> */}
@@ -214,7 +228,7 @@ const ShopeeCarts = () => {
                   const result = Object.values(donHang)
                     .filter(i => Object.values(i.donHang).reduce((acc, i) => acc + i, 0) > 0)
                     .map(i => ({
-                      khachHangId: 'e6794ee2-2ed6-4f40-9280-1edfb5122db9',
+                      khachHangId: localStorage.getItem(keys.userToken),
                       loaiHinhThanhToan: 'DANG_CHO',
                       sanPham: Object.entries(i.donHang).map(entry => ({
                         phienBanSanPhamId: entry[0],
@@ -223,11 +237,11 @@ const ShopeeCarts = () => {
                     }))
 
                   Promise.all(result.map(i => {
-                    console.log(JSON.stringify(i, null, 2))
+                    // console.log(JSON.stringify(i, null, 2))
                     return TaoDonHang(i)
                   }))
-                    .then(a => console.log(a))
-                  console.log(donHang)
+                  // .then(a => console.log(a))
+                  // console.log(donHang)
                   navigate(routePaths.orders.checkout)
                 }}>
                 Mua Hàng
@@ -241,4 +255,4 @@ const ShopeeCarts = () => {
   );
 };
 
-export default ShopeeCarts;
+export default ShoppingCarts;

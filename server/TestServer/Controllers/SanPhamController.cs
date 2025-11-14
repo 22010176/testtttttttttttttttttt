@@ -188,7 +188,7 @@ public class SanPhamController(IConfiguration config, AppDbContext dbContext) : 
   }
 
   [HttpPost]
-  public async Task<IActionResult> SinhSanPham(int sanPham, int phienBanSanPham)
+  public async Task<IActionResult> SinhSanPham(int sanPham = 10, int phienBanSanPham = 10)
   {
     try
     {
