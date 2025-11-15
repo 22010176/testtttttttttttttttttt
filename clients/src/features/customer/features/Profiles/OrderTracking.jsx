@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import { XemThongTinChiTietDonHang } from '_c/api/donHang';
 import { routePaths } from '_c/routes';
+import { Button } from 'antd';
 
 function LayTrangThaiDonHang(traingThai) {
   const a = [
@@ -79,13 +80,16 @@ export default function OrderTracking() {
           <div className="bg-white rounded-lg shadow-sm p-4">
             {/* <div className="text-sm text-gray-500 mb-4">return_ineligible_pass_due_date</div> */}
 
-            <div className="flex gap-4 mb-6">
-              <button className="flex-1 bg-blue-500 text-white py-2.5 rounded hover:bg-blue-600">
+            <div className="flex justify-end gap-4 mb-6">
+              <Button variant='solid' color='red'>
+                Hủy đơn hàng
+              </Button>
+              {/* <button className="flex-1 bg-blue-500 text-white py-2.5 rounded hover:bg-blue-600">
                 Mua Lại
               </button>
-              <button className="flex-1 border border-gray-300 py-2.5 rounded hover:bg-gray-50">
+              <button className="flex-1 bg-red-00 text-white py-2.5 rounded hover:bg-blue-600">
                 Liên Hệ Người Bán
-              </button>
+              </button> */}
             </div>
 
             {/* Divider */}
@@ -166,7 +170,7 @@ export default function OrderTracking() {
             <div className="mt-6 space-y-4">
               {donHang?.sanPham?.map((product) => (
                 <div key={product.SanPhamId} className="flex gap-3 pb-4 border-b last:border-b-0">
-                  <img src={product.Url} alt={product.TenSanPham} className="w-20 h-20 object-cover rounded" />
+                  <img src={product.Url} alt={product.TenSanPham} className="w-20 h-20 object-cover rounded border" />
                   <div className="flex-1">
                     <div className="text-sm mb-1">{product.TenSanPham}</div>
                     {/* <div className="text-xs text-gray-500">{product.variant}</div> */}

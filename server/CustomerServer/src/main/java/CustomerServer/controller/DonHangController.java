@@ -33,13 +33,48 @@ public class DonHangController {
     return ResponseEntity.ok(ResponseFormat.success(LoaiHinhThanhToan.values()));
   }
 
-  @GetMapping("thanh-toan")
-  public ResponseEntity<?> XemDanhSachDonHangThanhToan() {
-    return ResponseEntity.ok(ResponseFormat.success());
+  @GetMapping("duyetdonhang")
+  public ResponseEntity<?> XemThongTinDonHangCanDuyet(String khachHangId) {
+    String sql = """
+        SELECT
+        	sp."Id" "SanPhamId",
+        	sp."Id" "PhienBanSanPhamId",
+        	sp."TenSanPham",
+        	sp."GiaBan",
+        	sp."GianHangId",
+        	sp."TenGianHang",
+        	spdh."SoLuong",
+        	sp."Url"
+        FROM "DonHangKhachHang" dhkh
+        INNER JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
+        JOIN LATERAL (
+        	SELECT
+        		pbsp.*,
+        		sp."NguoiBanId",
+        		gh."Id" "GianHangId",
+        		gh."TenGianHang",
+        		media."Url"
+        	FROM "PhienBanSanPham" pbsp
+        	INNER JOIN "SanPham" sp ON sp."Id" = pbsp."SanPhamId"
+        	INNER JOIN "GianHang" gh ON gh."NguoiBanId" = sp."NguoiBanId"
+        	INNER JOIN "MediaSanPham" media ON media."SanPhamId" = pbsp."SanPhamId"
+        	WHERE
+        		media."LoaiHinhAnhSanPham" = 1 AND
+        		pbsp."Id" = spdh."PhienBanSanPhamId"
+        	ORDER BY media."NgayTao" DESC
+        	LIMIT 1
+        ) sp ON TRUE
+        WHERE
+        	dhkh."KhachHangId" = ? AND
+        	dhkh."LoaiHinhThanhToan" = 2
+        ORDER BY dhkh."Id", spdh."SoLuong" DESC;
+        """;
+    List<Map<String, Object>> result = jdbcTemplate.queryForList(sql, khachHangId);
+    return ResponseEntity.ok(ResponseFormat.success(result));
   }
 
   @GetMapping
-  public ResponseEntity<?> XemDanhSachDonHang() {
+  public ResponseEntity<?> XemDanhSachDonHang(String khachHangId) {
     String sql = """
         SELECT
           dhkh.*,
@@ -50,15 +85,15 @@ public class DonHangController {
           gh."Id",
           gh."TenGianHang",
           (
-            SELECT
-              "Url"
-            FROM "MediaSanPham" media
-            WHERE
-              media."SanPhamId" = sp."Id"
-              -- AND media."NgayTao" < CURRENT_DATE
-              AND media."LoaiHinhAnhSanPham" = 0
-            ORDER BY media."NgayTao" DESC
-            LIMIT 1
+        	SELECT
+        	  "Url"
+        	FROM "MediaSanPham" media
+        	WHERE
+        	  media."SanPhamId" = sp."Id"
+        	  -- AND media."NgayTao" < CURRENT_DATE
+        	  AND media."LoaiHinhAnhSanPham" = 0
+        	ORDER BY media."NgayTao" DESC
+        	LIMIT 1
           )"Url"
         FROM "DonHangKhachHang" dhkh
         LEFT JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
@@ -66,15 +101,16 @@ public class DonHangController {
         INNER JOIN "SanPham" sp ON sp."Id" = pbsp."SanPhamId"
         INNER JOIN "TaiKhoanNguoiBan" nb ON nb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = nb."Id"
+        WHERE dhkh."KhachHangId" = ?
         ORDER BY dhkh."NgayTao" DESC, nb."Id"
         """;
 
-    List<Map<String, Object>> data = jdbcTemplate.queryForList(sql);
+    List<Map<String, Object>> data = jdbcTemplate.queryForList(sql, khachHangId);
     return ResponseEntity.ok(ResponseFormat.success(data));
   }
 
-  @GetMapping("{id}")
-  public ResponseEntity<?> XemThongTinDonHang(@PathVariable String id) {
+  @GetMapping("{donHangId}")
+  public ResponseEntity<?> XemThongTinDonHang(@PathVariable String donHangId) {
     String sqlLayThongTinDonHang = """
         SELECT
         	dhkh.*,
@@ -92,7 +128,7 @@ public class DonHangController {
         ORDER BY "NgayTao" DESC
         LIMIT 1
         """;
-    Map<String, Object> donHang = jdbcTemplate.queryForMap(sqlLayThongTinDonHang, id);
+    Map<String, Object> donHang = jdbcTemplate.queryForMap(sqlLayThongTinDonHang, donHangId);
 
     String sqlXemThongTinTrangThaiDonHang = """
         SELECT
@@ -102,7 +138,7 @@ public class DonHangController {
         WHERE dhkh."Id" = ?
         ORDER BY cntt."ThoiGianTao" DESC
         """;
-    List<Map<String, Object>> trangThai = jdbcTemplate.queryForList(sqlXemThongTinTrangThaiDonHang, id);
+    List<Map<String, Object>> trangThai = jdbcTemplate.queryForList(sqlXemThongTinTrangThaiDonHang, donHangId);
 
     String sqlXemDanhSachSanPham = """
         SELECT
@@ -129,10 +165,23 @@ public class DonHangController {
         ) media ON TRUE
         WHERE dhkh."Id" = ?
         """;
-    List<Map<String, Object>> sanPham = jdbcTemplate.queryForList(sqlXemDanhSachSanPham, id);
+    List<Map<String, Object>> sanPham = jdbcTemplate.queryForList(sqlXemDanhSachSanPham, donHangId);
     donHang.put("trangThai", trangThai);
     donHang.put("sanPham", sanPham);
 
+    return ResponseEntity.ok(ResponseFormat.success(donHang));
+  }
+
+  @PostMapping("duyetdonhang")
+  public ResponseEntity<?> DuyetDonHang(String khachHangId) {
+    List<Map<String, Object>> donHang = jdbcTemplate.queryForList("""
+        SELECT
+        	"Id"
+        FROM "DonHangKhachHang" dhkh
+        WHERE
+        	dhkh."LoaiHinhThanhToan" = 2 AND
+        	dhkh."KhachHangId" = ?
+                  """, khachHangId);
     return ResponseEntity.ok(ResponseFormat.success(donHang));
   }
 
@@ -194,6 +243,52 @@ public class DonHangController {
     }
 
     return ResponseEntity.ok(ResponseFormat.success(entity));
+  }
+
+  @DeleteMapping("duyetdonhang")
+  public ResponseEntity<?> HuyDuyet(String id) {
+    List<Map<String, Object>> sanPhamDonHangCanDuyet = jdbcTemplate.queryForList("""
+        SELECT
+        	spdh."Id" "SanPhamDonHangId",
+        	dhkh."Id" "DonHangId"
+        FROM "SanPhamDonHang" spdh
+        INNER JOIN "DonHangKhachHang" dhkh ON dhkh."Id" = spdh."DonHangId"
+        WHERE
+        	dhkh."LoaiHinhThanhToan" = 2 AND
+        	dhkh."KhachHangId" = ?;
+          """, id);
+    List<Map<String, Object>> trangThai = jdbcTemplate.queryForList("""
+        SELECT
+        	cn."Id" "TrangThaiId"
+        FROM "CapNhatTrangThaiDonHang" cn
+        INNER JOIN "DonHangKhachHang" dhkh ON dhkh."Id" = cn."DonHangId"
+        WHERE
+        	dhkh."LoaiHinhThanhToan" = 2 AND
+        	dhkh."KhachHangId" = ?
+          """, id);
+    List<Map<String, Object>> donHang = jdbcTemplate.queryForList("""
+        SELECT
+        	"Id"
+        FROM "DonHangKhachHang" dhkh
+        WHERE
+        	dhkh."LoaiHinhThanhToan" = 2 AND
+        	dhkh."KhachHangId" = ?
+                  """, id);
+
+    for (Map<String, Object> elem : sanPhamDonHangCanDuyet) {
+      String _id = (String) elem.get("SanPhamDonHangId");
+      jdbcTemplate.update("DELETE FROM \"SanPhamDonHang\" WHERE \"Id\" = ?;", _id);
+    }
+    for (Map<String, Object> elem : trangThai) {
+      String _id = (String) elem.get("TrangThaiId");
+      jdbcTemplate.update("DELETE FROM \"CapNhatTrangThaiDonHang\" WHERE \"Id\" = ?;", _id);
+    }
+    for (Map<String, Object> elem : donHang) {
+      String _id = (String) elem.get("Id");
+      jdbcTemplate.update("DELETE FROM \"DonHangKhachHang\" WHERE \"Id\" = ?;", _id);
+    }
+
+    return ResponseEntity.ok(ResponseFormat.success());
   }
 
   @DeleteMapping("{id}")

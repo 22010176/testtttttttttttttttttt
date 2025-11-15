@@ -44,10 +44,9 @@ const ShoppingCarts = () => {
       }, {})))
     })
   }
-  console.log({
-    data, donHang
-  },
-  )
+  // console.log({
+  //   data, donHang
+  // },)
   useEffect(function () {
     updateGioHang()
   }, [])
@@ -224,7 +223,7 @@ const ShoppingCarts = () => {
               </div>
               {/* <Link to={routePaths.orders.checkout}> */}
               <Button type="primary"
-                onClick={function () {
+                onClick={async function () {
                   const result = Object.values(donHang)
                     .filter(i => Object.values(i.donHang).reduce((acc, i) => acc + i, 0) > 0)
                     .map(i => ({
@@ -236,7 +235,7 @@ const ShoppingCarts = () => {
                       }))
                     }))
 
-                  Promise.all(result.map(i => {
+                  await Promise.all(result.map(i => {
                     // console.log(JSON.stringify(i, null, 2))
                     return TaoDonHang(i)
                   }))

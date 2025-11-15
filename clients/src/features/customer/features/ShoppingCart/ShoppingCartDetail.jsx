@@ -15,8 +15,6 @@ const CartItem = ({ shop }) => {
 
     return sum + ((item.GiaBan || 1) * (item.SoLuong || 1));
   }, 0);
-
-  console.log(shop.sanPham[0])
   return (
     <div className="bg-white rounded-lg p-3">
       {/* Shop Header */}
