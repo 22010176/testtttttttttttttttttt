@@ -141,6 +141,14 @@ public class DonHangController {
     // TODO: process POST request
     // tao don hang
     // entity.setKhachHangId("khachHangId");
+    var danhSachSanPham = entity.getSanPham()
+        .stream()
+        .filter((SanPhamDonHang i) -> i.getSoLuong() > 0)
+        .toList();
+    if (danhSachSanPham.isEmpty()) {
+      throw new Error("yeu cau loi");
+    }
+
     String sqlTaoDonHAng = """
         INSERT INTO "DonHangKhachHang"
         ("Id", "KhachHangId", "PhiVanChuyen", "LoaiHinhThanhToan", "NgayTao")
@@ -169,7 +177,7 @@ public class DonHangController {
         "");
 
     // cap nhat san pham don hang
-    var danhSachSanPham = entity.getSanPham();
+    // var danhSachSanPham = entity.getSanPham();
     String sqlCapNhatSanPhamDonHang = """
         INSERT INTO "SanPhamDonHang"
         ("Id", "PhienBanSanPhamId", "DonHangId", "SoLuong")

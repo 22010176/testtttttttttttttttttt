@@ -1,5 +1,3 @@
-import { PlusOutlined } from '@ant-design/icons';
-import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 
 import { XemDanhSachDiaChi } from '_c/api/diaChi';
@@ -37,9 +35,9 @@ function DiaChi({ Id, HoTen, SoDienThoai, DiaChiCuThe }) {
             Cập nhật
           </a>
 
-          <a href="#" className="text-blue-500 hover:text-blue-600">
+          {/* <a href="#" className="text-blue-500 hover:text-blue-600">
             Xóa
-          </a>
+          </a> */}
           {/* {!address.isDefault && (
                   <>
                     <a href="#" className="text-blue-500 hover:text-blue-600">
@@ -71,9 +69,9 @@ const AddressManagement = () => {
     <div className="p-5 space-y-5">
       <div className='flex justify-between border-b-1'>
         <h2 className="text-lg font-medium text-gray-800 mb-6">Địa chỉ</h2>
-        <Button type="primary" icon={<PlusOutlined />}>
+        {/* <Button type="primary" icon={<PlusOutlined />}>
           Thêm địa chỉ mới
-        </Button>
+        </Button> */}
       </div>
 
       <div className="space-y-3">

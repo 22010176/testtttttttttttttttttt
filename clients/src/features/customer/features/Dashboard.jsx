@@ -1,12 +1,10 @@
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
-import { XemDanhSachSanPham } from '../api/sanPham';
-import Container from '../components/Container';
-import ProductCard from '../components/ProductCard';
-import SectionIsland from '../components/SectionIsland';
-import { routePaths } from '../routes';
+import { XemDanhSachSanPham } from '_c/api/sanPham';
+import Container from '_c/components/Container';
+import ProductCard from '_c/components/ProductCard';
+import SectionIsland from '_c/components/SectionIsland';
 
 export default function DashBoard() {
   const [sanPham, setSanPham] = useState([])
@@ -48,7 +46,7 @@ export default function DashBoard() {
   return (
     <Container className="space-y-10">
       {/* Categories */}
-      <SectionIsland className="space-y-5 bg-white">
+      {/* <SectionIsland className="space-y-5 bg-white">
         <h2 className="text-lg font-normal uppercase">DANH MỤC</h2>
         <div className="grid grid-cols-10 gap-5">
           {categories[0].map((category, index) => (
@@ -64,7 +62,7 @@ export default function DashBoard() {
             </Link>
           ))}
         </div>
-      </SectionIsland>
+      </SectionIsland> */}
 
       {/* Suggest */}
       <SectionIsland className="space-y-5 bg-white">

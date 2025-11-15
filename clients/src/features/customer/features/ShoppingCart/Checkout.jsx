@@ -1,10 +1,19 @@
-import { Button, Input } from 'antd';
+import { Button } from 'antd';
 import { MapPin } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Container from '_c/components/Container';
+import { XemDanhSachDiaChi } from '../../api/diaChi';
 
 export default function Checkout() {
+  const [address, setAddress] = useState({})
+
+  useEffect(() => {
+    XemDanhSachDiaChi().then(result => {
+      setAddress(result?.data[0])
+    })
+  }, [])
+
   const [orders, setOrders] = useState([
     {
       id: 1,
@@ -103,26 +112,26 @@ export default function Checkout() {
         <div className="flex items-start justify-between">
           <div>
             <div className="font-medium">
-              dddd 0123456789
-              <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-0.5 rounded">Mặc Định</span>
+              {address.HoTen} - {address.SoDienThoai}
+              {/* <span className="ml-2 text-xs bg-blue-500 text-white px-2 py-0.5 rounded">Mặc Định</span> */}
             </div>
             <div className="text-gray-600 text-sm mt-1">
-              dddd
+              {address.DiaChiCuThe}
             </div>
           </div>
-          <button className="text-blue-500 text-sm hover:text-blue-600">Thay Đổi</button>
+          {/* <button className="text-blue-500 text-sm hover:text-blue-600">Thay Đổi</button> */}
         </div>
       </div>
 
       {/* Products Header */}
-      <div className="bg-white rounded-t-lg shadow-sm p-4">
+      {/* <div className="bg-white rounded-t-lg shadow-sm p-4">
         <div className="grid grid-cols-12 gap-4 text-sm text-gray-600">
           <div className="col-span-5">Sản phẩm</div>
           <div className="col-span-2 text-center">Đơn giá</div>
           <div className="col-span-2 text-center">Số lượng</div>
           <div className="col-span-3 text-right">Thành tiền</div>
         </div>
-      </div>
+      </div> */}
 
       {/* Orders */}
       {orders.map((order, orderIndex) => (
@@ -183,10 +192,10 @@ export default function Checkout() {
           {/* Order Options */}
           <div className="p-4 space-y-3">
             {/* Note */}
-            <div className="flex items-center gap-3">
+            {/* <div className="flex items-center gap-3">
               <span className="text-sm text-gray-600 w-24">Lời nhắn:</span>
               <Input />
-            </div>
+            </div> */}
 
             {/* Voucher */}
             {/* {order.hasVoucher && (
@@ -227,7 +236,7 @@ export default function Checkout() {
             </div> */}
 
             {/* Order Total */}
-            <div className="flex justify-end items-center gap-3 pt-3 border-t">
+            <div className="flex justify-end items-center gap-3">
               <span className="text-sm text-gray-600">Tổng số tiền ({order.products.length} sản phẩm):</span>
               <span className="text-xl text-blue-600 font-medium">
                 {(calculateOrderTotal(order) + order.shippingFee).toLocaleString('vi-VN')}₫
@@ -289,11 +298,14 @@ export default function Checkout() {
           </div>
         </div>
 
-        <div className="p-4 border-t bg-gray-50 flex items-center justify-end">
+        <div className="p-4 border-t bg-gray-50 flex items-center justify-end gap-5">
           {/* <div className="text-xs text-gray-600">
             Nhấn "Đặt hàng" đồng nghĩa với việc bạn đồng ý tuân theo{' '}
             <a href="#" className="text-blue-500 hover:underline">Điều khoản Shopee</a>
           </div> */}
+          <Button variant='solid' color='red'>
+            Hủy
+          </Button>
           <Button variant='solid' color='blue'>
             Đặt hàng
           </Button>

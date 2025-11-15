@@ -26,27 +26,24 @@ public class DiaChiController {
   private final JdbcTemplate jdbcTemplate;
 
   @GetMapping
-  public ResponseEntity<?> XemDanhSachDiaChi() {
-    try {
-      // int taiKhoanKhachHangId = JwtUtilities.getUserId();
-      int taiKhoanKhachHangId = 1;
-      String sql = """
-          SELECT *
-          FROM "DiaChiGiaoHang"
-          WHERE "TaiKhoanKhachHangId" = ?
-          """;
-      List<Map<String, Object>> data = jdbcTemplate.queryForList(sql, taiKhoanKhachHangId);
+  public ResponseEntity<?> XemDanhSachDiaChi(String id) {
 
-      return ResponseEntity.ok(new ResponseFormat<>(
-          data,
-          "",
-          true));
-    } catch (Exception e) {
-      // TODO: handle exception
-      return ResponseEntity
-          .badRequest()
-          .body(new ResponseFormat<>());
-    }
+    // int taiKhoanKhachHangId = JwtUtilities.getUserId();
+    // int taiKhoanKhachHangId = 1;
+    String sql = """
+        SELECT *
+        FROM "DiaChiGiaoHang"
+        WHERE "TaiKhoanKhachHangId" = ?
+        ORDER BY "Id"
+        LIMIT 1
+        """;
+    List<Map<String, Object>> data = jdbcTemplate.queryForList(sql, id);
+
+    return ResponseEntity.ok(new ResponseFormat<>(
+        data,
+        "",
+        true));
+
   }
 
   @PostMapping
