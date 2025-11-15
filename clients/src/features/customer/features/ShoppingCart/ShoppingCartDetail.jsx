@@ -5,17 +5,18 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ROUTE_KEYS } from '@/constant/route_keys';
+
 import { routePaths } from '_c/routes';
-import { XemDanhSachDonHang } from '../../api/donHang';
+import { XemDanhSachDonHang } from '_c/api/donHang';
 
 const CartItem = ({ shop }) => {
   const shopTotal = shop.sanPham.reduce((sum, item) => {
     // const price = parseInt(item.GiaBan.replace(/[^\d]/g, ''));
-    // console.log(item)
+
     return sum + ((item.GiaBan || 1) * (item.SoLuong || 1));
   }, 0);
 
-  console.log(shop)
+  console.log(shop.sanPham[0])
   return (
     <div className="bg-white rounded-lg p-3">
       {/* Shop Header */}
@@ -73,12 +74,13 @@ const CartItem = ({ shop }) => {
   );
 };
 
-const ShoppingCart = () => {
+const ShoppingCartDetail = () => {
   const [donHang, setDonHang] = useState([])
 
   useEffect(function () {
     XemDanhSachDonHang().then(result => {
       const { data } = result
+      console.log({ data })
       setDonHang(Object.values(data.reduce((acc, i) => {
         if (acc[i.Id] == null) acc[i.Id] = { ...i, sanPham: [] }
         acc[i.Id].sanPham.push(i)
@@ -86,7 +88,7 @@ const ShoppingCart = () => {
       }, {})))
     })
   }, [])
-  console.log(donHang)
+
   return (
     <div className="bg-gray-50">
       {/* Header */}
@@ -108,4 +110,4 @@ const ShoppingCart = () => {
   );
 };
 
-export default ShoppingCart;
+export default ShoppingCartDetail;

@@ -16,7 +16,7 @@ import ProfilePage from "./features/Profiles/ProfileDashboard"
 import SearchPage from "./features/SearchPage"
 import ShopPage from "./features/ShopPage"
 import Checkout from "./features/ShoppingCart/Checkout"
-import ShoppingCart from "./features/ShoppingCart/ShoppingCart"
+import ShoppingCartDetail from "./features/ShoppingCart/ShoppingCartDetail"
 import Carts from "./features/ShoppingCart/ShoppingCarts"
 
 function Customer() {
@@ -46,7 +46,7 @@ function Customer() {
           <Route path={routePaths.account.address} element={<AddressManagement />} />
           <Route path={routePaths.account.change_password} element={<ProfilePage />} />
 
-          <Route path={routePaths.orders.root} element={<ShoppingCart />} />
+          <Route path={routePaths.orders.root} element={<ShoppingCartDetail />} />
           <Route path={routePaths.orders.tracking} element={<OrderTracking />} />
         </Route>
 

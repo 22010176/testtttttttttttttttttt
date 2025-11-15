@@ -20,7 +20,7 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
     {
       return Ok();
     }
-    catch (System.Exception)
+    catch (Exception)
     {
 
       throw;

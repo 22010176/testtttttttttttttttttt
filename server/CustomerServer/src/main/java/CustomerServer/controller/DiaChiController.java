@@ -51,27 +51,27 @@ public class DiaChiController {
 
   @PostMapping
   public ResponseEntity<?> ThemDiaChi(@RequestBody ThemDiaChiRequest entity) {
-    try {
-      // int taiKhoanKhachHangId = JwtUtilities.getUserId();
-      String sql = """
-          INSERT INTO "DiaChiGiaoHang"
-          ("Id", "TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
-          VALUES (?, ?, ?, ?, ?)
-          """;
-      jdbcTemplate.update(sql,
-          UUID.randomUUID().toString(),
-          entity.getTaiKhoanId(),
-          entity.getHoTen(),
-          entity.getSoDienThoai(),
-          entity.getDiaChiCuThe());
+    // int taiKhoanKhachHangId = JwtUtilities.getUserId();
+    String sql = """
+        INSERT INTO "DiaChiGiaoHang"
+        ("Id", "TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
+        VALUES (?, ?, ?, ?, ?)
+        """;
+    jdbcTemplate.update(sql,
+        UUID.randomUUID().toString(),
+        entity.getTaiKhoanId(),
+        entity.getHoTen(),
+        entity.getSoDienThoai(),
+        entity.getDiaChiCuThe());
 
-      return ResponseEntity.ok(new ResponseFormat<>(null, "", true));
-    } catch (Exception e) {
-      // TODO: handle exception
-      return ResponseEntity
-          .badRequest()
-          .body(new ResponseFormat<>());
-    }
+    return ResponseEntity.ok(new ResponseFormat<>(null, "", true));
+    // try {
+    // } catch (Exception e) {
+    // // TODO: handle exception
+    // return ResponseEntity
+    // .badRequest()
+    // .body(ResponseFormat.fail(e));
+    // }
   }
 
   @PutMapping("{id}")

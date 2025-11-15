@@ -1,5 +1,5 @@
 import { GiftOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
-import { Affix, Avatar, ConfigProvider, Layout, Menu, Typography } from 'antd';
+import { Avatar, ConfigProvider, Layout, Menu, Typography } from 'antd';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 import { ROUTE_KEYS } from '@/constant/route_keys';
@@ -43,7 +43,8 @@ export default function ProfileLayout() {
   return (
     <ConfigProvider theme={theme}>
       <Container className="grid grid-cols-5 gap-5">
-        <Affix offsetTop={50}>
+
+        <div>
           <div className="bg-white">
             <div className="flex items-center gap-3 p-3">
               <Avatar size={50} src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />
@@ -53,8 +54,9 @@ export default function ProfileLayout() {
             </div>
             <Menu mode="inline" items={menuItems} selectedKeys={[pathname]} onClick={onClick} />
           </div>
-        </Affix>
-        <div className="col-span-4 bg-white">
+        </div>
+
+        <div className="col-span-4">
           <Outlet />
         </div>
       </Container>

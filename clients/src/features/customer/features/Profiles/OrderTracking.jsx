@@ -1,10 +1,11 @@
-import { ChevronLeft, FileText, Info, MessageSquare, Package, Star, Store, Truck } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ChevronLeft, FileText, Package, Star, Truck } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 
 import { XemThongTinChiTietDonHang } from '_c/api/donHang';
+import { routePaths } from '_c/routes';
 
 function LayTrangThaiDonHang(traingThai) {
   const a = [
@@ -20,9 +21,9 @@ function LayTrangThaiDonHang(traingThai) {
 
 export default function OrderTracking() {
   const { id } = useParams()
-  console.log(id)
-  const [showAllTracking, setShowAllTracking] = useState(false);
-  const [donHang, setDonHang] = useState(null);
+
+  // const [showAllTracking, setShowAllTracking] = useState(false);
+  const [donHang, setDonHang] = useState({});
 
   const orderData = {
     orderCode: '25042667dddNSR0PV',
@@ -152,13 +153,11 @@ export default function OrderTracking() {
     }
   };
 
-  const subtotal = orderData.products.reduce((sum, p) => sum + (p.price * p.quantity), 0);
-  const shipping = 16500;
-  const total = 54448;
+  const subtotal = useMemo(() => donHang.sanPham?.reduce((acc, i) => acc + i.GiaBan * i.SoLuong, 0), [donHang])
+  const total = useMemo(() => subtotal + donHang?.PhiVanChuyen, [donHang]);
 
   useEffect(function () {
     XemThongTinChiTietDonHang({ id }).then(function (data) {
-      console.log(data)
       setDonHang(data.data)
     })
   }, [id])
@@ -168,13 +167,13 @@ export default function OrderTracking() {
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="bg-white border-b p-4 flex items-center justify-between">
-          <button className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
+          <Link to={routePaths.orders.root} className="flex items-center gap-2 text-gray-600 hover:text-gray-800">
             <ChevronLeft size={20} />
             <span className="text-sm">TRỞ LẠI</span>
-          </button>
+          </Link>
           <div className="flex items-center gap-4 text-sm">
             <span>MÃ ĐƠN HÀNG. {donHang?.Id}</span>
-            <span className="text-blue-500">{LayTrangThaiDonHang(donHang?.trangThai[0].TrangThaiDonHang)}</span>
+            <span className="text-blue-500">{LayTrangThaiDonHang(donHang.trangThai?.[(donHang.trangThai?.length - 1)]?.TrangThaiDonHang)}</span>
           </div>
         </div>
 
@@ -184,7 +183,7 @@ export default function OrderTracking() {
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
 
-            {donHang?.trangThai.map((step, index) => {
+            {donHang?.trangThai?.map((step, index) => {
               const Icon = step?.icon;
               return (
 
@@ -224,14 +223,14 @@ export default function OrderTracking() {
             <div className="mb-6">
               <h3 className="font-medium mb-4">Địa Chỉ Nhận Hàng</h3>
               <div className="space-y-1 text-sm">
-                <div className="font-medium">{orderData.address.name}</div>
-                <div className="text-gray-600">{orderData.address.phone}</div>
-                <div className="text-gray-600">{orderData.address.address}</div>
+                <div className="font-medium">{donHang?.HoTen}</div>
+                <div className="text-gray-600">{donHang?.SoDienThoai}</div>
+                <div className="text-gray-600">{donHang?.DiaChiCuThe}</div>
               </div>
-              <div className="flex items-center justify-end gap-2 mt-4 text-sm">
+              {/* <div className="flex items-center justify-end gap-2 mt-4 text-sm">
                 <span className="text-gray-600">{orderData.shipping.carrier}</span>
                 <span className="text-gray-400">{orderData.shipping.trackingCode}</span>
-              </div>
+              </div> */}
             </div>
 
             {/* Timeline */}
@@ -276,9 +275,9 @@ export default function OrderTracking() {
 
             {/* Seller Info */}
             <div className="flex items-center gap-3 mt-6 pt-6 border-t">
-              <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded">Yêu thích</span>
-              <span className="font-medium">{orderData.seller.name}</span>
-              <button className="flex items-center gap-1 text-blue-500 text-sm ml-auto">
+              {/* <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded">Yêu thích</span> */}
+              {/* <span className="font-medium">{orderData.seller.name}</span> */}
+              {/* <button className="flex items-center gap-1 text-blue-500 text-sm ml-auto">
                 <MessageSquare size={16} />
                 <span>Chat</span>
               </button>
@@ -287,13 +286,13 @@ export default function OrderTracking() {
                 <span>Xem Shop</span>
               </button>
               <button className="text-gray-400">
-                <Info size={18} />
-              </button>
+                <Info size={18} /> */}
+              {/* </button> */}
             </div>
 
             {/* Products */}
             <div className="mt-6 space-y-4">
-              {donHang?.sanPham.map((product) => (
+              {donHang?.sanPham?.map((product) => (
                 <div key={product.SanPhamId} className="flex gap-3 pb-4 border-b last:border-b-0">
                   <img src={product.Url} alt={product.TenSanPham} className="w-20 h-20 object-cover rounded" />
                   <div className="flex-1">
@@ -310,11 +309,11 @@ export default function OrderTracking() {
             <div className="mt-6 pt-6 border-t space-y-3">
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Tổng tiền hàng</span>
-                <span>{subtotal.toLocaleString('vi-VN')}₫</span>
+                <span>{subtotal?.toLocaleString('vi-VN')}₫</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">Phí vận chuyển</span>
-                <span>{shipping.toLocaleString('vi-VN')}₫</span>
+                <span>{donHang?.PhiVanChuyen?.toLocaleString('vi-VN')}₫</span>
               </div>
               <div className="flex justify-between items-center pt-3 border-t">
                 <span className="text-gray-600">Thành tiền</span>
@@ -342,6 +341,6 @@ export default function OrderTracking() {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

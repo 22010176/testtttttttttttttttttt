@@ -76,11 +76,22 @@ public class DonHangController {
   @GetMapping("{id}")
   public ResponseEntity<?> XemThongTinDonHang(@PathVariable String id) {
     String sqlLayThongTinDonHang = """
-        SELECT *
-        FROM "DonHangKhachHang"
-        WHERE "Id" = ?
+        SELECT
+        	dhkh.*,
+        	tkkh."SoDienThoai",
+        	dc."HoTen",
+        	dc."SoDienThoai",
+        	dc."DiaChiCuThe"
+        FROM "DonHangKhachHang" dhkh
+        INNER JOIN "TaiKhoanKhachHang" tkkh ON tkkh."Id" = dhkh."KhachHangId"
+        JOIN LATERAL (
+        	SELECT *
+        	FROM "DiaChiGiaoHang" dcgh
+        ) dc ON dc."TaiKhoanKhachHangId" = tkkh."Id"
+        WHERE dhkh."Id" = ?
         ORDER BY "NgayTao" DESC
-        LIMIT 1""";
+        LIMIT 1
+        """;
     Map<String, Object> donHang = jdbcTemplate.queryForMap(sqlLayThongTinDonHang, id);
 
     String sqlXemThongTinTrangThaiDonHang = """
@@ -96,14 +107,17 @@ public class DonHangController {
     String sqlXemDanhSachSanPham = """
         SELECT
         	pbsp."SanPhamId",
-        	pbsp."Id" PhienBanId,
+        	pbsp."Id" "PhienBanId",
         	pbsp."TenSanPham",
         	pbsp."GiaBan",
         	spdh."SoLuong",
+        	sp."NguoiBanId",
         	media."Url"
         FROM "DonHangKhachHang" dhkh
         INNER JOIN "SanPhamDonHang" spdh ON spdh."DonHangId" = dhkh."Id"
         INNER JOIN "PhienBanSanPham" pbsp ON pbsp."Id" = spdh."PhienBanSanPhamId"
+        INNER JOIN "SanPham" sp ON sp."Id" = pbsp."SanPhamId"
+        INNER JOIN "TaiKhoanNguoiBan" nb ON nb."Id" = sp."NguoiBanId"
         JOIN LATERAL (
         	SELECT "Url"
         	FROM "MediaSanPham"

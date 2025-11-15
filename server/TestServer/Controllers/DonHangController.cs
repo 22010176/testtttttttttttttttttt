@@ -88,11 +88,35 @@ public class DonHangController(IConfiguration config, AppDbContext dbContext) : 
   }
 
   [HttpPost("trang-thai-don-hang")]
-  public async Task<IActionResult> TaoTrangThaiDonHang(int trangThai = 5)
+  public async Task<IActionResult> TaoTrangThaiDonHang()
   {
     List<DonHangKhachHang> donHangKhachHang = await dbContext.DonHangKhachHang.ToListAsync();
+    List<CapNHatTrangThaiDonHangRequest> requests = [];
+    var _trangThai = Enum.GetValues<TrangThaiDonHang>()
+      .Where(i => i != TrangThaiDonHang.HUY_DON_HANG)
+      .Select(i => i)
+      .ToList();
 
-    return Ok(donHangKhachHang);
+    dbContext.CapNhatTrangThaiDonHang.RemoveRange(await dbContext.CapNhatTrangThaiDonHang.ToListAsync());
+    await dbContext.SaveChangesAsync();
+    foreach (var donHang in donHangKhachHang)
+    {
+      for (int i = 0; i < _trangThai.Count; i++)
+      {
+        requests.Add(new()
+        {
+          DonHangId = donHang.Id,
+          NoiDungCapNhat = RandomGenerator.GenerateRandomString(10, 20),
+          TrangThaiDonHang = _trangThai.ElementAt(i)
+        });
+      }
+    }
+    await Parallel.ForEachAsync(requests, async (data, c) =>
+    {
+      var body = await GenerateRequest.CreateRequest(data, "http://localhost:5216/api/don-hang", RequestMethod.POST);
+      Console.WriteLine($"TaoTrangThaiDonHang: {body}");
+    });
+    return Ok(requests);
   }
 
   [HttpDelete]
