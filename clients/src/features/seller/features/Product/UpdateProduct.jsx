@@ -1,16 +1,19 @@
-import { MessageOutlined, PlusOutlined, ShoppingCartOutlined, StarOutlined } from '@ant-design/icons';
+import { MessageOutlined, PlusOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Affix, Avatar, Button, Form, Input, message, Select, Upload } from 'antd';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { LayDanhSachNganhHang } from '_s/api/nganhHang';
-import { TaoSanPham } from '_s/api/sanPham';
+import { LayThongTinSanPhamChiTiet, TaoSanPham } from '_s/api/sanPham';
 import { routePaths } from '_s/routes';
 
 const { TextArea } = Input;
 
-function AddProduct() {
+function UpdateProduct() {
+  const { id } = useParams()
   const navigate = useNavigate()
+  const [form] = Form.useForm()
+
   const [messageApi, contextHolder] = message.useMessage();
   const [nganhHang, setNganhHang] = useState([])
 
@@ -19,6 +22,17 @@ function AddProduct() {
       const { data } = result
       console.log(data)
       setNganhHang(data)
+    })
+
+    LayThongTinSanPhamChiTiet({ id }).then(result => {
+      const data = result.data
+      console.log(data)
+      form.setFieldsValue({
+        nganhHangId: data.nganhHangId,
+        tenSanPham: data.tenSanPham,
+        moTaSanPham: data.moTaSanPham,
+        giaBan: data.giaBan,
+      })
     })
   }, [])
 
@@ -37,7 +51,7 @@ function AddProduct() {
   return (
     <div className="grid grid-cols-[1fr_auto] gap-5 p-5" >
       {contextHolder}
-      <Form layout='horizontal' labelCol={{ span: 4 }} onFinish={onFinish} >
+      <Form layout='horizontal' labelCol={{ span: 4 }} onFinish={onFinish} form={form}>
         <div className='bg-white p-5 rounded'>
           <h2 className="text-lg font-medium">Thông tin cơ bản</h2>
 
@@ -101,7 +115,7 @@ function AddProduct() {
           </Form.Item>
           <Form.Item >
             <div className='flex justify-end'>
-              <Button color='blue' variant='solid' htmlType='submit'>Tạo sản phẩm</Button>
+              <Button color='blue' variant='solid' htmlType='submit'>Cập nhật</Button>
             </div>
           </Form.Item>
 
@@ -178,4 +192,4 @@ function AddProduct() {
   );
 }
 
-export default AddProduct
+export default UpdateProduct

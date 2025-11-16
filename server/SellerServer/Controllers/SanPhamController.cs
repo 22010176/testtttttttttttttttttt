@@ -20,18 +20,57 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
   readonly AppDbContext dbContext = dbContext;
   readonly S3Service s3 = s3Service;
 
-  [HttpGet]
-  public async Task<IActionResult> LayDanhSachSanPham()
+  [HttpGet("{sanPhamId}")]
+  public async Task<IActionResult> LayThongTinChiTietSanPham(string sanPhamId)
   {
     try
     {
+      var item = await dbContext.SanPham
+        .Where(i => i.Id == sanPhamId)
+        .Join(
+          dbContext.PhienBanSanPham,
+          sp => sp.Id,
+          pbsp => pbsp.SanPhamId,
+          (sp, pbsp) => new { sp, pbsp })
+        .OrderByDescending(i => i.pbsp.NgayTao)
+        .Take(1)
+        .Select(i => new
+        {
+          IdSanPham = i.sp.Id,
+          i.sp.TrangThaiSanPham,
+          PhienBanSanPhamId = i.pbsp.Id,
+          i.pbsp.TenSanPham,
+          i.pbsp.MoTaSanPham,
+          i.pbsp.GiaBan,
+          NganhHangId = i.pbsp.NganhHang!.Id,
+          i.pbsp.NganhHang.TenNganhHang
+        })
+        .ToListAsync();
+      return Ok(new ResponseFormat
+      {
+        Data = item.FirstOrDefault(),
+        Success = true
+      });
+    }
+    catch (Exception)
+    {
+      throw;
+    }
+  }
+  [HttpGet]
+  public async Task<IActionResult> LayDanhSachSanPham(string nguoiBanId)
+  {
+    // TODO: process POST request
+    try
+    {
+      // Console.WriteLine(nguoiBanId);
       var danhSachSanPham = await dbContext.SanPham
+        .Where(sp => sp.NguoiBanId == nguoiBanId)
         .Join(
           dbContext.PhienBanSanPham,
           sp => sp.Id,
           pb => pb.SanPhamId,
           (sp, pb) => new { sp, pb })
-        // .Where(i => i.sp.NguoiBanId == AuthUtilities.TaiKhoanTest)
         .OrderByDescending(i => i.pb.NgayTao)
         // .Take(1)
         .Select(o => new

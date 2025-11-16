@@ -1,13 +1,20 @@
-import { Button, Form, Table } from 'antd';
+import { Button, Form, message, Table } from 'antd';
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
+import { ROUTE_KEYS } from '@/constant/route_keys';
+import { CapNhatTrangThaiSanPham, TrangThaiSanPham } from '_s/api/sanPham';
 import EmptyList from '_s/components/EmptyList';
 import { routePaths } from '_s/routes';
+import { PageProvider } from '../pageReducer';
 import FilterForm from './FilterForm';
 
 // console.log(import.meta.env.VITE_SERVER_URL);
 routePaths
 function ProductListLayout({ dataSource = [] }) {
+  const [state, dispatch] = useContext(PageProvider)
+  // console.log(state, dispatch)
+  const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const searchValue = Form.useWatch(i => i, form);
 
@@ -20,7 +27,6 @@ function ProductListLayout({ dataSource = [] }) {
           <div>
             <p className='font-semibold'>{record.tenSanPham}</p>
             <p className='text-gray-600'>{record.id}</p>
-
           </div>
         </div>
       ),
@@ -43,12 +49,50 @@ function ProductListLayout({ dataSource = [] }) {
       render: (item) => (
         // <Link to={routePaths} className='text-blue-600'>Chỉnh sửa</Link>
         <div className='grid text-center gap-1'>
-          <Link to={routePaths.management.product.insert} className='text-blue-600'>Chỉnh sửa</Link>
-          <Button variant='text' color='red'>Xoá</Button>
+          <Link to={routePaths.management.product.update.replace(ROUTE_KEYS.BY_ID, item.id)} className='text-blue-600'>Chỉnh sửa</Link>
+          <Button variant='text' color='red' onClick={function () {
+
+          }}>
+            Xoá
+          </Button>
           {item.trangThaiSanPham === "BAN_NHAP" ? (
-            <Button variant='text' color='green'>Đăng bán</Button>
+            <Button variant='text' color='green' onClick={async function () {
+              try {
+                const result = await CapNhatTrangThaiSanPham({
+                  sanPhamId: item.id,
+                  trangThaiSanPham: TrangThaiSanPham.HOAT_DONG
+                })
+                console.log(result)
+                if (result.success) {
+                  messageApi.info("Cập nhật trạng thái thành công!")
+                }
+                else throw ""
+
+              } catch (error) {
+                messageApi.error("Cập nhật trạng thái thất bại!")
+              }
+            }}>
+              Đăng bán
+            </Button>
           ) : (
-            <Button variant='text' color='gray'>Huỷ bán</Button>
+            <Button variant='text' color='gray' onClick={async function () {
+              try {
+                const result = await CapNhatTrangThaiSanPham({
+                  sanPhamId: item.id,
+                  trangThaiSanPham: TrangThaiSanPham.BI_XOA
+                })
+                console.log(result)
+                if (result.success) {
+                  messageApi.info("Cập nhật trạng thái thành công!")
+                }
+                else throw ""
+
+              } catch (error) {
+                messageApi.error("Cập nhật trạng thái thất bại!")
+              }
+            }}>
+              Huỷ bán
+            </Button>
           )}
         </div>
       ),
@@ -57,6 +101,7 @@ function ProductListLayout({ dataSource = [] }) {
 
   return (
     <div className='bg-white p-5 flex flex-col gap-5'>
+      {contextHolder}
       <FilterForm form={form} />
 
       {/* Product Table */}

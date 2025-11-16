@@ -20,10 +20,10 @@ function ProductDashBoard() {
   }, [])
 
   const topTabs = [
-    {
-      key: 'all', label: <p className='px-3'>Tất cả</p>,
-      children: <ProductListLayout dataSource={state.danh_sach_san_pham} />
-    },
+    // {
+    //   key: 'all', label: <p className='px-3'>Tất cả</p>,
+    //   children: <ProductListLayout dataSource={state.danh_sach_san_pham} />
+    // },
     {
       key: 'active', label: <p className='px-3'>Đang hoạt động</p>,
       children: <ProductListLayout dataSource={state.danh_sach_san_pham.filter(item => item.trangThaiSanPham === "HOAT_DONG")} />

@@ -9,3 +9,8 @@ export async function getNganhHangList({ id = 0, page = null, pageSize = null })
   return response.data;
 }
 // getNganhHangList({})
+
+export async function LayDanhSachNganhHang() {
+  const result = await axios.get('http://localhost:5216/api/nganh-hang')
+  return result.data
+}

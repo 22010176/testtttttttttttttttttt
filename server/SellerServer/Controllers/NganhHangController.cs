@@ -49,8 +49,12 @@ public class NganhHangController(IConfiguration configuration, AppDbContext dbCo
       return Ok(new ResponseFormat
       {
         Data = await dbContext.NganhHang
-          .Where(i => i.NganhHangChaId == null)
-          .Select(i => i)
+          // .Where(i => i.NganhHangChaId == null)
+          .Select(i => new
+          {
+            i.Id,
+            i.TenNganhHang
+          })
           .ToListAsync()
       });
     }

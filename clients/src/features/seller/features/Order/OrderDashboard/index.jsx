@@ -4,14 +4,14 @@ import { useState } from 'react';
 import OrderListLayout from './components/OrderListLayout';
 
 const topTabs = [
-  { key: 'all', label: <p className='px-3'>Tất cả</p>, children: <OrderListLayout /> },
+  // { key: 'all', label: <p className='px-3'>Tất cả</p>, children: <OrderListLayout /> },
   { key: 'active', label: <p className='px-3'>Chờ xác nhận</p>, children: <OrderListLayout /> },
   { key: 'a', label: <p className='px-3'>Chờ lấy hàng</p>, children: <OrderListLayout /> },
   { key: 'b', label: <p className='px-3'>Đang giao</p>, children: <OrderListLayout /> },
   { key: 'c', label: <p className='px-3'>Đã giao</p>, children: <OrderListLayout /> },
 ];
 export default function OrderDashboard() {
-  const [activeTab, setActiveTab] = useState('1');
+  const [activeTab, setActiveTab] = useState('active');
 
   return (
     <div className="bg-white m-5 p-5">

@@ -1,10 +1,13 @@
 import { LogoutOutlined, SettingOutlined, ShoppingOutlined } from '@ant-design/icons';
 import { Avatar, Popover } from "antd";
+import { useState } from 'react';
 import { Link } from "react-router-dom";
 
 import { routePaths } from "../routes";
 
 function AccountPopOver() {
+  const [taiKhoan, setTaiKhoan] = useState({})
+
   return (
     <div className="flex gap-1 flex-col justify-center w-60">
       <div className="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity">

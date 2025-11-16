@@ -1,13 +1,13 @@
-import { Button, Form, Input, Select, Table } from 'antd';
+import { Button, Form, Input, Table } from 'antd';
 
 import EmptyList from '_s/components/EmptyList';
 
 const columns = [
-  { title: 'Sản phẩm', dataIndex: 'product', key: 'product', },
+  { title: 'Khách hàng', dataIndex: 'product', key: 'product', },
   { title: 'Tổng Đơn hàng', dataIndex: 'total', key: 'total', },
   { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
-  { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
-  { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
+  // { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
+  // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
   { title: 'Thao tác', dataIndex: 'action', key: 'action', },
 ];
 function OrderListLayout({ dataSource = [] }) {
@@ -16,7 +16,7 @@ function OrderListLayout({ dataSource = [] }) {
 
       {/* Filters */}
       <Form className="flex gap-4 items-center" layout='inline'>
-        <Form.Item className="" label="Dịch vụ vận chuyển">
+        {/* <Form.Item className="" label="Dịch vụ vận chuyển">
           <Select value={"all"}
             options={[
               { value: 'all', label: 'Tất cả dịch vụ' },
@@ -25,7 +25,7 @@ function OrderListLayout({ dataSource = [] }) {
               { value: "tenNguoiMua", label: "Tên người mua" },
               { value: "sanPham", label: "Sản phẩm" },
             ]} />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item label="Mã đơn hàng">
           <Input placeholder="Nhập Mã đơn hàng" />

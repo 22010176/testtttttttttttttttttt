@@ -26,6 +26,7 @@ import ReturnOrder from "./features/Order/ReturnOrder"
 import AddProduct from "./features/Product/AddProduct"
 import ProductDashBoard from "./features/Product/ProductDashboard"
 import ShopDashboard from "./features/Shop/ShopDashboard"
+import UpdateProduct from "./features/Product/UpdateProduct"
 
 
 function Seller() {
@@ -37,29 +38,30 @@ function Seller() {
       </Route>
 
       <Route element={<MainLayout />}>
-        <Route >
-          <Route path={routePaths.management.root} element={<Dashboard />} />
+        {/* <Route > */}
+        <Route path={routePaths.management.root} element={<Dashboard />} />
 
-          <Route path={routePaths.management.product.root} element={<ProductDashBoard />} />
-          <Route path={routePaths.management.product.insert} element={<AddProduct />} />
+        <Route path={routePaths.management.product.root} element={<ProductDashBoard />} />
+        <Route path={routePaths.management.product.insert} element={<AddProduct />} />
+        <Route path={routePaths.management.product.update} element={<UpdateProduct />} />
 
-          <Route path={routePaths.management.orders.root} element={<OrderDashboard />} />
-          <Route path={routePaths.management.orders.return} element={<ReturnOrder />} />
+        <Route path={routePaths.management.orders.root} element={<OrderDashboard />} />
+        <Route path={routePaths.management.orders.return} element={<ReturnOrder />} />
 
-          <Route path={routePaths.management.marketing.root} element={<MarketingDashboard />} />
-          <Route path={routePaths.management.marketing.discounts} element={<DiscountDashboard />} />
-          <Route path={routePaths.management.marketing.flashSale} element={<FlashSaleDashboard />} />
-          <Route path={routePaths.management.marketing.voucher} element={<VoucherDashboard />} />
-          <Route path={routePaths.management.marketing.campaigns} element={<PlatformCampaign />} />
+        <Route path={routePaths.management.marketing.root} element={<MarketingDashboard />} />
+        <Route path={routePaths.management.marketing.discounts} element={<DiscountDashboard />} />
+        <Route path={routePaths.management.marketing.flashSale} element={<FlashSaleDashboard />} />
+        <Route path={routePaths.management.marketing.voucher} element={<VoucherDashboard />} />
+        <Route path={routePaths.management.marketing.campaigns} element={<PlatformCampaign />} />
 
-          <Route path={ROUTE_KEYS.FINANCE} >
-            <Route path={ROUTE_KEYS.PROFIT} element={<ProfitDashboard />} />
-            <Route path={ROUTE_KEYS.BALANCE} element={<BalanceDashboard />} />
-            <Route path={ROUTE_KEYS.BANK_ACCOUNT} element={<BankDashboard />} />
-          </Route>
-
-          <Route path={routePaths.management.store.root} element={<ShopDashboard />} />
+        <Route path={ROUTE_KEYS.FINANCE} >
+          <Route path={ROUTE_KEYS.PROFIT} element={<ProfitDashboard />} />
+          <Route path={ROUTE_KEYS.BALANCE} element={<BalanceDashboard />} />
+          <Route path={ROUTE_KEYS.BANK_ACCOUNT} element={<BankDashboard />} />
         </Route>
+
+        <Route path={routePaths.management.store.root} element={<ShopDashboard />} />
+        {/* </Route> */}
 
         <Route path={ROUTE_KEYS.ANALYTICS} element={<AnalyticsLayout />}>
           <Route index element={<AnalyticsDashboard />} />

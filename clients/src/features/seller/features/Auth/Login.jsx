@@ -1,17 +1,21 @@
 import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Input, notification } from 'antd';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { login } from '../../api/taiKhoan';
+import { keys } from '@/constant/localStorageKey';
+import { routePaths } from '../../routes';
 
 function Login() {
   const [api, contextHolder] = notification.useNotification();
-
+  const navigate = useNavigate()
   async function onFinish(values) {
     try {
       const result = await login({ email: values.email, matKhau: values.matKhau })
       console.log(result)
+      localStorage.setItem(keys.userToken, result.data)
+      navigate(routePaths.management.root)
       api.success({ description: "Đăng nhập thành công!" })
     } catch (error) {
       api.error({ description: "Đăng nhập thất bại!" })

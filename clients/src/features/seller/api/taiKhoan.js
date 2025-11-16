@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const server_url = import.meta.env.VITE_SERVER_URL + "/api/Auth"
+const server_url = import.meta.env.VITE_SERVER_URL + "/api/tai-khoan"
 
 export async function login({ email, matKhau }) {
   const result = await axios.post(`${server_url}/login`, { email, matKhau })
