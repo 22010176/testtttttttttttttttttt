@@ -2,6 +2,7 @@ using DatabaseModels;
 using DatabaseModels.DTO;
 using DatabaseModels.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Utilities;
 
 namespace SellerServer.Controllers;
@@ -14,11 +15,44 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
   readonly AppDbContext dbContext = dbContext;
 
   [HttpGet]
-  public async Task<IActionResult> LayDanhSachDonHang()
+  public async Task<IActionResult> LayDanhSachDonHang(string nguoiBanId)
   {
     try
     {
-      return Ok();
+      // var sanPham = await dbContext.SanPham
+      //   .Where(i => i.NguoiBanId == nguoiBanId)
+      //   .Select(sp => new
+      //   {
+      //     sp.Id,
+      //     sp.NguoiBanId,
+      //     sp.TrangThaiSanPham
+      //   })
+      //   .ToListAsync();
+
+      // var phienBanSanPham = (await dbContext.PhienBanSanPham.ToListAsync())
+      //   .Where(j => sanPham.Exists(sp => sp.Id == j.SanPhamId))
+      //   .ToList();
+
+      // var sanPhamDonHang = (await dbContext.SanPhamDonHang.ToListAsync())
+      //   .Where(j => phienBanSanPham.Exists(pbsp => pbsp.Id == j.PhienBanSanPhamId))
+      //   .ToList();
+
+      // var donHang = (await dbContext.DonHangKhachHang.ToListAsync())
+      //   .Where(j => sanPhamDonHang.Exists(i => i.DonHangId == j.Id))
+      //   .ToList();
+
+      var result = await (
+            from dh in dbContext.DonHangKhachHang
+            join sdh in dbContext.SanPhamDonHang on dh.Id equals sdh.DonHangId
+            join pb in dbContext.PhienBanSanPham on sdh.PhienBanSanPhamId equals pb.Id
+            join sp in dbContext.SanPham on pb.SanPhamId equals sp.Id
+            where sp.NguoiBanId == nguoiBanId
+            select dh
+      ).ToListAsync();
+      return Ok(new ResponseFormat
+      {
+        Data = result
+      });
     }
     catch (Exception)
     {

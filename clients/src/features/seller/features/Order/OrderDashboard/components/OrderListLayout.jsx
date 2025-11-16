@@ -4,13 +4,25 @@ import EmptyList from '_s/components/EmptyList';
 
 const columns = [
   { title: 'Khách hàng', dataIndex: 'product', key: 'product', },
-  { title: 'Tổng Đơn hàng', dataIndex: 'total', key: 'total', },
-  { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
+  { title: 'Số điện thoại', dataIndex: 'product', key: 'product', },
+  { title: 'Tổng giá trị', dataIndex: 'total', key: 'total', },
+  { title: 'Ngày đặt', dataIndex: 'total', key: 'total', },
+  // { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
   // { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
   // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
   { title: 'Thao tác', dataIndex: 'action', key: 'action', },
 ];
-function OrderListLayout({ dataSource = [] }) {
+const sanPhamColumns = [
+  { title: 'Tên sản phẩm', dataIndex: 'product', key: 'product', },
+  { title: 'Mã sản phẩm', dataIndex: 'product', key: 'product', },
+  { title: 'Giá tiền', dataIndex: 'total', key: 'total', },
+  { title: 'Số lượng', dataIndex: 'total', key: 'total', },
+  // { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
+  // { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
+  // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
+  // { title: 'Thao tác', dataIndex: 'action', key: 'action', },
+]
+function OrderListLayout({ dataSource = [{}] }) {
   return (
     <div className='flex flex-col gap-5'>
 
@@ -40,7 +52,16 @@ function OrderListLayout({ dataSource = [] }) {
       </Form>
 
       {/* Table */}
-      <Table columns={columns} dataSource={dataSource} pagination={false} locale={{ emptyText: <EmptyList message='Không có đơn hàng nào!' /> }} />
+      <Table
+        size='small'
+        columns={columns} dataSource={dataSource} pagination={false}
+        expandable={{
+          expandedRowRender: () => (
+            <Table size='small' columns={sanPhamColumns} />
+          )
+        }}
+        locale={{ emptyText: <EmptyList message='Không có đơn hàng nào!' /> }}
+      />
     </div>
   )
 }
