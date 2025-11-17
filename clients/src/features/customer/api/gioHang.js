@@ -1,6 +1,5 @@
-import axios from 'axios'
-import { keys } from '@/constant/localStorageKey'
-import { useNavigate } from 'react-router-dom';
+import { keys } from '@/constant/localStorageKey';
+import axios from 'axios';
 import { routePaths } from '../routes';
 
 const API_URL = import.meta.env.VITE_SERVER_URL + "/api/giohang";

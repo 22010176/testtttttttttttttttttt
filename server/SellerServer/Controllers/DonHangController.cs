@@ -46,8 +46,43 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
             join sdh in dbContext.SanPhamDonHang on dh.Id equals sdh.DonHangId
             join pb in dbContext.PhienBanSanPham on sdh.PhienBanSanPhamId equals pb.Id
             join sp in dbContext.SanPham on pb.SanPhamId equals sp.Id
+            join kh in dbContext.TaiKhoanKhachHang on dh.KhachHangId equals kh.Id
             where sp.NguoiBanId == nguoiBanId
-            select dh
+            orderby dh.NgayTao descending
+            select new
+            {
+              DonHangId = dh.Id,
+              NgayDat = dh.NgayTao,
+              TaiKhoanKhachHangId = kh.Id,
+              TrangThaiDonHang = (
+                from tt in dbContext.CapNhatTrangThaiDonHang
+                where tt.DonHangId == dh.Id
+                orderby tt.ThoiGianTao descending
+                select new
+                {
+                  tt.Id,
+                  TrangThai = tt.TrangThaiDonHang.ToString(),
+                  tt.ThoiGianTao
+                }
+              ).ToList(),
+              SoDienThoai = (
+                from dc in dbContext.DiaChiGiaoHang
+                where dc.TaiKhoanKhachHangId == kh.Id
+                orderby dc.Id descending
+                select dc.SoDienThoai
+              ).FirstOrDefault(),
+              HoTen = (
+                from dc in dbContext.DiaChiGiaoHang
+                where dc.TaiKhoanKhachHangId == kh.Id
+                orderby dc.Id descending
+                select dc.HoTen
+              ).FirstOrDefault(),
+              sdh.PhienBanSanPhamId,
+              sdh.SoLuong,
+              pb.SanPhamId,
+              pb.TenSanPham,
+              pb.GiaBan,
+            }
       ).ToListAsync();
       return Ok(new ResponseFormat
       {
@@ -64,31 +99,31 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
   [HttpPost]
   public async Task<IActionResult> CapNhatTrangThaiDonHang(CapNHatTrangThaiDonHangRequest request)
   {
-    try
+    // try
+    // {
+    CapNhatTrangThaiDonHang trangThai = new()
     {
-      CapNhatTrangThaiDonHang trangThai = new()
-      {
-        Id = Guid.NewGuid().ToString(),
-        DonHangId = request.DonHangId,
-        NoiDungCapNhat = request.NoiDungCapNhat,
-        TrangThaiDonHang = request.TrangThaiDonHang,
-        ThoiGianTao = DateTime.UtcNow
-      };
-      await dbContext.CapNhatTrangThaiDonHang.AddAsync(trangThai);
-      await dbContext.SaveChangesAsync();
-      return Ok(new ResponseFormat()
-      {
-        Success = true
-      });
-    }
-    catch (Exception)
+      Id = Guid.NewGuid().ToString(),
+      DonHangId = request.DonHangId,
+      NoiDungCapNhat = request.NoiDungCapNhat,
+      TrangThaiDonHang = request.TrangThaiDonHang,
+      ThoiGianTao = DateTime.UtcNow
+    };
+    await dbContext.CapNhatTrangThaiDonHang.AddAsync(trangThai);
+    await dbContext.SaveChangesAsync();
+    return Ok(new ResponseFormat()
     {
+      Success = true
+    });
+    // }
+    // catch (Exception)
+    // {
 
-      return BadRequest(new ResponseFormat()
-      {
-        Success = false
-      });
-      throw;
-    }
+    //   return BadRequest(new ResponseFormat()
+    //   {
+    //     Success = false
+    //   });
+    //   throw;
+    // }
   }
 }

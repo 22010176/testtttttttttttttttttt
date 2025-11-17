@@ -34,7 +34,10 @@ export default function OrderTracking() {
       setDonHang(data.data)
     })
   }, [id])
-  console.log(donHang)
+  // console.log(donHang)
+  // const a = []
+  // a.reverse()
+  // const trangThai = [...(donHang?.trangThai ?? [])].reverse()
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto">
@@ -52,20 +55,20 @@ export default function OrderTracking() {
 
         {/* Progress Tracker */}
         <div className="bg-white p-8 mb-4">
-          <div className="flex items-center justify-between relative overflow-x-scroll">
+          <div className="flex items-center gap-10 relative overflow-x-scroll">
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
 
-            {donHang?.trangThai?.map((step, index) => {
+            {[...(donHang?.trangThai ?? [])].reverse().map((step, index) => {
               const Icon = step?.icon;
               return (
 
-                <div key={index} className="flex flex-col items-center relative" style={{ zIndex: 1 }}>
+                <div key={index} className="flex flex-col items-center justify-center" style={{ zIndex: 1 }}>
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 3 ? 'bg-green-500' : 'bg-gray-300'}`}>
                     {/* <Icon size={24} className="text-white" /> */}
                     <FontAwesomeIcon icon={faFlag} />
                   </div>
-                  <div className="text-center mt-3 max-w-[120px]">
+                  <div className="text-center mt-3 mw-100">
                     <div className="text-xs font-medium">{LayTrangThaiDonHang(step.TrangThaiDonHang)}</div>
                     <div className="text-xs text-gray-400 mt-1">{new Date(step.ThoiGianTao).toLocaleString()}</div>
                   </div>

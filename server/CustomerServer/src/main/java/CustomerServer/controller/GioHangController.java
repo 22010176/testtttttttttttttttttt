@@ -94,7 +94,7 @@ public class GioHangController {
 
     if (!data.isEmpty()) {
       System.out.println("DDDDDDDD " + data.get(0));
-      return ResponseEntity.ok(ResponseFormat.success(null, "test"));
+      return ResponseEntity.ok(ResponseFormat.success(null, "da ton tai"));
     }
 
     String sql = """
