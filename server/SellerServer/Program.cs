@@ -10,9 +10,10 @@ using Utilities.Aws;
 var builder = ServerTemplate.CreateTemplateServer(args);
 
 var awsSettings = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
-
 SecretsManagerService service = new(awsSettings!);
 var secret = (await service.GetSecretAsync())!;
+
+
 builder.Services.AddSingleton(options => secret);
 AwsSecret.TestSecret(secret);
 

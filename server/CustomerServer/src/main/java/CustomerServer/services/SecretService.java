@@ -13,11 +13,12 @@ public class SecretService {
   private final SecretsManagerClient secretsClient;
 
   public String getSecret(String secretName) {
-    GetSecretValueRequest request = GetSecretValueRequest.builder()
-        .secretId(secretName)
-        .build();
+    // GetSecretValueRequest request = GetSecretValueRequest.builder()
+    // .secretId(secretName)
+    // .build();
 
-    GetSecretValueResponse response = secretsClient.getSecretValue(request);
-    return response.secretString();
+    // GetSecretValueResponse response = secretsClient.getSecretValue(request);
+    // return response.secretString();
+    return "";
   }
 }

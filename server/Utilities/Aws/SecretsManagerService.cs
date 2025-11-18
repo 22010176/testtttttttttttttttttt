@@ -12,26 +12,46 @@ public class SecretsManagerService
 
   public SecretsManagerService(AwsSettings settings)
   {
-    _secretName = settings.SecretName;
-    var config = new AmazonSecretsManagerConfig()
-    {
-      ServiceURL = settings.ServiceURL,
-      AuthenticationRegion = settings.RegionEndpoint
-    };
-    var creds = new BasicAWSCredentials(settings.AccessKey, settings.SecretKey);
-    _client = new AmazonSecretsManagerClient(creds, config);
+    // _secretName = settings.SecretName;
+    // var config = new AmazonSecretsManagerConfig()
+    // {
+    //   ServiceURL = settings.ServiceURL,
+    //   AuthenticationRegion = settings.RegionEndpoint
+    // };
+    // var creds = new BasicAWSCredentials(settings.AccessKey, settings.SecretKey);
+    // _client = new AmazonSecretsManagerClient(creds, config);
   }
 
   public async Task<AwsSecret?> GetSecretAsync()
   {
-    var response = await _client.GetSecretValueAsync(new GetSecretValueRequest
+    return new()
     {
-      SecretId = _secretName
-    });
+      Database = new()
+      {
+        Username = "postgres",
+        DatabaseName = "TMDT",
+        Host = "localhost",
+        Password = "admin",
+        Port = 5432
+      },
+      Jwt = new()
+      {
+        Audience = "yourapp_users",
+        Issuer = "yourapp",
+        Key = "your_super_secret_key_123456"
+      },
+      MailSettings = new() { },
+      S3 = new() { },
+      VNPAY = new() { }
+    };
+    // var response = await _client.GetSecretValueAsync(new GetSecretValueRequest
+    // {
+    //   SecretId = _secretName
+    // });
 
-    return response.SecretString != null
-      ? JsonConvert.DeserializeObject<AwsSecret>(response.SecretString)
-      : null;
+    // return response.SecretString != null
+    //   ? JsonConvert.DeserializeObject<AwsSecret>(response.SecretString)
+    //   : null;
   }
 
 }

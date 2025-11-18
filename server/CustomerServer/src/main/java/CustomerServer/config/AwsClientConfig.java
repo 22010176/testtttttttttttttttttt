@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import CustomerServer.dto.aws.AwsSecret;
 import CustomerServer.dto.aws.DatabaseConfig;
+import CustomerServer.dto.aws.Jwt;
+import CustomerServer.dto.aws.S3Config;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -81,17 +83,45 @@ public class AwsClientConfig {
 
   @Bean
   AwsSecret awsSecret() {
-    SecretsManagerClient client = secretsManagerClient();
-    GetSecretValueResponse response = client.getSecretValue(GetSecretValueRequest.builder()
-        .secretId(aws.getSecretName())
-        .build());
-    String secretString = response.secretString();
-    ObjectMapper objectMapper = new ObjectMapper();
-    try {
-      return objectMapper.readValue(secretString, AwsSecret.class);
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException("Failed to parse secret JSON: " + e.getMessage(), e);
-    }
+    AwsSecret result = new AwsSecret();
+    result.setDatabase(new DatabaseConfig(
+        "postgres",
+        "admin",
+        "localhost",
+        5432,
+        "TMDT"));
+    result.setJwt(new Jwt(
+        "your_super_secret_key_123456",
+        "yourapp",
+        "yourapp_users"));
+    result.setS3(new S3Config("", ""));
+    return result;
+    // try {
+    // SecretsManagerClient client = secretsManagerClient();
+    // GetSecretValueResponse response =
+    // client.getSecretValue(GetSecretValueRequest.builder()
+    // .secretId(aws.getSecretName())
+    // .build());
+    // String secretString = response.secretString();
+    // ObjectMapper objectMapper = new ObjectMapper();
+    // return objectMapper.readValue(secretString, AwsSecret.class);
+
+    // } catch (JsonProcessingException e) {
+    // throw new RuntimeException("Failed to parse secret JSON: " + e.getMessage(),
+    // e);
+    // AwsSecret result = new AwsSecret();
+    // result.setDatabase(new DatabaseConfig(
+    // "postgres",
+    // "admin",
+    // "localhost",
+    // 5432,
+    // "TMDT"));
+    // result.setJwt(new Jwt(
+    // "Test",
+    // "test",
+    // "test"));
+    // return result;
+    // }
   }
 
 }

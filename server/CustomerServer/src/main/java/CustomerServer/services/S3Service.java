@@ -31,20 +31,22 @@ public class S3Service {
   }
 
   public void uploadFile(String key, String content) {
-    s3Client.putObject(PutObjectRequest.builder()
-        .bucket(s3Config.getBucketName())
-        .key(key)
-        .build(),
-        RequestBody.fromBytes(content.getBytes(StandardCharsets.UTF_8)));
+
+    // s3Client.putObject(PutObjectRequest.builder()
+    // .bucket(s3Config.getBucketName())
+    // .key(key)
+    // .build(),
+    // RequestBody.fromBytes(content.getBytes(StandardCharsets.UTF_8)));
   }
 
   public String readFile(String key) {
-    var response = s3Client.getObjectAsBytes(GetObjectRequest.builder()
-        .bucket(s3Config.getBucketName())
-        .key(key)
-        .build()).asByteArray();
+    // var response = s3Client.getObjectAsBytes(GetObjectRequest.builder()
+    // .bucket(s3Config.getBucketName())
+    // .key(key)
+    // .build()).asByteArray();
 
-    return new String(response, StandardCharsets.UTF_8);
+    // return new String(response, StandardCharsets.UTF_8);
+    return "";
   }
 
 }
