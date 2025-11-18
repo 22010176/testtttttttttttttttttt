@@ -48,14 +48,26 @@ public class TaiKhoanController {
 
       String salt = BCrypt.gensalt();
       String hashedPassword = BCrypt.hashpw(entity.getMatKhau(), salt);
-
+      String khachHangId = UUID.randomUUID().toString();
       jdbcTemplate.update(sql,
-          UUID.randomUUID().toString(),
+          khachHangId,
           entity.getHoTen(),
           entity.getEmail(),
           entity.getSoDienThoai(),
           hashedPassword,
           salt);
+
+      String diaChiSQL = """
+          INSERT INTO "DiaChiGiaoHang"
+          ("Id", "TaiKhoanKhachHangId", "HoTen", "SoDienThoai", "DiaChiCuThe")
+          VALUES (?, ?, ?, ?, ?)
+          """;
+      jdbcTemplate.update(diaChiSQL,
+          UUID.randomUUID().toString(),
+          khachHangId,
+          entity.getHoTen(),
+          entity.getSoDienThoai(),
+          "");
 
       return new ResponseFormat<>(null, "Đăng kí tài khoản thành công", true);
     } catch (Exception e) {

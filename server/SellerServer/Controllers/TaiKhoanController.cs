@@ -112,16 +112,6 @@ public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, E
       });
     }
   }
-
-  [HttpGet("public")]
-  public IActionResult Public() => Ok("This is public");
-
-  [Authorize]
-  [HttpGet("private")]
-  public IActionResult Private() => Ok("This is protected");
-
-  [HttpGet("admin")]
-  public IActionResult Admin() => Ok("Only Admins can see this");
 }
 
 public class LoginRequest

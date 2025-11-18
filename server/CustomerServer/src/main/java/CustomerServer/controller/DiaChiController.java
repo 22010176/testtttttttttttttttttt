@@ -27,7 +27,6 @@ public class DiaChiController {
 
   @GetMapping
   public ResponseEntity<?> XemDanhSachDiaChi(String id) {
-
     // int taiKhoanKhachHangId = JwtUtilities.getUserId();
     // int taiKhoanKhachHangId = 1;
     String sql = """
