@@ -41,7 +41,7 @@ function Login() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to="/register">
+        <Link className='text-sm text-blue-500' to={routePaths.account.register}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng kí tài khoản
         </Link>

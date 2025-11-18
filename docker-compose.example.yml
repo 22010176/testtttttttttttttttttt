@@ -4,42 +4,36 @@ services:
       context: ./clients
       dockerfile: dockerfile
       args:
-        - VITE_MODE=seller
+        - VITE_MODE=seller-prod
     ports:
       - "80:80"
-    environment:
-      - NODE_ENV=production
-      - VITE_SERVER_URL=
+    # environment:
+    #   - NODE_ENV=production
+    #   - VITE_SERVER_URL=http://seller-server:8080
     volumes:
       - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - seller-server
+    networks:
+      - expose
 
   customer-client:
     build:
       context: ./clients
       dockerfile: dockerfile
       args:
-        - VITE_MODE=customer
+        - VITE_MODE=customer-prod
     ports:
       - "81:80"
-    environment:
-      - NODE_ENV=production
-      - VITE_SERVER_URL=
+    # environment:
+    #   - NODE_ENV=production
+    #   - VITE_SERVER_URL=http://customer-server:8081
     volumes:
       - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
-
-  administrator-client:
-    build:
-      context: ./clients
-      dockerfile: dockerfile
-      args:
-        - VITE_MODE=administrator
-    ports:
-      - "82:80"
-    environment:
-      - NODE_ENV=production
-      - VITE_SERVER_URL=
-    volumes:
-      - ./clients/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - customer-server
+    networks:
+      - expose
 
   customer-server:
     container_name: customer-server
@@ -54,6 +48,14 @@ services:
       - SPRING_DATASOURCE_PASSWORD=admin
       - SPRING_JPA_HIBERNATE_DDL-AUTO=none
       - SERVER_PORT=8081
+      - AWS_ACCESS-KEY=test
+      - AWS_SECRET-KEY=test
+      - AWS_REGION=test
+      - AWS_SECRET-NAME=prod
+      - AWS_ENDPOINT=http://localstack:4566
+    depends_on:
+      - database
+      - localstack
     networks:
       - expose
       - database
@@ -68,31 +70,17 @@ services:
       - 8080:8080
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ConnectionStrings__PostgresConnection=Host=database;Port=5432;Database=TMDT;Username=postgres;Password=admin
-      # JWT
-      - Jwt__Key=your_super_secret_key_123456
-      - Jwt__Issuer=yourapp
-      - Jwt__Audience=yourapp_users
-      # VNPAY
-      - VNPAY__VNP_TmnCode=
-      - VNPAY__VNP_HashSecret=
-      - VNPAY__VNP_Url=
-      - VNPAY__VNP_ReturnUrl=
       # AWS
-      - AWS_Profile=default
-      - AWS_RegionEndpoint=us-east-1
-      - AWS_AccessKey=test
-      - AWS_SecretKey=test
-      - AWS_BucketName=tmdt-bucket
-      - AWS_UseLocalStack=true
-      - AWS_ServiceURL=http://localstack:4566
-      # Mail
-      - MailSettings__SmtpServer=smtp.gmail.com"
-      - MailSettings__Port=587
-      - MailSettings__SenderName=
-      - MailSettings__SenderEmail=
-      - MailSettings__Username=
-      - MailSettings__Password=
+      - AWS__Profile=default
+      - AWS__RegionEndpoint=us-east-1
+      - AWS__AccessKey=test
+      - AWS__SecretKey=test
+      - AWS__UseLocalStack=true
+      - AWS__SecretName=prod/credentials
+      - AWS__ServiceURL=http://localstack:4566
+    depends_on:
+      - database
+      - localstack
     networks:
       - expose
       - database
@@ -133,7 +121,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: TMDT
     ports:
-      - 5432:5432
+      - 5000:5432
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./server/init.sql:/docker-entrypoint-initdb.d/init.sql

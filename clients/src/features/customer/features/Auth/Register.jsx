@@ -12,7 +12,7 @@ function Register() {
   async function onFinish(values) {
     try {
       // const result = await register({ email: values.email, matKhau: values.matKhau, soDienThoai: values.soDienThoai, hoTen: values.hoTen })
-      console.log(result)
+      console.log(values)
       api.success({ description: "Đăng kí thành công!" })
     } catch (error) {
       console.log(error)

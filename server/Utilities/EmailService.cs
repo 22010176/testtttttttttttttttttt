@@ -2,12 +2,13 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using Utilities.Aws;
 
 namespace Utilities;
 
-public class EmailService(EmailSettings settings)
+public class EmailService(MailSettings settings)
 {
-  private readonly EmailSettings _settings = settings;
+  private readonly MailSettings _settings = settings;
 
   public async Task SendEmailAsync(string toEmail, string subject, string body)
   {
@@ -25,12 +26,12 @@ public class EmailService(EmailSettings settings)
   }
 }
 
-public class EmailSettings
-{
-  public string SmtpServer { get; set; } = string.Empty;
-  public int Port { get; set; }
-  public string SenderName { get; set; } = string.Empty;
-  public string SenderEmail { get; set; } = string.Empty;
-  public string Username { get; set; } = string.Empty;
-  public string Password { get; set; } = string.Empty;
-}
+// public class EmailSettings
+// {
+//   public string SmtpServer { get; set; } = string.Empty;
+//   public int Port { get; set; }
+//   public string SenderName { get; set; } = string.Empty;
+//   public string SenderEmail { get; set; } = string.Empty;
+//   public string Username { get; set; } = string.Empty;
+//   public string Password { get; set; } = string.Empty;
+// }

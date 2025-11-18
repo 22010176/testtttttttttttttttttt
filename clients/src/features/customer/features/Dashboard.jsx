@@ -12,36 +12,36 @@ export default function DashBoard() {
     document.title = 'Dashboard'
     XemDanhSachSanPham({}).then(data => {
       console.log(data)
-      setSanPham(data.data)
+      setSanPham(data?.data)
     })
   }, [])
 
   console.log(sanPham)
 
-  const categories = [
-    [
-      { name: 'Thời Trang Nam', icon: '👔', color: 'bg-blue-100' },
-      { name: 'Điện Thoại & Phụ Kiện', icon: '📱', color: 'bg-gray-100' },
-      { name: 'Thiết Bị Điện Tử', icon: '📺', color: 'bg-blue-50' },
-      { name: 'Máy Tính & Laptop', icon: '💻', color: 'bg-gray-100' },
-      { name: 'Máy Ảnh & Máy Quay Phim', icon: '📷', color: 'bg-gray-100' },
-      { name: 'Đồng Hồ', icon: '⌚', color: 'bg-gray-100' },
-      { name: 'Giày Dép Nam', icon: '👟', color: 'bg-gray-100' },
-      { name: 'Thiết Bị Điện Gia Dụng', icon: '🔌', color: 'bg-blue-100' },
-      { name: 'Thể Thao & Du Lịch', icon: '⚽', color: 'bg-gray-100' },
-      { name: 'Ô Tô & Xe Máy & Xe Đạp', icon: '🛵', color: 'bg-blue-100' },
-      { name: 'Thời Trang Nữ', icon: '👗', color: 'bg-orange-100' },
-      { name: 'Mẹ & Bé', icon: '🍼', color: 'bg-blue-50' },
-      { name: 'Nhà Cửa & Đời Sống', icon: '🏠', color: 'bg-orange-100' },
-      { name: 'Sắc Đẹp', icon: '💄', color: 'bg-pink-100' },
-      { name: 'Sức Khỏe', icon: '💊', color: 'bg-blue-100' },
-      { name: 'Giày Dép Nữ', icon: '👠', color: 'bg-orange-100' },
-      { name: 'Túi Ví Nữ', icon: '👜', color: 'bg-orange-100' },
-      { name: 'Phụ Kiện & Trang Sức Nữ', icon: '💍', color: 'bg-orange-100' },
-      { name: 'Bách Hóa Online', icon: '🍫', color: 'bg-yellow-50' },
-      { name: 'Nhà Sách Online', icon: '📚', color: 'bg-red-100' },
-    ],
-  ];
+  // const categories = [
+  //   [
+  //     { name: 'Thời Trang Nam', icon: '👔', color: 'bg-blue-100' },
+  //     { name: 'Điện Thoại & Phụ Kiện', icon: '📱', color: 'bg-gray-100' },
+  //     { name: 'Thiết Bị Điện Tử', icon: '📺', color: 'bg-blue-50' },
+  //     { name: 'Máy Tính & Laptop', icon: '💻', color: 'bg-gray-100' },
+  //     { name: 'Máy Ảnh & Máy Quay Phim', icon: '📷', color: 'bg-gray-100' },
+  //     { name: 'Đồng Hồ', icon: '⌚', color: 'bg-gray-100' },
+  //     { name: 'Giày Dép Nam', icon: '👟', color: 'bg-gray-100' },
+  //     { name: 'Thiết Bị Điện Gia Dụng', icon: '🔌', color: 'bg-blue-100' },
+  //     { name: 'Thể Thao & Du Lịch', icon: '⚽', color: 'bg-gray-100' },
+  //     { name: 'Ô Tô & Xe Máy & Xe Đạp', icon: '🛵', color: 'bg-blue-100' },
+  //     { name: 'Thời Trang Nữ', icon: '👗', color: 'bg-orange-100' },
+  //     { name: 'Mẹ & Bé', icon: '🍼', color: 'bg-blue-50' },
+  //     { name: 'Nhà Cửa & Đời Sống', icon: '🏠', color: 'bg-orange-100' },
+  //     { name: 'Sắc Đẹp', icon: '💄', color: 'bg-pink-100' },
+  //     { name: 'Sức Khỏe', icon: '💊', color: 'bg-blue-100' },
+  //     { name: 'Giày Dép Nữ', icon: '👠', color: 'bg-orange-100' },
+  //     { name: 'Túi Ví Nữ', icon: '👜', color: 'bg-orange-100' },
+  //     { name: 'Phụ Kiện & Trang Sức Nữ', icon: '💍', color: 'bg-orange-100' },
+  //     { name: 'Bách Hóa Online', icon: '🍫', color: 'bg-yellow-50' },
+  //     { name: 'Nhà Sách Online', icon: '📚', color: 'bg-red-100' },
+  //   ],
+  // ];
 
   return (
     <Container className="space-y-10">
@@ -69,7 +69,7 @@ export default function DashBoard() {
         <h2 className="text-lg font-normal uppercase">GỢI Ý</h2>
 
         <div className='grid grid-cols-6 gap-5'>
-          {sanPham.map((product, j) => <ProductCard key={j} {...product} />)}
+          {sanPham?.map((product, j) => <ProductCard key={j} {...product} />)}
 
           <div className='col-span-6 flex justify-center'>
             <Button className='w-100' size='large' variant='solid' color='blue'>Xem thêm</Button>

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict 2wndh7xuXQL7hpDuTv6YCs6eGe4Bm6vDUipJjiy7Ed2CQP1LQeYqCGLgU8MwQYN
+\restrict 2Pc1hGvBLCMFcqYcm4WoLNAArwmkjkxfGPFVfR5e9j91TeSpWIEYZZS793PL6dx
 
 -- Dumped from database version 17.6
 -- Dumped by pg_dump version 17.6
@@ -324,7 +324,7 @@ INSERT INTO public."NganhHang" ("Id", "NganhHangChaId", "TenNganhHang", "LaNhanh
 -- Data for Name: __EFMigrationsHistory; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") VALUES ('20251118042216_Init', '9.0.9');
+INSERT INTO public."__EFMigrationsHistory" ("MigrationId", "ProductVersion") VALUES ('20251118071931_Init', '9.0.9');
 
 
 --
@@ -630,5 +630,5 @@ ALTER TABLE ONLY public."SanPham"
 -- PostgreSQL database dump complete
 --
 
-\unrestrict 2wndh7xuXQL7hpDuTv6YCs6eGe4Bm6vDUipJjiy7Ed2CQP1LQeYqCGLgU8MwQYN
+\unrestrict 2Pc1hGvBLCMFcqYcm4WoLNAArwmkjkxfGPFVfR5e9j91TeSpWIEYZZS793PL6dx
 

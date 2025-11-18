@@ -1,15 +1,21 @@
 const fs = require('fs')
 const path = require('path')
 
-const data = require('../data/aws_secret.json')
+function exportAwsSecret(src, name) {
+  const data = require(src)
+  const secretString = `"${JSON.stringify(data).replaceAll("\"", "\\\"")}"`
+  // const secret_name = prod ? "prod/credentials" : "local/credentials"
+  const script = `
+  aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 delete-secret --secret-id ${name} --force-delete-without-recovery
+  
+  aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 create-secret --name ${name} --secret-string ${secretString}
+  
+  aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 get-secret-value --secret-id ${name}
+  `
 
-const secretString = `"${JSON.stringify(data).replaceAll("\"", "\\\"")}"`
-const script = `
-aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 delete-secret --secret-id local/credentials --force-delete-without-recovery
+  fs.writeFileSync(path.join(__dirname, `..\\..\\scripts\\init-aws-${name}.cmd`), script)
 
-aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 create-secret --name local/credentials --secret-string ${secretString}
+}
 
-aws --endpoint-url=http://localhost:4566 secretsmanager --region us-east-1 get-secret-value --secret-id local/credentials
-`
-
-fs.writeFileSync(path.join(__dirname, "..\\..\\scripts\\init-aws.cmd"), script)
+exportAwsSecret('../data/aws_secret.prod.json', 'prod')
+exportAwsSecret('../data/aws_secret.json', 'dev')

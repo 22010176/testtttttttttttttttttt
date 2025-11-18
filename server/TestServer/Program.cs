@@ -13,11 +13,13 @@ var awsSettings = builder.Configuration.GetSection("AWS").Get<AwsSettings>()!;
 
 SecretsManagerService service = new(awsSettings!);
 var secret = (await service.GetSecretAsync())!;
+builder.Services.AddSingleton(options => secret);
+AwsSecret.TestSecret(secret);
 
 S3Config s3Config = secret.S3;
-DatabaseConfig dbConfig = secret.Database;
-builder.Services.AddSingleton<SecretsManagerService>(options => new(awsSettings));
 builder.Services.AddSingleton<S3Service>(options => new(awsSettings, secret!.S3));
+
+DatabaseConfig dbConfig = secret.Database;
 ServerTemplate.AddPostgres<AppDbContext>(builder, $"Host={dbConfig!.Host};Port={dbConfig.Port};Database={dbConfig.DatabaseName};Username={dbConfig.Username};Password={dbConfig.Password}");
 
 builder.Services.AddAuthentication(options =>
@@ -26,16 +28,15 @@ builder.Services.AddAuthentication(options =>
   options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-  var jwtSettings = builder.Configuration.GetSection("Jwt");
-  var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!.PadRight(32));
+  var key = Encoding.UTF8.GetBytes(secret.Jwt.Key!.PadRight(32));
   options.TokenValidationParameters = new TokenValidationParameters
   {
     ValidateIssuer = true,
     ValidateAudience = true,
     ValidateLifetime = true,
     ValidateIssuerSigningKey = true,
-    ValidIssuer = jwtSettings["Issuer"],
-    ValidAudience = jwtSettings["Audience"],
+    ValidIssuer = secret.Jwt.Issuer,
+    ValidAudience = secret.Jwt.Audience,
     IssuerSigningKey = new SymmetricSecurityKey(key)
   };
 });
@@ -52,11 +53,11 @@ if (app.Environment.IsProduction())
   }
 }
 
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
+// if (app.Environment.IsDevelopment())
+// {
+app.UseSwagger();
+app.UseSwaggerUI();
+// }
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();

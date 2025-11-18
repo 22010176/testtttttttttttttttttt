@@ -17,7 +17,7 @@ function LayTrangThaiDonHang(traingThai) {
     "DON_HANG_GIAO_THANH_CONG",
     "HUY_DON_HANG"
   ]
-  return a[(traingThai + 1) ?? 0]
+  return a[(traingThai + 1) || 0]
 }
 
 export default function OrderTracking() {
@@ -54,7 +54,7 @@ export default function OrderTracking() {
             {/* Progress Line */}
             <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
 
-            {[...(donHang?.trangThai ?? [])].reverse().map((step, index) => {
+            {[...(donHang?.trangThai || [])].reverse().map((step, index) => {
               return (
                 <div key={index} className="flex flex-col items-center justify-center" style={{ zIndex: 1 }}>
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 3 ? 'bg-green-500' : 'bg-gray-300'}`}>

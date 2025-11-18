@@ -22,7 +22,7 @@ export default function ProfilePage() {
       console.log(data)
       form.setFieldsValue({
         hoTen: data.HoTen,
-        gioiTinh: Object.values(GIOI_TINH)[data.GioiTinh ?? 2],
+        gioiTinh: Object.values(GIOI_TINH)[data.GioiTinh || 2],
         ngaySinh: dayjs(data.SinhNhat),
         email: data.Email,
         soDienThoai: data.SoDienThoai

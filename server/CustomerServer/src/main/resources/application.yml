@@ -19,7 +19,5 @@ aws:
   access-key: ${AWS_ACCESS_KEY_ID:test}
   secret-key: ${AWS_SECRET_ACCESS_KEY:test}
   region: us-east-1
-  secret-name: local/credentials
+  secret-name: dev
   endpoint: http://localhost:4566
-
-# LOCALSTACK_ENDPOINT: http://localhost:4566

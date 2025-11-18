@@ -6,24 +6,26 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
+using Utilities.Aws;
 
 namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/thanh-toan")]
-public class PaymentController(IConfiguration configuration) : ControllerBase
+public class PaymentController(IConfiguration configuration, AwsSecret secrets) : ControllerBase
 {
   readonly IConfiguration _config = configuration;
+  readonly AwsSecret secrets = secrets;
 
   [HttpPost]
   public IActionResult GetUrl()
   {
     var request = HttpContext.Request;
 
-    string vnp_HashSecret = _config["VNPAY:VNP_HashSecret"]!;
-    string vnp_TmnCode = _config["VNPAY:VNP_TmnCode"]!;
-    string vnp_Url = _config["VNPAY:VNP_Url"]!;
-    string vnp_ReturnUrl = $"{request.Scheme}://{request.Host}/{_config["VNPAY:vnp_ReturnUrl"]!}";
+    string vnp_HashSecret = secrets.VNPAY.HashSecret!;
+    string vnp_TmnCode = secrets.VNPAY.TmnCode!;
+    string vnp_Url = secrets.VNPAY.Url!;
+    string vnp_ReturnUrl = $"{request.Scheme}://{request.Host}/{secrets.VNPAY.ReturnUrl!}";
 
     VNP_Params _params = new()
     {

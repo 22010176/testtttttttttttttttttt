@@ -4,6 +4,7 @@ import { Button, Form, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
 
 import { register } from '../../api/taiKhoan';
+import { routePaths } from '../../routes';
 
 function Register() {
   const [api, contextHolder] = notification.useNotification();
@@ -70,7 +71,7 @@ function Register() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to="/login">
+        <Link className='text-sm text-blue-500' to={routePaths.account.register}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng nhập tài khoản
         </Link>

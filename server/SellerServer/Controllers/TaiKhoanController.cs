@@ -9,16 +9,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Utilities;
+using Utilities.Aws;
 
 namespace SellerServer.Controllers;
 
 [ApiController]
 [Route("api/tai-khoan")]
-public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, EmailService emailService) : ControllerBase
+public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, EmailService emailService, AwsSecret secret) : ControllerBase
 {
   readonly IConfiguration _config = config;
   readonly AppDbContext dbContext = dbContext;
   readonly EmailService emailService = emailService;
+  readonly AwsSecret secret = secret;
+
   [HttpPost("send")]
   public async Task<IActionResult> SendEmail([FromQuery] string to, [FromQuery] string subject, [FromQuery] string body)
   {

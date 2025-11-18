@@ -3,7 +3,6 @@ using System.Text.Json;
 using DatabaseModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TestServer.Utilities;
 using Utilities;
 
 namespace TestServer.Controllers;
