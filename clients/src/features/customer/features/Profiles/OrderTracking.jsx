@@ -1,12 +1,12 @@
 import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ChevronLeft, FileText, Package, Star, Truck } from 'lucide-react';
+import { Button } from 'antd';
+import { ChevronLeft } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import { XemThongTinChiTietDonHang } from '_c/api/donHang';
 import { routePaths } from '_c/routes';
-import { Button } from 'antd';
 
 function LayTrangThaiDonHang(traingThai) {
   const a = [
@@ -23,9 +23,7 @@ function LayTrangThaiDonHang(traingThai) {
 export default function OrderTracking() {
   const { id } = useParams()
 
-  // const [showAllTracking, setShowAllTracking] = useState(false);
   const [donHang, setDonHang] = useState({});
-
   const subtotal = useMemo(() => donHang.sanPham?.reduce((acc, i) => acc + i.GiaBan * i.SoLuong, 0), [donHang])
   const total = useMemo(() => subtotal + donHang?.PhiVanChuyen, [donHang]);
 
@@ -34,10 +32,7 @@ export default function OrderTracking() {
       setDonHang(data.data)
     })
   }, [id])
-  // console.log(donHang)
-  // const a = []
-  // a.reverse()
-  // const trangThai = [...(donHang?.trangThai ?? [])].reverse()
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-5xl mx-auto">
@@ -60,9 +55,7 @@ export default function OrderTracking() {
             <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
 
             {[...(donHang?.trangThai ?? [])].reverse().map((step, index) => {
-              const Icon = step?.icon;
               return (
-
                 <div key={index} className="flex flex-col items-center justify-center" style={{ zIndex: 1 }}>
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 3 ? 'bg-green-500' : 'bg-gray-300'}`}>
                     {/* <Icon size={24} className="text-white" /> */}

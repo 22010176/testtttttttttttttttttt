@@ -16,7 +16,7 @@ public class GioHangController(IConfiguration config, AppDbContext dbContext) : 
   readonly string serverUrl = "http://localhost:8083";
 
   [HttpPost]
-  public async Task<IActionResult> TaoGioHang(int gioHang)
+  public async Task<IActionResult> TaoGioHang(int gioHang = 10)
   {
     try
     {

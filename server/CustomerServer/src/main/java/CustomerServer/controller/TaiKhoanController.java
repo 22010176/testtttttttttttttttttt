@@ -3,8 +3,8 @@ package CustomerServer.controller;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import CustomerServer.dto.ResponseFormat;
 import CustomerServer.dto.taikhoan.DangKiTaiKhoanRequest;
 import CustomerServer.dto.taikhoan.DangNhapTaiKhoanRequest;
+import CustomerServer.dto.taikhoan.SuaThongTinTaiKhoanRequest;
 import CustomerServer.utilities.JwtUtilities;
 import lombok.AllArgsConstructor;
 
@@ -89,16 +90,15 @@ public class TaiKhoanController {
   }
 
   @GetMapping
-  public ResponseFormat<Object> XemThongTinTaiKhoan(Authentication authentication) {
+  public ResponseFormat<Object> XemThongTinTaiKhoan(String khachHangId) {
     try {
-      String email = authentication.getName();
       String sql = """
-          SELECT "HoTen", "Email", "SoDienThoai", "SinhNhat"
+          SELECT "HoTen", "Email", "SoDienThoai", "SinhNhat", "GioiTinh"
           FROM "TaiKhoanKhachHang"
-          WHERE "Email" = ?
+          WHERE "Id" = ?
           LIMIT 1
           """;
-      var taiKhoan = jdbcTemplate.queryForMap(sql, email);
+      var taiKhoan = jdbcTemplate.queryForMap(sql, khachHangId);
       return new ResponseFormat<>(taiKhoan, "Xem thông tin tài khoản thành công", true);
     } catch (Exception e) {
       // TODO: handle exception
@@ -107,10 +107,22 @@ public class TaiKhoanController {
   }
 
   @PutMapping
-  public String SuaThongTinTaiKhoan(@RequestBody String entity) {
+  public ResponseEntity<?> SuaThongTinTaiKhoan(@RequestBody SuaThongTinTaiKhoanRequest entity) {
     // TODO: process PUT request
-
-    return entity;
+    String sql = """
+        UPDATE "TaiKhoanKhachHang"
+        SET
+          "GioiTinh" = ?,
+          "SinhNhat" = ?,
+          "HoTen" = ?
+        WHERE "Id" = ?;
+        """;
+    jdbcTemplate.update(sql,
+        entity.getGioiTinh().ordinal(),
+        entity.getNgaySinh(),
+        entity.getHoTen(),
+        entity.getKhachHangId());
+    return ResponseEntity.ok(ResponseFormat.success());
   }
 
   @PutMapping("doimatkhau/{id}")
