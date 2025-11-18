@@ -81,13 +81,24 @@ export default function OrderDashboard() {
   }, [])
 
   function createUpdateState(trangThai) {
-    return async function ({ item }) {
-      console.log(item)
-      const result = await CapNhatTrangThaiDonHang({
-        donHangId: item.donHangId,
-        noiDungCapNhat: "",
-        trangThaiDonHang: trangThai
-      })
+    return async function (item) {
+      let result
+      try {
+        result = await CapNhatTrangThaiDonHang({
+          donHangId: item.donHangId,
+          noiDungCapNhat: "",
+          trangThaiDonHang: trangThai
+        })
+
+      } catch (error) {
+        let data = item.item
+        result = await CapNhatTrangThaiDonHang({
+          donHangId: data.donHangId,
+          noiDungCapNhat: "",
+          trangThaiDonHang: trangThai
+        })
+
+      }
       if (!result.success) {
         return messageApi.error("Cập nhật lỗi!")
       }
@@ -117,9 +128,9 @@ export default function OrderDashboard() {
         // { key: 'all', label: <p className='px-3'>Tất cả</p>, children: <OrderListLayout /> },
         {
           key: 'active', label: <p className='px-3'>Chờ xác nhận</p>,
-          children: <OrderListLayout dataSource={Object.fromEntries(Object
-            .entries(temp)
-            .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.KHACH_HANG_DAT_HANG))}
+          children: <OrderListLayout dataSource={Object.fromEntries(
+            Object.entries(temp)
+              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.KHACH_HANG_DAT_HANG))}
             Function={({ item }) => (
               <div className='space-y-5'>
                 <Button variant='text' color='green' onClick={nguoiBanXacNhan.bind({}, item)}>Xác nhận</Button>
@@ -129,9 +140,9 @@ export default function OrderDashboard() {
         },
         {
           key: 'a', label: <p className='px-3'>Chờ lấy hàng</p>,
-          children: <OrderListLayout dataSource={Object.fromEntries(Object
-            .entries(temp)
-            .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.NGUOI_BAN_XAC_NHAN))}
+          children: <OrderListLayout dataSource={Object.fromEntries(
+            Object.entries(temp)
+              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.NGUOI_BAN_XAC_NHAN))}
             Function={item => (
               <div className='space-y-5'>
                 <Button variant='text' color='green' onClick={donHangVanChuyen.bind({}, item)}>Giao hàng</Button>
@@ -141,9 +152,9 @@ export default function OrderDashboard() {
         },
         {
           key: 'b', label: <p className='px-3'>Đang giao</p>,
-          children: <OrderListLayout dataSource={Object.fromEntries(Object
-            .entries(temp)
-            .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_VAN_CHUYEN))}
+          children: <OrderListLayout dataSource={Object.fromEntries(
+            Object.entries(temp)
+              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_VAN_CHUYEN))}
             Function={item => (
               <div className='space-y-5'>
                 <Button variant='text' color='green' onClick={giaoHangThanhCong.bind({}, item)} >Thành công</Button>
@@ -154,15 +165,15 @@ export default function OrderDashboard() {
         },
         {
           key: 'c', label: <p className='px-3'>Hoàn thành</p>,
-          children: <OrderListLayout dataSource={Object.fromEntries(Object
-            .entries(temp)
-            .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_GIAO_THANH_CONG))} />
+          children: <OrderListLayout dataSource={Object.fromEntries(
+            Object.entries(temp)
+              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_GIAO_THANH_CONG))} />
         },
         {
           key: 'd', label: <p className='px-3'>Đơn hủy</p>,
-          children: <OrderListLayout dataSource={Object.fromEntries(Object
-            .entries(temp)
-            .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.HUY_DON_HANG))} />
+          children: <OrderListLayout dataSource={Object.fromEntries(
+            Object.entries(temp)
+              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.HUY_DON_HANG))} />
         },
       ]} />
     </div>

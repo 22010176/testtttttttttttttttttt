@@ -2,38 +2,38 @@ import { Button, Form, Input, Table } from 'antd';
 
 import EmptyList from '_s/components/EmptyList';
 
-const columns = [
-  { title: 'Khách hàng', dataIndex: 'tenKhachHang', key: 'product', },
-  { title: 'Số điện thoại', dataIndex: 'soDienThoai', key: 'product', },
-  {
-    title: 'Tổng giá trị', dataIndex: 'tongGiaTri', key: 'total',
-    render: val => (+val).toLocaleString() + " VND"
-  },
-  {
-    title: 'Ngày đặt', dataIndex: 'ngayDat', key: 'total',
-    render: val => new Date(val).toLocaleString()
-  },
-  // { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
-  // { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
-  // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
-  {
-    title: 'Thao tác', render: (item) => (
-      <div className='space-x-5'>
-        <Button variant='text' color='blue'>Xác nhận</Button>
-        <Button variant='text' color='red'>Hủy</Button>
-      </div>
-    )
-  },
-];
-const sanPhamColumns = [
-  { title: 'Tên sản phẩm', dataIndex: 'tenSanPham', key: 'product', },
-  { title: 'Mã sản phẩm', dataIndex: 'sanPhamId', key: 'product', },
-  {
-    title: 'Giá tiền', dataIndex: 'giaBan', key: 'total',
-    render: val => (+val).toLocaleString() + " VND"
-  },
-  { title: 'Số lượng', dataIndex: 'soLuong', key: 'total', },
-]
+// const columns = [
+//   { title: 'Khách hàng', dataIndex: 'tenKhachHang', key: 'product', },
+//   { title: 'Số điện thoại', dataIndex: 'soDienThoai', key: 'product', },
+//   {
+//     title: 'Tổng giá trị', dataIndex: 'tongGiaTri', key: 'total',
+//     render: val => (+val).toLocaleString() + " VND"
+//   },
+//   {
+//     title: 'Ngày đặt', dataIndex: 'ngayDat', key: 'total',
+//     render: val => new Date(val).toLocaleString()
+//   },
+//   // { title: 'Trạng thái', dataIndex: 'status', key: 'status', },
+//   // { title: 'Đếm ngược', dataIndex: 'countdown', key: 'countdown', },
+//   // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
+//   {
+//     title: 'Thao tác', render: (item) => (
+//       <div className='space-x-5'>
+//         <Button variant='text' color='blue'>Xác nhận</Button>
+//         <Button variant='text' color='red'>Hủy</Button>
+//       </div>
+//     )
+//   },
+// ];
+// const sanPhamColumns = [
+//   { title: 'Tên sản phẩm', dataIndex: 'tenSanPham', key: 'product', },
+//   { title: 'Mã sản phẩm', dataIndex: 'sanPhamId', key: 'product', },
+//   {
+//     title: 'Giá tiền', dataIndex: 'giaBan', key: 'total',
+//     render: val => (+val).toLocaleString() + " VND"
+//   },
+//   { title: 'Số lượng', dataIndex: 'soLuong', key: 'total', },
+// ]
 
 // {
 //     "donHangId": "eb19ff88-461f-4b6a-ba08-4ba86bc557df",
@@ -64,6 +64,7 @@ function OrderListLayout({ dataSource = {}, Function }) {
     // { title: 'Đơn vị vận chuyển', dataIndex: 'shipping', key: 'shipping', },
     typeof Function === 'function' ? {
       title: 'Thao tác', render: (item) => {
+        console.log(item)
         return <Function item={item} />
       }
     } : null,

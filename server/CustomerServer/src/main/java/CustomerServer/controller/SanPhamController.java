@@ -60,10 +60,10 @@ public class SanPhamController {
           sp."Id" IN (
             SELECT "Id"
             FROM "SanPham"
+            WHERE "TrangThaiSanPham" = 0
             ORDER BY RANDOM()
-            LIMIT 100
+            LIMIT ?
         )
-          AND sp."TrangThaiSanPham" = 0
         ORDER BY sp."Id"
         """;
     return ResponseEntity.ok(new ResponseFormat<>(

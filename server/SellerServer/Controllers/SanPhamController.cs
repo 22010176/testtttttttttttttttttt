@@ -66,31 +66,43 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       // Console.WriteLine(nguoiBanId);
       var danhSachSanPham = await dbContext.SanPham
         .Where(sp => sp.NguoiBanId == nguoiBanId)
-        .Join(
-          dbContext.PhienBanSanPham,
-          sp => sp.Id,
-          pb => pb.SanPhamId,
-          (sp, pb) => new { sp, pb })
-        .OrderByDescending(i => i.pb.NgayTao)
+        // .Join(
+        //   dbContext.PhienBanSanPham,
+        //   sp => sp.Id,
+        //   pb => pb.SanPhamId,
+        //   (sp, pb) => new { sp, pb })
+        // .OrderByDescending(i => i.pb.NgayTao)
         // .Take(1)
         .Select(o => new
         {
-          o.sp.Id,
-          o.sp.NguoiBanId,
-          TrangThaiSanPham = o.sp.TrangThaiSanPham.ToString(),
-          PhienBanId = o.pb.Id,
-          o.pb.TenSanPham,
+          o.Id,
+          o.NguoiBanId,
+          TrangThaiSanPham = o.TrangThaiSanPham.ToString(),
+          pb = dbContext.PhienBanSanPham
+            .Where(i => i.SanPhamId == o.Id)
+            .OrderByDescending(i => i.NgayTao)
+            .Take(1)
+            .FirstOrDefault(),
+          AnhBia = dbContext.MediaSanPham
+           .Where(i =>
+             i.LoaiHinhAnhSanPham == LoaiHinhAnhSanPham.HINH_ANH_BIA
+             && i.SanPhamId == o.Id)
+           .OrderByDescending(i => i.NgayTao)
+           .Select(i => i.Url)
+           .FirstOrDefault(),
+          DoanhSoBanHang = 0 // Cai dat sau
+        }).Select(o => new
+        {
+          o.Id,
+          o.NguoiBanId,
+          o.TrangThaiSanPham,
+          o.AnhBia,
+          o.DoanhSoBanHang,
+          o.pb!.TenSanPham,
           o.pb.MoTaSanPham,
           o.pb.GiaBan,
-          NgayChinhSuaCuoi = o.pb.NgayTao,
-          AnhBia = dbContext.MediaSanPham
-            .Where(i =>
-              i.LoaiHinhAnhSanPham == LoaiHinhAnhSanPham.HINH_ANH_BIA
-              && i.SanPhamId == o.sp.Id)
-            .OrderByDescending(i => i.NgayTao)
-            .Select(i => i.Url)
-            .FirstOrDefault(),
-          DoanhSoBanHang = 0 // Cai dat sau
+          NganhHangId = o.pb.NganhHang!.Id,
+          o.pb.NganhHang.TenNganhHang
         }).ToListAsync();
       return Ok(new ResponseFormat()
       {
