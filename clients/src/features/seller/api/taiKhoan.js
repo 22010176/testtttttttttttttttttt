@@ -1,3 +1,4 @@
+import { keys } from "@/constant/localStorageKey";
 import axios from "axios";
 
 const server_url = import.meta.env.VITE_SERVER_URL + "/api/tai-khoan"
@@ -15,3 +16,14 @@ export async function register({ email, matKhau, hoTen, soDienThoai, }) {
 
 }
 // login({ email: "", matKhau: "" })
+
+export async function getInfo() {
+  const result = await axios.get(server_url, {
+    params: {
+      taiKhoanId: localStorage.getItem(keys.userToken)
+    }
+  })
+  // console.log(result)
+  return result.data
+
+}

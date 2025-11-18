@@ -1,17 +1,21 @@
+import { useEffect } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 
+import { keys } from "@/constant/localStorageKey"
+import { getInfo } from "../api/taiKhoan"
 import Header from "../components/Header"
 import Sidebar from "../components/Sidebar"
-import { useEffect } from "react"
-import { keys } from "@/constant/localStorageKey"
 import { routePaths } from "../routes"
 
 function MainLayout() {
   const navigate = useNavigate()
   useEffect(function () {
-    if (localStorage.getItem(keys.userToken) == null) {
+    getInfo().then(result => {
+      console.log(result)
+    }).catch(err => {
+      localStorage.removeItem(keys.userToken)
       navigate(routePaths.account.login)
-    }
+    })
 
   }, [])
   return (

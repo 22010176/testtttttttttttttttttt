@@ -1,14 +1,15 @@
 import { GiftOutlined, ShoppingOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar, ConfigProvider, Layout, Menu, Typography } from 'antd';
+import { Avatar, ConfigProvider, Menu } from 'antd';
+import { useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import { keys } from '@/constant/localStorageKey';
 import { ROUTE_KEYS } from '@/constant/route_keys';
 
+import { XemThongTinTaiKhoan } from '../api/taiKhoan';
 import Container from '../components/Container';
 import { routePaths } from '../routes';
 
-const { Sider, Content } = Layout;
-const { Title, Text } = Typography;
 
 const theme = {
   components: {
@@ -19,6 +20,7 @@ const theme = {
 export default function ProfileLayout() {
   const { pathname } = useLocation()
   const navigate = useNavigate()
+  const [taiKhoan, setTaiKhoan] = useState()
   const menuItems = [
     // { key: 'thong-bao', icon: <BellOutlined />, label: 'Thông Báo', },
     {
@@ -36,6 +38,17 @@ export default function ProfileLayout() {
     { key: 'kho-voucher', icon: <GiftOutlined />, label: 'Kho Voucher', },
   ];
 
+  useEffect(function () {
+    XemThongTinTaiKhoan().then(i => {
+      if (i.data == null) {
+        navigate(routePaths.login)
+        localStorage.removeItem(keys.userToken)
+        return
+      }
+      setTaiKhoan(i.data)
+    })
+  }, [])
+
   function onClick(e) {
     console.log(e)
     navigate(e.key)
@@ -49,7 +62,7 @@ export default function ProfileLayout() {
             <div className="flex items-center gap-3 p-3">
               <Avatar size={50} src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" />
               <p className='font-semibold text-lg'>
-                User
+                {taiKhoan?.HoTen}
               </p>
             </div>
             <Menu mode="inline" items={menuItems} selectedKeys={[pathname]} onClick={onClick} />

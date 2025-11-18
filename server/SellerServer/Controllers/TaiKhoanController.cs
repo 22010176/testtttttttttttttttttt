@@ -22,6 +22,25 @@ public class TaiKhoanController(IConfiguration config, AppDbContext dbContext, E
   readonly EmailService emailService = emailService;
   readonly AwsSecret secret = secret;
 
+  [HttpGet]
+  public async Task<IActionResult> LayThonTinTaiKhoan(string taiKhoanId)
+  {
+    try
+    {
+      var item = await dbContext.TaiKhoanNguoiBan.Where(i => i.Id == taiKhoanId).FirstOrDefaultAsync();
+      return Ok(new ResponseFormat()
+      {
+        Success = true,
+        Data = item
+      });
+    }
+    catch (System.Exception)
+    {
+
+      throw;
+    }
+  }
+
   [HttpPost("send")]
   public async Task<IActionResult> SendEmail([FromQuery] string to, [FromQuery] string subject, [FromQuery] string body)
   {

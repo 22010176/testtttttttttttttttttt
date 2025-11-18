@@ -25,8 +25,8 @@ import OrderDashboard from "./features/Order/OrderDashboard"
 import ReturnOrder from "./features/Order/ReturnOrder"
 import AddProduct from "./features/Product/AddProduct"
 import ProductDashBoard from "./features/Product/ProductDashboard"
-import ShopDashboard from "./features/Shop/ShopDashboard"
 import UpdateProduct from "./features/Product/UpdateProduct"
+import ShopDashboard from "./features/Shop/ShopDashboard"
 
 
 function Seller() {

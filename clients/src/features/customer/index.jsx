@@ -18,6 +18,7 @@ import ShopPage from "./features/ShopPage"
 import Checkout from "./features/ShoppingCart/Checkout"
 import ShoppingCartDetail from "./features/ShoppingCart/ShoppingCartDetail"
 import Carts from "./features/ShoppingCart/ShoppingCarts"
+import { LockLayout } from "./layouts/LockLayout"
 
 function Customer() {
   useEffect(function () {
@@ -34,8 +35,10 @@ function Customer() {
 
         <Route path={routePaths.product.details} element={<ProductDetail />} />
 
-        <Route path={routePaths.orders.carts} element={<Carts />} />
-        <Route path={routePaths.orders.checkout} element={<Checkout />} />
+        <Route element={<LockLayout />}>
+          <Route path={routePaths.orders.carts} element={<Carts />} />
+          <Route path={routePaths.orders.checkout} element={<Checkout />} />
+        </Route>
 
         <Route path={routePaths.shop} element={<ShopPage />} />
 
@@ -49,9 +52,6 @@ function Customer() {
           <Route path={routePaths.orders.root} element={<ShoppingCartDetail />} />
           <Route path={routePaths.orders.tracking} element={<OrderTracking />} />
         </Route>
-
-
-
       </Route>
     </Routes>
   )

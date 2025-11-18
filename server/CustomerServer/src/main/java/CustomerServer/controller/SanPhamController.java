@@ -56,15 +56,20 @@ public class SanPhamController {
           ORDER BY pbsp."NgayTao" DESC
           LIMIT 1
         ) pbsp ON TRUE
-        WHERE sp."Id" IN (
+        WHERE
+          sp."Id" IN (
             SELECT "Id"
             FROM "SanPham"
             ORDER BY RANDOM()
-            LIMIT ?
+            LIMIT 100
         )
+          AND sp."TrangThaiSanPham" = 0
         ORDER BY sp."Id"
         """;
-    return ResponseEntity.ok(new ResponseFormat<>(jdbcTemplate.queryForList(sql, pageSize), "", true));
+    return ResponseEntity.ok(new ResponseFormat<>(
+        jdbcTemplate.queryForList(sql, pageSize),
+        "",
+        true));
   }
 
   @GetMapping("/{id}")
