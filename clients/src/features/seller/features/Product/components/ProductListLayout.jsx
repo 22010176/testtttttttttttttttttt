@@ -3,7 +3,7 @@ import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { ROUTE_KEYS } from '@/constant/route_keys';
-import { CapNhatTrangThaiSanPham, TrangThaiSanPham } from '_s/api/sanPham';
+import { CapNhatTrangThaiSanPham, layDanhSachSanPham, TrangThaiSanPham } from '_s/api/sanPham';
 import EmptyList from '_s/components/EmptyList';
 import { routePaths } from '_s/routes';
 import { PageProvider } from '../pageReducer';
@@ -50,11 +50,11 @@ function ProductListLayout({ dataSource = [] }) {
         // <Link to={routePaths} className='text-blue-600'>Chỉnh sửa</Link>
         <div className='grid text-center gap-1'>
           <Link to={routePaths.management.product.update.replace(ROUTE_KEYS.BY_ID, item.id)} className='text-blue-600'>Chỉnh sửa</Link>
-          <Button variant='text' color='red' onClick={function () {
+          {/* <Button variant='text' color='red' onClick={function () {
 
           }}>
             Xoá
-          </Button>
+          </Button> */}
           {item.trangThaiSanPham === "BAN_NHAP" ? (
             <Button variant='text' color='green' onClick={async function () {
               try {
@@ -67,7 +67,9 @@ function ProductListLayout({ dataSource = [] }) {
                   messageApi.info("Cập nhật trạng thái thành công!")
                 }
                 else throw ""
-
+                layDanhSachSanPham().then(function (res) {
+                  dispatch({ type: 'SET_DANH_SACH_SAN_PHAM', payload: res.data });
+                })
               } catch (error) {
                 messageApi.error("Cập nhật trạng thái thất bại!")
               }
@@ -86,6 +88,9 @@ function ProductListLayout({ dataSource = [] }) {
                   messageApi.info("Cập nhật trạng thái thành công!")
                 }
                 else throw ""
+                layDanhSachSanPham().then(function (res) {
+                  dispatch({ type: 'SET_DANH_SACH_SAN_PHAM', payload: res.data });
+                })
 
               } catch (error) {
                 messageApi.error("Cập nhật trạng thái thất bại!")

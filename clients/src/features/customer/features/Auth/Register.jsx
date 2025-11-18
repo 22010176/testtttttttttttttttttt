@@ -2,17 +2,22 @@ import { faLeftLong } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Form, Input, notification } from 'antd';
 import { Link } from 'react-router-dom';
-import { routePaths } from '../../routes';
 
-// import { register } from '../../api/taiKhoan';
+import { routePaths } from '../../routes';
+import { dangKiTaiKhoan } from '../../api/taiKhoan';
 
 function Register() {
   const [api, contextHolder] = notification.useNotification();
 
   async function onFinish(values) {
     try {
-      // const result = await register({ email: values.email, matKhau: values.matKhau, soDienThoai: values.soDienThoai, hoTen: values.hoTen })
-      console.log(values)
+      const result = await dangKiTaiKhoan({
+        email: values.email,
+        matKhau: values.matKhau,
+        soDienThoai: values.soDienThoai,
+        hoTen: values.hoTen
+      })
+      console.log(values, result)
       api.success({ description: "Đăng kí thành công!" })
     } catch (error) {
       console.log(error)
@@ -71,7 +76,7 @@ function Register() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to={routePaths.login}>
+        <Link className='text-sm text-blue-500' to={routePaths.account.login}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng nhập tài khoản
         </Link>

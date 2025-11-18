@@ -26,4 +26,8 @@
     <ProjectReference Include="..\DatabaseModels\DatabaseModels.csproj" />
     <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <WatchExclude Include="Uploads\**" />
+  </ItemGroup>
 </Project>

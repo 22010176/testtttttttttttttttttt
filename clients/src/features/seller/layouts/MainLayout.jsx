@@ -11,6 +11,7 @@ function MainLayout() {
   const navigate = useNavigate()
   useEffect(function () {
     getInfo().then(result => {
+      if (result.data == null) throw "ddd"
       console.log(result)
     }).catch(err => {
       localStorage.removeItem(keys.userToken)

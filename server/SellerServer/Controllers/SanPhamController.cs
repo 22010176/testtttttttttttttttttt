@@ -43,7 +43,13 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
           i.pbsp.MoTaSanPham,
           i.pbsp.GiaBan,
           NganhHangId = i.pbsp.NganhHang!.Id,
-          i.pbsp.NganhHang.TenNganhHang
+          i.pbsp.NganhHang.TenNganhHang,
+          hinhAnh = dbContext.MediaSanPham
+            .Where(i => i.SanPhamId == sanPhamId)
+            .OrderBy(i => i.LoaiHinhAnhSanPham)
+            .ThenByDescending(i => i.NgayTao)
+            .Select(i => i.Url)
+            .FirstOrDefault()
         })
         .ToListAsync();
       return Ok(new ResponseFormat
@@ -81,7 +87,6 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
           pb = dbContext.PhienBanSanPham
             .Where(i => i.SanPhamId == o.Id)
             .OrderByDescending(i => i.NgayTao)
-            .Take(1)
             .FirstOrDefault(),
           AnhBia = dbContext.MediaSanPham
            .Where(i =>
@@ -128,22 +133,38 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
   {
     try
     {
+      if (file.File == null || file.File.Length == 0) throw new Exception("File invalid");
+
+      var uploadRoot = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+      if (!Directory.Exists(uploadRoot)) Directory.CreateDirectory(uploadRoot);
+
+      var safeFileName = Path.GetFileNameWithoutExtension(Path.GetRandomFileName())
+                          + Path.GetExtension(file.File.FileName);
+      var filePath = Path.Combine(uploadRoot, safeFileName);
+      using (var stream = new FileStream(filePath, FileMode.Create))
+      {
+        await file.File.CopyToAsync(stream);
+      }
+
       // Console.WriteLine(file.LoaiHinhAnhSanPham);
       MediaSanPham mediaSanPham = new()
       {
         Id = Guid.NewGuid().ToString(),
         SanPhamId = file.SanPhamId,
         NgayTao = DateTime.UtcNow,
-        Url = await s3.UploadFileAsync(file.File),
+        // Url = await s3.UploadFileAsync(file.File),
+        Url = $"http://localhost:5216/files/{safeFileName}",
         LoaiHinhAnhSanPham = file.LoaiHinhAnhSanPham
       };
       // if (mediaSanPham.Url == null)
       await dbContext.MediaSanPham.AddAsync(mediaSanPham);
       await dbContext.SaveChangesAsync();
 
+      Console.WriteLine($"http://localhost:5216/files/{safeFileName}");
       return Ok(new ResponseFormat
       {
         Data = mediaSanPham,
+        // Data = Path.Combine(Directory.GetCurrentDirectory(), "Uploads"),
         Success = true,
         Message = ""
       });
@@ -211,6 +232,7 @@ public class SanPhamController(IConfiguration configuration, AppDbContext dbCont
       // await dbContext.SaveChangesAsync();
       return Ok(new ResponseFormat
       {
+        Data = sanPham,
         Message = "Cập nhật sản phẩm thành công",
         Success = true
       });

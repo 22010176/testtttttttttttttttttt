@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { LayDanhSachNganhHang } from '_s/api/nganhHang';
-import { TaoSanPham } from '_s/api/sanPham';
+import { CapNhatHinhAnh, TaoSanPham } from '_s/api/sanPham';
 import { routePaths } from '_s/routes';
 
 const { TextArea } = Input;
@@ -14,6 +14,9 @@ function AddProduct() {
   const [messageApi, contextHolder] = message.useMessage();
   const [nganhHang, setNganhHang] = useState([])
 
+
+  const [file, setFile] = useState()
+
   useEffect(function () {
     LayDanhSachNganhHang().then(result => {
       const { data } = result
@@ -22,10 +25,24 @@ function AddProduct() {
     })
   }, [])
 
+  const beforeUpload = (file) => {
+    setFile(file)
+    // handleUpload(file);
+    return false; // prevent Ant Design from auto-uploading
+  };
+
   async function onFinish(e) {
     try {
+      if (file == null) return messageApi.error("Phải tải hình ảnh")
       const result = await TaoSanPham(e)
+
       console.log(result)
+      const result2 = await CapNhatHinhAnh({
+        SanPhamId: result.data.id,
+        LoaiHinhAnhSanPham: 0,
+        File: file
+      })
+      // return
       if (result.success) {
         navigate(routePaths.management.product.root)
       }
@@ -39,10 +56,10 @@ function AddProduct() {
       {contextHolder}
       <Form layout='horizontal' labelCol={{ span: 4 }} onFinish={onFinish} >
         <div className='bg-white p-5 rounded'>
-          <h2 className="text-lg font-medium">Thông tin cơ bản</h2>
+          <h2 className="text-lg font-medium pb-5">Thông tin cơ bản</h2>
 
           {/* Product Images */}
-          <Form.Item label="Hình ảnh sản phẩm">
+          {/* <Form.Item label="Hình ảnh sản phẩm">
             <Upload
               // {...props}
               listType="picture-card" showUploadList={false}
@@ -53,15 +70,19 @@ function AddProduct() {
                 <div className="text-blue-500 text-xs">ảnh (0/9)</div>
               </div>
             </Upload>
-          </Form.Item>
+          </Form.Item> */}
 
           {/* Cover Image */}
-          <Form.Item label="Ảnh bìa">
-            <Upload listType="picture-card" showUploadList={false}        >
-              <div className="text-center">
-                <PlusOutlined className="text-2xl text-red-500 mb-2" />
-                <div className="text-xs text-blue-500">(0/1)</div>
-              </div>
+          <Form.Item label="Ảnh bìa" className='p-5'>
+            <Upload listType="picture-card" showUploadList={false} beforeUpload={beforeUpload}>
+              {file ? (
+                <img src={URL.createObjectURL(file)} alt="uploaded" style={{ height: "100px", width: "100%" }} />
+              ) : (
+                <div className="text-center">
+                  <PlusOutlined className="text-2xl text-red-500 mb-2" />
+                  <div className="text-xs text-blue-500">(0/1)</div>
+                </div>
+              )}
             </Upload>
           </Form.Item>
 

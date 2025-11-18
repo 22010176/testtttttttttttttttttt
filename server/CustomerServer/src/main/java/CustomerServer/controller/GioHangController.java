@@ -57,7 +57,7 @@ public class GioHangController {
         		ghkh."SanPhamId" = sp2."Id"
         		-- AND pbsp2."NgayTao" < CURRENT_DATE
         		AND (
-        			media."LoaiHinhAnhSanPham" = 1
+        			media."LoaiHinhAnhSanPham" = 0
         			OR media."Url" IS NULL
         		)
         	ORDER BY pbsp2."NgayTao" DESC

@@ -91,7 +91,7 @@ const ShoppingCarts = () => {
 
                 }} />
               {/* Product Image */}
-              <img src={item.hinhanhsanpham} alt={item.TenSanPham} className="size-20 bg-black object-cover rounded" />
+              <img src={item.HinhAnhSanPham} alt={item.TenSanPham} className="size-20 bg-black object-cover rounded" />
 
               {/* Product Info */}
               <Link className="col-span-4" to={routePaths.product.details.replace(ROUTE_KEYS.BY_ID, item.SanPhamId)}>

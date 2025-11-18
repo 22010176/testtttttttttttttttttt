@@ -54,8 +54,8 @@ export const routePaths = {
   root: `/`,
   search: `/${ROUTE_KEYS.SEARCH}`,
   shop: `/${ROUTE_KEYS.STORE}`,
-  register: `/${ROUTE_KEYS.REGISTER}`,
-  login: `/${ROUTE_KEYS.LOGIN}`,
+  // register: `/${ROUTE_KEYS.REGISTER}`,
+  // login: `/${ROUTE_KEYS.LOGIN}`,
 
   product: {
     details: `/${ROUTE_KEYS.PRODUCTS}/${ROUTE_KEYS.BY_ID}`,

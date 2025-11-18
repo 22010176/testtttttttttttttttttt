@@ -59,7 +59,7 @@ public class DonHangController {
         	INNER JOIN "GianHang" gh ON gh."NguoiBanId" = sp."NguoiBanId"
         	INNER JOIN "MediaSanPham" media ON media."SanPhamId" = pbsp."SanPhamId"
         	WHERE
-        		media."LoaiHinhAnhSanPham" = 1 AND
+        		media."LoaiHinhAnhSanPham" = 0 AND
         		pbsp."Id" = spdh."PhienBanSanPhamId"
         	ORDER BY media."NgayTao" DESC
         	LIMIT 1

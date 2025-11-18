@@ -16,7 +16,7 @@ function Login() {
   async function onFinish(values) {
     try {
       const result = await dangNhapTaiKhoan({ email: values.email, matKhau: values.matKhau })
-      console.log(result)
+      console.log(result, values)
       localStorage.setItem(keys.userToken, result.data?.Id)
 
       api.success({ description: "Đăng nhập thành công!" })
@@ -45,7 +45,7 @@ function Login() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to={routePaths.register}>
+        <Link className='text-sm text-blue-500' to={routePaths.account.register}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng kí tài khoản
         </Link>

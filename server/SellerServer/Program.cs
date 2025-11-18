@@ -2,6 +2,7 @@ using System.Text;
 using DatabaseModels;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 
 using Utilities;
@@ -48,7 +49,13 @@ builder.Services.AddSingleton<EmailService>(options =>
 });
 
 var app = builder.Build();
+var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
 
+app.UseStaticFiles(new StaticFileOptions
+{
+  FileProvider = new PhysicalFileProvider(uploadPath),
+  RequestPath = "/files"
+});
 // if (app.Environment.IsDevelopment())
 // {
 //   var logger = app.Services.GetRequiredService<ILogger<Program>>();

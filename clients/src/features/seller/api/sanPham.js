@@ -1,6 +1,7 @@
 import { keys } from "@/constant/localStorageKey";
 import axios from "axios";
 
+
 const server_url = import.meta.env.VITE_SERVER_URL + "/api/san-pham";
 
 export async function LayThongTinSanPhamChiTiet({ id }) {
@@ -20,13 +21,14 @@ export async function layDanhSachSanPham() {
 
 // http://localhost:5216/api/san-pham/cap-nhat-san-pham
 export async function TaoSanPham({
+  sanPhamId = null,
   nganhHangId = "string",
   tenSanPham = "string",
   moTaSanPham = "string",
   giaBan = 0,
 }) {
   const result = await axios.post(`${server_url}/cap-nhat-san-pham`, {
-    sanPhamId: null,
+    sanPhamId: sanPhamId,
     nguoiBanId: localStorage.getItem(keys.userToken),
     ngayTao: new Date(),
     nganhHangId,
@@ -49,6 +51,25 @@ export async function CapNhatTrangThaiSanPham({ sanPhamId, trangThaiSanPham }) {
   const result = await axios.put(`${server_url}/cap-nhat-trang-thai`, {
     sanPhamId,
     trangThaiSanPham
+  })
+  return result.data
+}
+
+export async function CapNhatHinhAnh({
+  SanPhamId,
+  LoaiHinhAnhSanPham,
+  File
+}) {
+  const form = new FormData();
+  form.append("SanPhamId", SanPhamId);
+  form.append("LoaiHinhAnhSanPham", LoaiHinhAnhSanPham);
+  form.append("File", File);
+
+  const result = await axios({
+    method: 'post',
+    url: `${server_url}/tai-hinh-anh`,
+    data: form,
+    headers: { "Content-Type": "multipart/form-data" },
   })
   return result.data
 }

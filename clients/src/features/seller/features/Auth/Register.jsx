@@ -71,7 +71,7 @@ function Register() {
             </Button>
           </Form.Item>
         </Form>
-        <Link className='text-sm text-blue-500' to={routePaths.account.register}>
+        <Link className='text-sm text-blue-500' to={routePaths.account.login}>
           <FontAwesomeIcon icon={faLeftLong} className='pr-2' />
           Đăng nhập tài khoản
         </Link>

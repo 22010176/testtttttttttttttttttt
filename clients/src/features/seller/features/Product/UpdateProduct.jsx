@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { LayDanhSachNganhHang } from '_s/api/nganhHang';
-import { LayThongTinSanPhamChiTiet, TaoSanPham } from '_s/api/sanPham';
+import { CapNhatHinhAnh, LayThongTinSanPhamChiTiet, TaoSanPham } from '_s/api/sanPham';
 import { routePaths } from '_s/routes';
 
 const { TextArea } = Input;
@@ -16,17 +16,20 @@ function UpdateProduct() {
 
   const [messageApi, contextHolder] = message.useMessage();
   const [nganhHang, setNganhHang] = useState([])
+  const [file, setFile] = useState()
 
   useEffect(function () {
     LayDanhSachNganhHang().then(result => {
       const { data } = result
       console.log(data)
       setNganhHang(data)
+
     })
 
     LayThongTinSanPhamChiTiet({ id }).then(result => {
       const data = result.data
       console.log(data)
+      setFile(data.hinhAnh)
       form.setFieldsValue({
         nganhHangId: data.nganhHangId,
         tenSanPham: data.tenSanPham,
@@ -36,18 +39,36 @@ function UpdateProduct() {
     })
   }, [])
 
+  const beforeUpload = (file) => {
+    setFile(file)
+    // handleUpload(file);
+    return false; // prevent Ant Design from auto-uploading
+  };
+
   async function onFinish(e) {
     try {
-      const result = await TaoSanPham(e)
+      const result = await TaoSanPham({
+        ...e,
+        sanPhamId: id
+      })
       console.log(result)
+      if (typeof file != 'string') {
+        const result2 = await CapNhatHinhAnh({
+          SanPhamId: result.data.id,
+          LoaiHinhAnhSanPham: 0,
+          File: file
+        })
+        console.log(result2)
+      }
       if (result.success) {
         navigate(routePaths.management.product.root)
       }
     } catch (error) {
+      console.log(error)
       messageApi.error("Lỗi tạo sản phẩm!")
     }
   }
-
+  console.log(file)
   return (
     <div className="grid grid-cols-[1fr_auto] gap-5 p-5" >
       {contextHolder}
@@ -56,7 +77,7 @@ function UpdateProduct() {
           <h2 className="text-lg font-medium">Thông tin cơ bản</h2>
 
           {/* Product Images */}
-          <Form.Item label="Hình ảnh sản phẩm">
+          {/* <Form.Item label="Hình ảnh sản phẩm">
             <Upload
               // {...props}
               listType="picture-card" showUploadList={false}
@@ -67,15 +88,20 @@ function UpdateProduct() {
                 <div className="text-blue-500 text-xs">ảnh (0/9)</div>
               </div>
             </Upload>
-          </Form.Item>
+          </Form.Item> */}
 
           {/* Cover Image */}
           <Form.Item label="Ảnh bìa">
-            <Upload listType="picture-card" showUploadList={false}        >
-              <div className="text-center">
-                <PlusOutlined className="text-2xl text-red-500 mb-2" />
-                <div className="text-xs text-blue-500">(0/1)</div>
-              </div>
+            <Upload listType="picture-card" showUploadList={false} beforeUpload={beforeUpload}>
+              {typeof file == 'string' ? (
+                <img src={file} alt="uploaded" style={{ height: "100px", width: "100%" }} />
+              ) : (
+                file != null ? <img src={URL.createObjectURL(file)} alt="uploaded" style={{ height: "100px", width: "100%" }} /> :
+                  <div className="text-center">
+                    <PlusOutlined className="text-2xl text-red-500 mb-2" />
+                    <div className="text-xs text-blue-500">(0/1)</div>
+                  </div>
+              )}
             </Upload>
           </Form.Item>
 
