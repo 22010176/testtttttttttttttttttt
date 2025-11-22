@@ -252,13 +252,14 @@ export default function Checkout() {
             <a href="#" className="text-blue-500 hover:underline">Điều khoản Shopee</a>
           </div> */}
           <Button variant='solid' color='red' onClick={async function () {
-            await XacNhanHuyDuyetDonHang()
+            console.log(await XacNhanHuyDuyetDonHang())
             navidate(routePaths.root)
           }}>
             Hủy
           </Button>
           <Button variant='solid' color='blue' onClick={async function () {
             await XacNhanDuyetDonHang()
+            // await XacNhanHuyDuyetDonHang()
             navidate(routePaths.orders.root)
           }}>
             Đặt hàng

@@ -1,0 +1,29 @@
+{
+  "name": "dddd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ser-cus": "cd server/CustomerServer && mvnw spring-boot:run",
+    "ser-sel": "cd server/SellerServer && dotnet watch",
+    "dev-server": "concurrently \"npm:ser-*\"",
+    "dev-client": "cd clients && npm run dev",
+    "dev": "concurrently \"npm:dev-server\" \"npm:dev-client\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/22010176/testtttttttttttttttttt.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/22010176/testtttttttttttttttttt/issues"
+  },
+  "homepage": "https://github.com/22010176/testtttttttttttttttttt#readme",
+  "dependencies": {
+    "concurrently": "^9.2.1"
+  }
+}

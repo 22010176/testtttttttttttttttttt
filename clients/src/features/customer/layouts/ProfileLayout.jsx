@@ -35,14 +35,14 @@ export default function ProfileLayout() {
     },
     { key: routePaths.orders.root, icon: <ShoppingOutlined />, label: 'Đơn Mua', },
 
-    { key: 'kho-voucher', icon: <GiftOutlined />, label: 'Kho Voucher', },
+    // { key: 'kho-voucher', icon: <GiftOutlined />, label: 'Kho Voucher', },
   ];
 
   useEffect(function () {
     XemThongTinTaiKhoan().then(i => {
       if (i.data == null) {
-        navigate(routePaths.login)
-        localStorage.removeItem(keys.userToken)
+        // navigate(routePaths.login)
+        // localStorage.removeItem(keys.userToken)
         return
       }
       setTaiKhoan(i.data)

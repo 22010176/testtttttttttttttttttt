@@ -30,8 +30,8 @@ function Customer() {
       <Route element={<MainLayout />} >
         <Route index element={<DashBoard />} />
         <Route path={routePaths.search} element={<SearchPage />} />
-        <Route path={routePaths.register} element={<Register />} />
-        <Route path={routePaths.login} element={<Login />} />
+        <Route path={routePaths.account.register} element={<Register />} />
+        <Route path={routePaths.account.login} element={<Login />} />
 
         <Route path={routePaths.product.details} element={<ProductDetail />} />
 
@@ -42,15 +42,17 @@ function Customer() {
 
         <Route path={routePaths.shop} element={<ShopPage />} />
 
-        <Route element={<ProfileLayout />}>
-          <Route path={routePaths.account.root} element={<ProfilePage />} />
-          <Route path={routePaths.account.profile} element={<ProfilePage />} />
-          <Route path={routePaths.account.infomation} element={<ProfilePage />} />
-          <Route path={routePaths.account.address} element={<AddressManagement />} />
-          <Route path={routePaths.account.change_password} element={<ProfilePage />} />
+        <Route element={<LockLayout />}>
+          <Route element={<ProfileLayout />}>
+            <Route path={routePaths.account.root} element={<ProfilePage />} />
+            <Route path={routePaths.account.profile} element={<ProfilePage />} />
+            <Route path={routePaths.account.infomation} element={<ProfilePage />} />
+            <Route path={routePaths.account.address} element={<AddressManagement />} />
+            <Route path={routePaths.account.change_password} element={<ProfilePage />} />
 
-          <Route path={routePaths.orders.root} element={<ShoppingCartDetail />} />
-          <Route path={routePaths.orders.tracking} element={<OrderTracking />} />
+            <Route path={routePaths.orders.root} element={<ShoppingCartDetail />} />
+            <Route path={routePaths.orders.tracking} element={<OrderTracking />} />
+          </Route>
         </Route>
       </Route>
     </Routes>

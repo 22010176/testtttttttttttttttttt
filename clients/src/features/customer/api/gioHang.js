@@ -19,7 +19,7 @@ export async function ThemGioHang({
   soLuong = 0
 }) {
   const khachHangId = localStorage.getItem(keys.userToken)
-  if (khachHangId == null) return document.location.replace(routePaths.login)
+  // if (khachHangId == null) return document.location.replace(routePaths.login)
   const response = await axios.post(API_URL, { sanPhamId, khachHangId, soLuong })
   return response.data
 }

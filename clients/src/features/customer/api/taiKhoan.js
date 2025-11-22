@@ -26,6 +26,7 @@ export async function XemThongTinTaiKhoan() {
       khachHangId: localStorage.getItem(keys.userToken)
     }
   })
+  console.log(result)
   return result.data
 }
 

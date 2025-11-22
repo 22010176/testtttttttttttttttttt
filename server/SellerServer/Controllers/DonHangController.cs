@@ -47,7 +47,7 @@ public class DonHangController(IConfiguration configuration, AppDbContext dbCont
             join pb in dbContext.PhienBanSanPham on sdh.PhienBanSanPhamId equals pb.Id
             join sp in dbContext.SanPham on pb.SanPhamId equals sp.Id
             join kh in dbContext.TaiKhoanKhachHang on dh.KhachHangId equals kh.Id
-            where sp.NguoiBanId == nguoiBanId
+            where sp.NguoiBanId == nguoiBanId && dh.LoaiHinhThanhToan != LoaiHinhThanhToan.DANG_CHO
             orderby dh.NgayTao descending
             select new
             {

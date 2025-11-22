@@ -18,7 +18,8 @@ export const TrangThaiDonHang =
   KHACH_HANG_DAT_HANG: 0,
   NGUOI_BAN_XAC_NHAN: 1,
   DON_HANG_VAN_CHUYEN: 2,
-  DON_HANG_GIAO_THANH_CONG: 3,
+  DON_HANG_GIAO_THAT_BAI: 3,
+  DON_HANG_GIAO_THANH_CONG: 4,
   HUY_DON_HANG: 4
 }
 export async function CapNhatTrangThaiDonHang({

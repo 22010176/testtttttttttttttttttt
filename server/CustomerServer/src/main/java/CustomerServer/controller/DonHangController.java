@@ -101,7 +101,9 @@ public class DonHangController {
         INNER JOIN "SanPham" sp ON sp."Id" = pbsp."SanPhamId"
         INNER JOIN "TaiKhoanNguoiBan" nb ON nb."Id" = sp."NguoiBanId"
         INNER JOIN "GianHang" gh ON gh."NguoiBanId" = nb."Id"
-        WHERE dhkh."KhachHangId" = ?
+        WHERE
+          dhkh."KhachHangId" = ?
+          AND NOT dhkh."LoaiHinhThanhToan" = 2
         ORDER BY dhkh."NgayTao" DESC, nb."Id"
         """;
 
@@ -181,7 +183,18 @@ public class DonHangController {
         WHERE
         	dhkh."LoaiHinhThanhToan" = 2 AND
         	dhkh."KhachHangId" = ?
-                  """, khachHangId);
+          """, khachHangId);
+
+    String query = """
+        UPDATE "DonHangKhachHang"
+        	SET "LoaiHinhThanhToan"=?
+        	WHERE "Id"=?;
+          """;
+    for (Map<String, Object> elem : donHang) {
+      System.out.println(elem);
+      jdbcTemplate.update(query, LoaiHinhThanhToan.KHI_NHAN_HANG.ordinal(), elem.get("Id").toString());
+    }
+
     return ResponseEntity.ok(ResponseFormat.success(donHang));
   }
 
@@ -246,7 +259,7 @@ public class DonHangController {
   }
 
   @DeleteMapping("duyetdonhang")
-  public ResponseEntity<?> HuyDuyet(String id) {
+  public ResponseEntity<?> HuyDuyet(String khachHangId) {
     List<Map<String, Object>> sanPhamDonHangCanDuyet = jdbcTemplate.queryForList("""
         SELECT
         	spdh."Id" "SanPhamDonHangId",
@@ -256,7 +269,7 @@ public class DonHangController {
         WHERE
         	dhkh."LoaiHinhThanhToan" = 2 AND
         	dhkh."KhachHangId" = ?;
-          """, id);
+          """, khachHangId);
     List<Map<String, Object>> trangThai = jdbcTemplate.queryForList("""
         SELECT
         	cn."Id" "TrangThaiId"
@@ -265,7 +278,7 @@ public class DonHangController {
         WHERE
         	dhkh."LoaiHinhThanhToan" = 2 AND
         	dhkh."KhachHangId" = ?
-          """, id);
+          """, khachHangId);
     List<Map<String, Object>> donHang = jdbcTemplate.queryForList("""
         SELECT
         	"Id"
@@ -273,10 +286,11 @@ public class DonHangController {
         WHERE
         	dhkh."LoaiHinhThanhToan" = 2 AND
         	dhkh."KhachHangId" = ?
-                  """, id);
+                  """, khachHangId);
 
     for (Map<String, Object> elem : sanPhamDonHangCanDuyet) {
       String _id = (String) elem.get("SanPhamDonHangId");
+
       jdbcTemplate.update("DELETE FROM \"SanPhamDonHang\" WHERE \"Id\" = ?;", _id);
     }
     for (Map<String, Object> elem : trangThai) {
@@ -288,7 +302,10 @@ public class DonHangController {
       jdbcTemplate.update("DELETE FROM \"DonHangKhachHang\" WHERE \"Id\" = ?;", _id);
     }
 
-    return ResponseEntity.ok(ResponseFormat.success());
+    return ResponseEntity.ok(ResponseFormat.success(Map.of(
+        "sanPhamDonHangCanDuyet", sanPhamDonHangCanDuyet,
+        "trangThai", trangThai,
+        "donHang", donHang)));
   }
 
   @DeleteMapping("{id}")

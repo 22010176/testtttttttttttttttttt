@@ -30,11 +30,11 @@ export async function LayDanhSachDonHangCanDuyet() {
   return result.data
 }
 export async function XacNhanDuyetDonHang() {
-  const result = await axios.post(`${API_URL}/duyetdonhang?id=${localStorage.getItem(keys.userToken)}`,)
+  const result = await axios.post(`${API_URL}/duyetdonhang?khachHangId=${localStorage.getItem(keys.userToken)}`,)
   return result.data
 }
 export async function XacNhanHuyDuyetDonHang() {
-  const result = await axios.delete(`${API_URL}/duyetdonhang?id=${localStorage.getItem(keys.userToken)}`,)
+  const result = await axios.delete(`${API_URL}/duyetdonhang?khachHangId=${localStorage.getItem(keys.userToken)}`,)
   return result.data
 }
 

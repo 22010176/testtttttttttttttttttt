@@ -42,6 +42,7 @@ function AddProduct() {
         LoaiHinhAnhSanPham: 0,
         File: file
       })
+      console.log(result2)
       // return
       if (result.success) {
         navigate(routePaths.management.product.root)
@@ -74,7 +75,7 @@ function AddProduct() {
 
           {/* Cover Image */}
           <Form.Item label="Ảnh bìa" className='p-5'>
-            <Upload listType="picture-card" showUploadList={false} beforeUpload={beforeUpload}>
+            <Upload listType="picture-card" showUploadList={false} beforeUpload={beforeUpload} accept='image/*'>
               {file ? (
                 <img src={URL.createObjectURL(file)} alt="uploaded" style={{ height: "100px", width: "100%" }} />
               ) : (

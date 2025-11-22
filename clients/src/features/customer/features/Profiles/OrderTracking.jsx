@@ -14,6 +14,7 @@ function LayTrangThaiDonHang(traingThai) {
     "KHACH_HANG_DAT_HANG",
     "NGUOI_BAN_XAC_NHAN",
     "DON_HANG_VAN_CHUYEN",
+    'DON_HANG_GIAO_THAT_BAI',
     "DON_HANG_GIAO_THANH_CONG",
     "HUY_DON_HANG"
   ]
@@ -44,20 +45,21 @@ export default function OrderTracking() {
           </Link>
           <div className="flex items-center gap-4 text-sm">
             <span>MÃ ĐƠN HÀNG. {donHang?.Id}</span>
-            <span className="text-blue-500">{LayTrangThaiDonHang(donHang.trangThai?.[(donHang.trangThai?.length - 1)]?.TrangThaiDonHang)}</span>
+            {/* <span className="text-blue-500">{LayTrangThaiDonHang(donHang.trangThai?.[(donHang.trangThai?.length - 1)]?.TrangThaiDonHang)}</span> */}
           </div>
         </div>
 
         {/* Progress Tracker */}
         <div className="bg-white p-8 mb-4">
-          <div className="flex items-center gap-10 relative overflow-x-scroll">
+          <div className="flex items-center overflow-x-scroll">
             {/* Progress Line */}
-            <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" style={{ zIndex: 0 }}></div>
+
 
             {[...(donHang?.trangThai || [])].reverse().map((step, index) => {
               return (
-                <div key={index} className="flex flex-col items-center justify-center" style={{ zIndex: 1 }}>
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 3 ? 'bg-green-500' : 'bg-gray-300'}`}>
+                <div key={index} className="relative px-5 flex  flex-col items-center justify-center" style={{ zIndex: 0 }}>
+                  <div className={`z-10 w-12 h-12 rounded-full flex items-center justify-center ${step?.TrangThaiDonHang == 4 ? 'bg-green-500' :
+                    step?.TrangThaiDonHang == 3 ? 'bg-red-300' : 'bg-gray-300'}`}>
                     {/* <Icon size={24} className="text-white" /> */}
                     <FontAwesomeIcon icon={faFlag} />
                   </div>
@@ -65,9 +67,11 @@ export default function OrderTracking() {
                     <div className="text-xs font-medium">{LayTrangThaiDonHang(step.TrangThaiDonHang)}</div>
                     <div className="text-xs text-gray-400 mt-1">{new Date(step.ThoiGianTao).toLocaleString()}</div>
                   </div>
+                  <div className="absolute top-6 left-0 right-0 h-1 bg-green-500" ></div>
                 </div>
               );
             })}
+
           </div>
         </div>
 

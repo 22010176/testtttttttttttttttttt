@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 
 import { CapNhatThongTinTaiKhoan, GIOI_TINH, XemThongTinTaiKhoan } from '_c/api/taiKhoan';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 
@@ -14,6 +15,7 @@ const { Title, Text } = Typography;
 //     "GioiTinh": null
 // }
 export default function ProfilePage() {
+  const navigate = useNavigate()
   const [messageApi, dataContext] = message.useMessage()
   const [form] = Form.useForm()
   function updateThongTin() {
@@ -55,7 +57,8 @@ export default function ProfilePage() {
           if (response.success) message.success("Cập nhật thông tin tài khoản thành công!")
           else message.success("Cập nhật thông tin tài khoản thất bại!")
 
-          updateThongTin()
+          // updateThongTin()
+          navigate(0)
         }}>
         <div className='grid grid-cols-[2fr_1fr] gap-5 px-10'>
           <div>

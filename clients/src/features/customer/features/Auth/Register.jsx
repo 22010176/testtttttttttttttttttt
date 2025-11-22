@@ -17,11 +17,12 @@ function Register() {
         soDienThoai: values.soDienThoai,
         hoTen: values.hoTen
       })
+      if (result.success == false) throw result.message
       console.log(values, result)
       api.success({ description: "Đăng kí thành công!" })
     } catch (error) {
       console.log(error)
-      api.error({ description: "Đăng kí thất bại!" })
+      api.error({ description: error })
     }
   }
 

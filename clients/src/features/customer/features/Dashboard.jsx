@@ -67,14 +67,21 @@ export default function DashBoard() {
       {/* Suggest */}
       <SectionIsland className="space-y-5 bg-white">
         <h2 className="text-lg font-normal uppercase">GỢI Ý</h2>
-
         <div className='grid grid-cols-6 gap-5'>
-          {sanPham?.map((product, j) => <ProductCard key={j} {...product} />)}
+          {sanPham.length > 0 ? sanPham?.map((product, j) => <ProductCard key={j} {...product} />) : (
 
-          <div className='col-span-6 flex justify-center'>
+            <div className=' text-center  col-span-6 mb-10'>
+
+              <h1 className='text-2xl font-semibold'>
+                Không tìm thấy sản phẩm được đăng bán.
+              </h1>
+            </div>
+          )}
+
+          {/* <div className='col-span-6 flex justify-center'>
             <Button className='w-100' size='large' variant='solid' color='blue'>Xem thêm</Button>
 
-          </div>
+          </div> */}
         </div>
       </SectionIsland>
     </Container>

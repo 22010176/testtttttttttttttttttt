@@ -78,7 +78,13 @@ public class GioHangController {
       @RequestBody ThemGioHangRequest entity) {
     // TODO: process POST request
     // entity.setKhachHangId("e6794ee2-2ed6-4f40-9280-1edfb5122db9");
-
+    if (jdbcTemplate.queryForList("""
+          SELECT * FROM "TaiKhoanKhachHang"
+          WHERE "Id" = ?
+        """, entity.getKhachHangId()).isEmpty()) {
+      throw new Error("Tai khoan khong ton tai");
+    }
+    ;
     String checkSql = """
         SELECT
         	ghkh."Id"

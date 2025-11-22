@@ -14,11 +14,13 @@ function Login() {
     try {
       const result = await login({ email: values.email, matKhau: values.matKhau })
       console.log(result)
+      if (result.success == false) throw result.message
+
       localStorage.setItem(keys.userToken, result.data)
-      navigate(routePaths.management.root)
       api.success({ description: "Đăng nhập thành công!" })
+      navigate(routePaths.management.root)
     } catch (error) {
-      api.error({ description: "Đăng nhập thất bại!" })
+      api.error({ description: error || "Đăng nhập thất bại!" })
       console.log(error)
     }
   }

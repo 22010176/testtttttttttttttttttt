@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 import { keys } from "@/constant/localStorageKey";
@@ -7,15 +7,21 @@ import { routePaths } from "../routes";
 
 export function LockLayout() {
   const navigate = useNavigate()
+  const [status, setStatus] = useState("waiting")
 
   useEffect(function () {
     XemThongTinTaiKhoan().then(result => {
-      if (result.success) return
+      if (result.data == null || result.success == false) {
+        localStorage.removeItem(keys.userToken)
+        navigate(routePaths.account.login)
+        return
+      }
+      setStatus(' ')
+    }).catch(er => {
       localStorage.removeItem(keys.userToken)
-      navigate(routePaths.login)
+      navigate(routePaths.account.login)
+
     })
   }, [])
-  return (
-    <Outlet />
-  )
+  return status == 'waiting' ? "" : <Outlet />
 }

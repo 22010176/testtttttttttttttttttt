@@ -111,6 +111,7 @@ export default function OrderDashboard() {
   const huyDonHang = createUpdateState(TrangThaiDonHang.HUY_DON_HANG)
   const donHangVanChuyen = createUpdateState(TrangThaiDonHang.DON_HANG_VAN_CHUYEN)
   const giaoHangThanhCong = createUpdateState(TrangThaiDonHang.DON_HANG_GIAO_THANH_CONG)
+  const giaoHangThatBai = createUpdateState(TrangThaiDonHang.DON_HANG_GIAO_THAT_BAI)
   return (
     <div className="bg-white m-5 p-5">
       {contextHolder}
@@ -154,11 +155,14 @@ export default function OrderDashboard() {
           key: 'b', label: <p className='px-3'>Đang giao</p>,
           children: <OrderListLayout dataSource={Object.fromEntries(
             Object.entries(temp)
-              .filter(i => TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_VAN_CHUYEN))}
+              .filter(i =>
+                TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_VAN_CHUYEN
+                || TrangThaiDonHang[i[1].trangThai] === TrangThaiDonHang.DON_HANG_GIAO_THAT_BAI
+              ))}
             Function={item => (
               <div className='space-y-5'>
                 <Button variant='text' color='green' onClick={giaoHangThanhCong.bind({}, item)} >Thành công</Button>
-                <Button variant='text' color='red' onClick={donHangVanChuyen.bind({}, item)} >Thất bại</Button>
+                <Button variant='text' color='red' onClick={giaoHangThatBai.bind({}, item)} >Thất bại</Button>
                 <Button variant='text' color='red' onClick={huyDonHang.bind({}, item)} >Hủy</Button>
               </div>
             )} />

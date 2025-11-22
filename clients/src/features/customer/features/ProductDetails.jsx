@@ -1,13 +1,16 @@
 import { LikeOutlined, MoreOutlined, PlayCircleFilled, RightOutlined, ShopOutlined, ShoppingCartOutlined, StarFilled } from '@ant-design/icons';
 import { Button, InputNumber, notification } from 'antd';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
+import { keys } from '@/constant/localStorageKey';
+import { ThemGioHang } from '../api/gioHang';
 import { XemChiTietSanPham } from '../api/sanPham';
 import Container from '../components/Container';
-import { ThemGioHang } from '../api/gioHang';
+import { routePaths } from '../routes';
 
 export default function ProductDetail() {
+  const navigate = useNavigate();
   const [api, contextHolder] = notification.useNotification();
   const { id } = useParams();
 
@@ -215,13 +218,26 @@ export default function ProductDetail() {
               <div className="flex gap-4">
                 <Button variant='outlined' color='blue' size='large' icon={<ShoppingCartOutlined />}
                   onClick={async function () {
-                    const result = await ThemGioHang({
-                      sanPhamId: id,
-                      soLuong: 1
-                    })
-                    if (result.success)
-                      api.success({ description: "Thêm giỏ hàng thành công!" })
-                    console.log(result)
+                    if (localStorage.getItem(keys.userToken) == null) {
+                      navigate(routePaths.account.login)
+                    }
+                    try {
+                      const result = await ThemGioHang({
+                        sanPhamId: id,
+                        soLuong: 1
+                      })
+
+                      if (result.success) {
+                        api.success({ description: "Thêm giỏ hàng thành công!" })
+                        console.log(result)
+                      }
+                      else {
+
+                        throw new Error("dd")
+                      }
+                    } catch (error) {
+                      navigate(routePaths.account.login)
+                    }
                   }}>
                   Thêm Vào Giỏ Hàng
                 </Button>
@@ -235,7 +251,7 @@ export default function ProductDetail() {
       </Container >
 
       {/* Shop Header */}
-      <Container className="bg-white my-4">
+      < Container className="bg-white my-4" >
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -286,10 +302,10 @@ export default function ProductDetail() {
             </div> */}
           </div>
         </div>
-      </Container>
+      </Container >
 
       {/* Product Details Section */}
-      <Container>
+      < Container >
         <div className="bg-white rounded-sm p-6 mb-4">
           <h2 className="text-lg font-semibold mb-4">CHI TIẾT SẢN PHẨM</h2>
 
@@ -440,7 +456,7 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
-      </Container>
+      </Container >
     </div >
   );
 }

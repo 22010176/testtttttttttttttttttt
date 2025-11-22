@@ -17,12 +17,13 @@ function Login() {
     try {
       const result = await dangNhapTaiKhoan({ email: values.email, matKhau: values.matKhau })
       console.log(result, values)
+      if (result.success == false) throw result.message
       localStorage.setItem(keys.userToken, result.data?.Id)
 
       api.success({ description: "Đăng nhập thành công!" })
       navidate('/')
     } catch (error) {
-      api.error({ description: "Đăng nhập thất bại!" })
+      api.error({ description: error })
       console.log(error)
     }
   }
